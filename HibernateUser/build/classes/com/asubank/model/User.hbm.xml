@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.asubank.model">
+	<class name="User" table="USER">
+		<id name="userID" column="USERID">
+			<generator class="native" />
+		</id>		
+		<property name="firstname">
+			<column name="FIRSTNAME" length="20" not-null="true" />
+		</property>
+		
+		<property name="lastname">
+			<column name="LASTNAME" length="20" not-null="true" />
+		</property>
+		
+		<property name="deptID">
+			<column name="DEPTID" not-null="false"/>
+		</property>
+		
+		<property name="roleID">
+			<column name="ROLEID" not-null="true"/>
+		</property>
+		
+		<property name="accno">
+			<column name="ACCOUNTNO" length="12" not-null="true"/>
+		</property>
+		
+		<property name="amount">
+			<column name="AMOUNT" not-null="true"/>
+		</property>
+		
+		<property name="cardno">
+			<column name="CARDNO" length="16" not-null="true"/>
+		</property>
+		
+		<property name="pinno">
+			<column name="PINNO" not-null="true"/>
+		</property>
+		
+		<property name="password">
+			<column name="PASSWORD" length="20" not-null="true"/>
+		</property>
+		
+		<property name="shortname">
+			<column name="SHORTNAME" length="20" not-null="true"/>
+		</property>
+		
+		<property name="strID">
+			<column name="STRID" length="20" not-null="true"/>
+		</property>
+	</class>
+</hibernate-mapping>
