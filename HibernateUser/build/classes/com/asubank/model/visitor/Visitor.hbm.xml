@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.asubank.model.visitor">
+	<class name="Visitor" table="visitor">
+		<id name="machineID" column="machineid">
+		      <generator class="assigned"/>
+		</id>			
+		<property name="fail">
+			<column name="fail" not-null="false"/>
+		</property>
+		
+		<property name="captcha">
+			<column name="captcha" length="25" not-null="false" />
+		</property>
+		
+		<property name="captchaStart">
+			<column name="captchastart" not-null="false" />
+		</property>
+	</class>
+</hibernate-mapping>
