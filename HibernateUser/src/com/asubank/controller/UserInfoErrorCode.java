@@ -7,12 +7,14 @@ public class UserInfoErrorCode {
 	public static final int SAME_ACCOUNT_TRANSACTION_PASSWORD = 3;
 	public static final int SIMPLE_ACCOUNT_PASSWORD = 4;
 	public static final int SIMPLE_TRANSACTION_PASSWORD = 5;
+	public static final int INVALID_DOB = 6;
 	public static final String[] USERINFOERROR = {"No Error", 
 												  "Account Password is not confirmed",
 												  "Transaction Password is not confirmed",
 												  "Account Password and Transaction Password should be different",
 												  "Account Password is too simple",
-												  "Transaction Password is too simple"};
+												  "Transaction Password is too simple",
+												  "DOB is invalid"};
 	
 //	public static final int ACCT_NOT_BLOCKED = 0;
 //	public static final int ACCT_BLOCKED = 1;

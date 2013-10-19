@@ -11,6 +11,7 @@ public class UserInformation {
 	private String firstname;
 	private String lastname;
 	private int dobYear;
+	private int dobDay;
 	private int dobMonth;
 	private String ssn;
 	private String address;
@@ -28,6 +29,12 @@ public class UserInformation {
 	}
 	public void setVisitor(Visitor visitor) {
 		this.visitor = visitor;
+	}
+	public int getDobDay() {
+		return dobDay;
+	}
+	public void setDobDay(int dobDay) {
+		this.dobDay = dobDay;
 	}
 	public String getFirstname() {
 		return firstname;

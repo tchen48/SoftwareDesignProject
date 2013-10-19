@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
@@ -162,8 +163,7 @@ public class UserController {
 			    model.addAttribute("userInformation", userInformation);
 			    model.addAttribute("visitor", userInformation.getVisitor());
 			    return "applynewaccount";
-			}
-						
+			}			
 			int checkInfoCode = checkUserInfo(userInformation);
 			if(checkInfoCode != UserInfoErrorCode.NO_ERROR){
 				VisitorManager.createCaptcha(machineID);
@@ -198,6 +198,7 @@ public class UserController {
 			pii.setSsn(userInformation.getSsn());
 			pii.setDobYear(userInformation.getDobYear());
 			pii.setDobMonth(userInformation.getDobMonth());
+			pii.setDobDay(userInformation.getDobDay());
 	//		String dobString = pii.getDob().toString();
 	//		String yearString = dobString.substring(dobString.length() - 4, dobString.length());
 	//		int dobYear = Integer.parseInt(yearString);
@@ -247,10 +248,17 @@ public class UserController {
 		boolean uppercaseTrans = false;
 		boolean lowercaseTrans =false;
 		boolean numberTrans = false;
+		boolean validDate = false;
+		int year = userInfo.getDobYear();
+		int month = userInfo.getDobMonth();
+		int day = userInfo.getDobDay();
 		String pwd1 = userInfo.getPassword();
 		String pwd2 = userInfo.getPwdConfirm();
 		String transpwd1 = userInfo.getTransPwd();
 		String transpwd2 = userInfo.getTransPwdConfirm();
+		if(checkDate(year, month, day) != true){
+			return UserInfoErrorCode.INVALID_DOB;
+		}
 
 		if(pwd1.equals(pwd2) != true){
 //			return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.ACCOUNT_PASSWORD_NOT_CONFIRMED];
@@ -362,6 +370,20 @@ public class UserController {
 	    return encodedImage;
 	}
 	
+	private static boolean checkDate(int dobYear, int dobMonth, int dobDay){
+		if(((dobMonth == 4 || dobMonth == 6 || dobMonth == 9 || dobMonth == 11) && dobDay == 31) || 
+		   (dobMonth == 2 && dobDay > 29)){			
+			return false;
+		}
+		if(dobMonth == 2 && dobDay == 29){
+			if((dobYear % 4 == 0 && dobYear % 100 != 0) || (dobYear % 400 == 0)){
+				return true;
+			}
+			else
+				return false;
+		}
+		return true;
+	}
 	
 //	private static void main(String[] args){
 //		 

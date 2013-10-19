@@ -3,18 +3,17 @@ package com.asubank.model.pii;
 import java.util.Date;
 
 public class Pii {
-//	private Date dob;
+	private int dobDay;
 	private int dobYear;
 	private int dobMonth;
 	private String ssn;
 	private String strID;
-//	public Date getDob() {
-//		return dob;
-//	}
-//	public void setDob(Date dob) {
-//		this.dob = dob;
-//	}
-	
+	public int getDobDay() {
+		return dobDay;
+	}
+	public void setDobDay(int dobDay) {
+		this.dobDay = dobDay;
+	}	
 	public String getSsn() {
 		return ssn;
 	}
