@@ -115,26 +115,30 @@ public class UserController {
     }
 	
 	@RequestMapping("/forgetpwd")
-	public String forgetPwd(@RequestParam("machineid") String machineID){
+	public String forgetPwd(@RequestParam("machineid") String machineID, Model model){
 		if(machineID.equals("") == false)
 			VisitorManager.deleteVisitor(machineID);
+		model.addAttribute("user", new User());
 		return "forgetpwd";
 	}
 	
-//	@RequestMapping("/sendpwd")
-//	public String sendPwd(@ModelAttribute("user") User user, Model model){
-////		Visitor
-////		combinedCommand.setVisitor(VisitorManager.createVisitor());
-//		String strID = user.getStrID();
-//		String email = user.getEmail();
-//		user = UserManager.queryUser(strID);
-//		if(user == null){
-//			String ErrorMsg = StatusCode.LOGIN_STATUS[StatusCode.USERID_NOT_EXIST];
-//			model.addAttribute("ErrorMsg", ErrorMsg);
-//			model.addAttribute("machineid", "");
-//			return "forgetpwd";
-//		}
-		
+	@RequestMapping("/sendpwd")
+	public String sendPwd(@ModelAttribute("user") User user, Model model){
+		String strID = user.getStrID();
+		user = UserManager.queryUser(strID);
+		if(user == null){
+			String ErrorMsg = StatusCode.LOGIN_STATUS[StatusCode.USERID_NOT_EXIST];
+			model.addAttribute("ErrorMsg", ErrorMsg);
+			model.addAttribute("machineid", "");
+			return "forgetpwd";
+		}
+		String tempPW = SecurityManager.createRandomPW();
+		SecurityManager.updatePassword(strID, tempPW);
+		SecurityManager.sendTempPw(tempPW, user.getEmail());
+		String resultMessage = UserResultMessage.TEMP_PASSWORD_EMAIL_SENT;
+		model.addAttribute("resultMessage", resultMessage);
+		return "result";
+	}
 		
 		
 //		String machineID = combinedCommand.getVisitor().getMachineID();
@@ -221,7 +225,8 @@ public class UserController {
 	//        PartialPii partialPii = new PartialPii(dobYear, ssnLastFour, message);
 	        PiiManager.createPii(pii);
 	        PiiManager.createPartialPii(partialPii);
-	    	model.addAttribute("message", message);
+	        String resultMessage = UserResultMessage.NEW_ACCOUNT_APPLICATION_ACCEPTED;
+	    	model.addAttribute("resultMessage", resultMessage);
 	    	VisitorManager.deleteVisitor(machineID);
 	        return "result";
 		}
@@ -358,36 +363,36 @@ public class UserController {
 	}
 	
 	
-	private static void main(String[] args){
-		 
-		InetAddress ip;
-		try {
-	 
-			ip = InetAddress.getLocalHost();
-			System.out.println("Current IP address : " + ip.getHostAddress());
-	 
-			NetworkInterface network = NetworkInterface.getByInetAddress(ip);
-	 
-			byte[] mac = network.getHardwareAddress();
-	 
-			System.out.print("Current MAC address : ");
-	 
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < mac.length; i++) {
-				sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));		
-			}
-			System.out.println(sb.toString());
-	 
-		} catch (UnknownHostException e) {
-	 
-			e.printStackTrace();
-	 
-		} catch (SocketException e){
-	 
-			e.printStackTrace();
-	 
-		}
-	 
-	   }
+//	private static void main(String[] args){
+//		 
+//		InetAddress ip;
+//		try {
+//	 
+//			ip = InetAddress.getLocalHost();
+//			System.out.println("Current IP address : " + ip.getHostAddress());
+//	 
+//			NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+//	 
+//			byte[] mac = network.getHardwareAddress();
+//	 
+//			System.out.print("Current MAC address : ");
+//	 
+//			StringBuilder sb = new StringBuilder();
+//			for (int i = 0; i < mac.length; i++) {
+//				sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));		
+//			}
+//			System.out.println(sb.toString());
+//	 
+//		} catch (UnknownHostException e) {
+//	 
+//			e.printStackTrace();
+//	 
+//		} catch (SocketException e){
+//	 
+//			e.printStackTrace();
+//	 
+//		}
+//	 
+//	   }
 	
 }

@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.mail.Message;
@@ -319,10 +320,65 @@ public class SecurityManager {
 	    return true;
 	}
 	
-	private static void sendOTP(String otp){
-		String reciepient = "shaosh0913@gmail.com";
+	private static void sendOTP(String otp, String recipient){
+		//"shaosh0913@gmail.com";
 		String subject = "One Time Password from ASUBank";
-		String content = "Hello, \n This is your One Time Password. " + otp + ". Please validate it within one minute.";
-		PublicMethod.sendEmail(reciepient, subject, content);
+		String content = "Dear user, \n This is your One Time Password: " + otp + ". Please validate it within one minute.";
+		PublicMethod.sendEmail(recipient, subject, content);
+	}
+	
+	public static void updatePassword(String strID, String newPW){
+		createSession();
+		String hql = "update User as u set u.password=:password where strID=:strID";
+		Query query = session.createQuery(hql);
+		query.setString("password", newPW);
+		query.setString("strID", strID);
+		query.executeUpdate(); 
+		session.getTransaction().commit();
+		session.close();
+		updateLastPWUpdate(strID);
+	}
+	
+	private static void updateLastPWUpdate(String strID){
+		createSession();
+		String hql = "update Security as s set s.lastPasswordUpdate=:lastPasswordUpdate where strID=:strID";
+		Query query = session.createQuery(hql);
+		query.setString("lastPasswordUpdate", df.format(new Date()));
+		query.setString("strID", strID);
+		query.executeUpdate(); 
+		session.getTransaction().commit();
+		session.close();
+	}
+	
+	public static void sendTempPw(String tempPW, String recipient){
+		String subject = "Temporary Password from ASUBank";
+		String content = "Dear ASUBank Customer, \nThis is your Temporary Password:\n" + tempPW + "\nPlease access your account and change your password as soon as possible.\nYours,\nASUBank";
+		PublicMethod.sendEmail(recipient, subject, content);
+	}
+	
+	public static String createRandomPW(){
+		char[] chars = { '0', '1', '2', '3', '4', '5', '6', '7',
+			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+			     'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
+			     'y', 'z', 'A', 'B','C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+			     'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y',
+			     'Z','!','@','#','$','%','^','&','*','~','|'};
+		Random random = new Random();
+		int randomLength = 3 + random.nextInt(2);
+		int randomCount = 4 + random.nextInt(2);
+		long mills = new Date().getTime();
+		String[] passwords = new String[randomCount];
+	    random = new Random(mills);
+	    String finalpw = "";
+	    for (int i = 0; i < randomCount; i++) {
+	    	StringBuilder password = new StringBuilder("");
+    		for (int m = 1; m <= randomLength; m++) {
+    			password.append(chars[random.nextInt(72)]);
+    		}
+    		passwords[i] = password.toString();
+    		finalpw = finalpw.concat(passwords[i]);
+	    }
+	    System.out.println(finalpw);
+	    return finalpw;
 	}
 }

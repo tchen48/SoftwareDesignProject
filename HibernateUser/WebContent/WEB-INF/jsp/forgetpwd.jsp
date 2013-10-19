@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -5,6 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
 <div id="wrapper">
@@ -30,24 +32,20 @@
 	<div id="page">
 	  <div id="content">
 		  <div class="box">
-                <form:form method="post" action="sendpwd.html" commandName="user">
-                	<table style="margin-top: 5px; margin-right:200px">
+                <form:form method="post" action="sendpwd.html" commandName="user" style="border: 0;margin:auto auto; text-align:center">
+                	<table style="margin:auto auto;" cellspacing="0"; cellpadding="0" >
                 		<tr>
                 			<div style="padding-left:10px; color:red;">
                 				${ErrorMsg}
                 			</div>
                 		</tr>
                 		<tr>
-                			<td>User ID:</td>
-                			<td><form:input  id="textfield" path="strID" style="height: 20px;"/></td>
+                			<td style="text-align: right;">User ID:</td>
+                			<td style="text-align: left;"><form:input  id="textfield" path="strID" required="true" style="height: 30px;"/></td>
                 		</tr>
-                		<tr>
-                			<td>Email:</td>
-                			<td><form:input type="email" id="textfield2" path="email" style="height: 20px;" /></td>
-                		</tr>
-                	</table>
-                	<div style="text-algin:center">
-                		<input type="submit" name="action" id="submit" value="Submit" style="padding:3px 10px;"/>
+                	</table><br />
+                	<div style="text-algin:center;">
+                		<input type="submit" id="submit" value="Send Temporary Password" style="padding:5px 10px; "/>
                 	</div>		
                 	
 			      </form:form>	

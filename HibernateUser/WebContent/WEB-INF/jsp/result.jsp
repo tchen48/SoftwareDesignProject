@@ -32,7 +32,7 @@
 	<div id="page">
 	  <div id="content">
 		  <div class="box">
-				<h4>Your application is accepted. Your account will created in 2 - 3 days.</h4>
+				<h4>${resultMessage}</h4>
                 
                 <form:form method="post" action="login.html" style="border:0; text-align:center; margin:auto auto">                	                	
                 	<input type="submit" value="Log In" style="padding: 5px 10px;float:center; margin-right: 50px;display:inline;" /><br /><br />
