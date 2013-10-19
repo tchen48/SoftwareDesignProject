@@ -33,15 +33,12 @@
 		</property>
 		
 		<property name="password">
-			<column name="password" length="50" not-null="true"/>
+			<column name="password" length="20" not-null="true"/>
 		</property>
 		
 		<property name="shortname">
 			<column name="shortname" length="20" not-null="true"/>
 		</property>
 		
-		<property name="strID">
-			<column name="strid" length="30" not-null="true"/>
-		</property>
 	</class>
 </hibernate-mapping>

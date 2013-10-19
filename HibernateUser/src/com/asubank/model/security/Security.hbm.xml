@@ -6,7 +6,7 @@
 <hibernate-mapping package="com.asubank.model.security">
 	<class name="Security" table="security">
 		<id name="strID" column="strid">
-		      <generator class="assigned"/>
+			<generator class="assigned"/>
 		</id>		
 		<property name="otp">
 			<column name="otp" length="8" not-null="false" />

@@ -4,6 +4,12 @@ public class PartialPii {
 	private int dobYear;
 	private String ssnLastFour;
 	private String strID;
+	public PartialPii(){}
+	public PartialPii(int dobYear, String ssnLastFour, String strID){
+		this.dobYear = dobYear;
+		this.ssnLastFour = ssnLastFour;
+		this.strID = strID;
+	}
 	public int getDobYear() {
 		return dobYear;
 	}

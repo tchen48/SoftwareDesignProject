@@ -8,8 +8,11 @@
 		<id name="strID" column="strid">
 			<generator class="assigned" />
 		</id>		
-		<property name="dob">
-			<column name="dob" not-null="true" />
+		<property name="dobYear">
+			<column name="dobyear" not-null="true" />
+		</property>
+		<property name="dobMonth">
+			<column name="dobmonth" not-null="true" />
 		</property>
 		
 		<property name="ssn">

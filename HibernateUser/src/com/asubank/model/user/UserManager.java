@@ -71,7 +71,7 @@ public class UserManager {
 		user.setShortname(shortname);
 		user.setStrID(strID);
 		createSession();
-		
+		System.out.println("StrID = " + user.getStrID());
 		session.save(user);
 		session.getTransaction().commit();
 		//queryPerson(session);
@@ -120,7 +120,7 @@ public class UserManager {
 	
 	private static int queryStrID(String shortname){
 		createSession();
-		String hql = "select count(userID) from User as user where user.shortname=:shortname";
+		String hql = "select count(strID) from User as user where user.shortname=:shortname";
 		Query query = session.createQuery(hql);  
 		query.setString("shortname",shortname);
 		int num = ((Number)query.uniqueResult()).intValue();

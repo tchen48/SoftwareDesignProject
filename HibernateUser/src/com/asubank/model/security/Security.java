@@ -21,7 +21,7 @@ public class Security {
 	private Date lastPasswordUpdate;
 	private boolean loginStatus;
 	private String transPwd;
-	private String transPwdConfirm;
+//	private String transPwdConfirm;
 	
 	static{
 		String date0 = "1970-01-01 00:00:00";
@@ -172,11 +172,11 @@ public class Security {
 		this.transPwd = transPwd;
 	}
 
-	public String getTransPwdConfirm() {
-		return transPwdConfirm;
-	}
-
-	public void setTransPwdConfirm(String transPwdConfirm) {
-		this.transPwdConfirm = transPwdConfirm;
-	}
+//	public String getTransPwdConfirm() {
+//		return transPwdConfirm;
+//	}
+//
+//	public void setTransPwdConfirm(String transPwdConfirm) {
+//		this.transPwdConfirm = transPwdConfirm;
+//	}
 }

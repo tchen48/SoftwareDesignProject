@@ -8,7 +8,6 @@ public class User {
 	private String telephone;
 	private int roletype;
 	private String password;
-	private String pwdconfirm;
 	private String shortname;
 	private String strID;
 	public String getFirstname() {
@@ -52,12 +51,6 @@ public class User {
 	}
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	public String getPwdconfirm() {
-		return pwdconfirm;
-	}
-	public void setPwdconfirm(String pwdconfirm) {
-		this.pwdconfirm = pwdconfirm;
 	}
 	public String getShortname() {
 		return shortname;

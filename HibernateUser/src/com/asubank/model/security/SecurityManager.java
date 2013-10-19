@@ -58,6 +58,13 @@ public class SecurityManager {
 		session.getTransaction().commit();
 		session.close();
 	}
+	public static void createSecurity(Security security){
+		createSession();
+//		Security security = new Security(strID);
+		session.save(security);
+		session.getTransaction().commit();
+		session.close();
+	}
 	public static Security createOtp(String strID) throws ParseException, InvalidKeyException, NoSuchAlgorithmException{
 		User user = UserManager.queryUser(strID);
 		String password = user.getPassword();

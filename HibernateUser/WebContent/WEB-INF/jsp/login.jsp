@@ -38,7 +38,7 @@
                 <h3>
                 LOGIN 
 :				</h3>
-                <form:form id="form1" method="post" action="home.html" commandName="combinedcommand">
+                <form:form id="form1" method="post" action="home.html" commandName="uservisitor">
                 	<table style="margin-top: 5px; margin-right:200px">
                 		<tr>
                 			<div style="padding-left:10px; color:red;">
@@ -67,7 +67,7 @@
                 	<form:hidden path="visitor.machineID" value="${visitor.machineID}" />
 			        
 	                <p class="member" style="margin-left: 2px; margin-bottom:0px; margin-top:0px"><a href="forgetpwd.html?machineid=${visitor.machineID}">Lost your Password?</a></p>
-	                <p class="member" style="margin-left: 7px; margin-bottom:5px">Not a member yet? <a href="userinfo.html?machineid=${visitor.machineID}">Create Account now!</a></p>
+	                <p class="member" style="margin-left: 7px; margin-bottom:5px">Not a member yet? <a href="applynewaccount.html">Create Account now!</a></p>
 			    </form:form>	
 			    	
 			    	        

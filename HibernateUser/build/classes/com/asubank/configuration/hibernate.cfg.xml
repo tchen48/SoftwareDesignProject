@@ -15,7 +15,7 @@
         <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 
         <!-- Automatic schema creation (begin) === -->
-       	<!--<property name="hibernate.hbm2ddl.auto">create</property>-->
+        <!-- <property name="hibernate.hbm2ddl.auto">create</property> -->
 
 
         <!-- Simple memory-only cache -->
@@ -31,6 +31,8 @@
         <mapping resource="com/asubank/model/user/User.hbm.xml" />
         <mapping resource="com/asubank/model/security/Security.hbm.xml" />
         <mapping resource="com/asubank/model/visitor/Visitor.hbm.xml" />
-
+        <mapping resource="com/asubank/model/account/Account.hbm.xml" />
+        <mapping resource="com/asubank/model/pii/Pii.hbm.xml" />
+		<mapping resource="com/asubank/model/pii/PartialPii.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

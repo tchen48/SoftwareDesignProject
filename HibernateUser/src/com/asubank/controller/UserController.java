@@ -5,7 +5,11 @@ import com.asubank.model.user.UserManager;
 import com.asubank.model.user.User;
 import com.asubank.model.visitor.Visitor;
 import com.asubank.model.visitor.VisitorManager;
+import com.asubank.model.combinedcommand.UserInformation;
 import com.asubank.model.combinedcommand.UserVisitor;
+import com.asubank.model.pii.PartialPii;
+import com.asubank.model.pii.Pii;
+import com.asubank.model.pii.PiiManager;
 import com.asubank.model.security.Security;
 import com.asubank.model.security.SecurityManager;
 import com.asubank.model.security.StatusCode;
@@ -30,6 +34,7 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
+import java.util.Date;
 
 import javax.imageio.ImageIO;
 
@@ -44,31 +49,31 @@ public class UserController {
 	private static final String VISITORCAPTCHA = "visitorcaptcha";
 	
 	@RequestMapping("/login")
-    public String login(@ModelAttribute("combinedcommand") UserVisitor combinedCommand, Model model) throws IOException, InvalidKeyException, NoSuchAlgorithmException, ParseException {	
-		combinedCommand.setVisitor(VisitorManager.createVisitor());
+    public String login(@ModelAttribute("uservisitor") UserVisitor userVisitor, Model model) throws IOException, InvalidKeyException, NoSuchAlgorithmException, ParseException {	
+		userVisitor.setVisitor(VisitorManager.createVisitor());
 //		String machineID = combinedCommand.getVisitor().getMachineID();
 //		VisitorManager.createCaptcha(machineID);
 //		String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
 //	    model.addAttribute("encodedImage",encodedImage); 
-	    model.addAttribute("visitor", combinedCommand.getVisitor());
+	    model.addAttribute("visitor", userVisitor.getVisitor());
         return "login";
     }
 	
 	@RequestMapping("/home")
-	public String home(@RequestParam String action, @ModelAttribute("combinedcommand") UserVisitor combinedCommand, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException{
+	public String home(@RequestParam String action, @ModelAttribute("uservisitor") UserVisitor userVisitor, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException{
 		if(action.equals("Submit")){
-			String machineID = combinedCommand.getVisitor().getMachineID();
-			int captchaCode = VisitorManager.validateCaptcha(machineID, combinedCommand.getVisitor().getCaptchaInput());
+			String machineID = userVisitor.getVisitor().getMachineID();
+			int captchaCode = VisitorManager.validateCaptcha(machineID, userVisitor.getVisitor().getCaptchaInput());
 			if(captchaCode != StatusCode.CAPTCHA_VALIDATED){
 				String captchaStatus = StatusCode.CAPTCHA_STATUS[captchaCode];
 				model.addAttribute("captchaStatus", captchaStatus);
 				String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
 			    model.addAttribute("encodedImage",encodedImage); 
-			    model.addAttribute("user", combinedCommand.getUser());
-			    model.addAttribute("visitor", combinedCommand.getVisitor());
+			    model.addAttribute("user", userVisitor.getUser());
+			    model.addAttribute("visitor", userVisitor.getVisitor());
 			    return "login";
 			}
-			LoginResult loginResult = UserManager.validate(combinedCommand.getUser().getStrID(), combinedCommand.getUser().getPassword());
+			LoginResult loginResult = UserManager.validate(userVisitor.getUser().getStrID(), userVisitor.getUser().getPassword());
 			
 			if(loginResult.getUser() == null){
 				VisitorManager.increaseFail(machineID);
@@ -77,7 +82,7 @@ public class UserController {
 			    model.addAttribute("encodedImage",encodedImage); 
 				String ErrorMsg = StatusCode.LOGIN_STATUS[loginResult.getStatusCode()];
 				model.addAttribute("ErrorMsg", ErrorMsg);
-				model.addAttribute("visitor", combinedCommand.getVisitor());
+				model.addAttribute("visitor", userVisitor.getVisitor());
 				return "login";
 			}	
 			Security security = SecurityManager.querySecurity(loginResult.getUser().getStrID());
@@ -87,21 +92,23 @@ public class UserController {
 			return "home";
 		}
 		else{
-			String machineID = combinedCommand.getVisitor().getMachineID();
+			String machineID = userVisitor.getVisitor().getMachineID();
 			VisitorManager.createCaptcha(machineID);
 			String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
 		    model.addAttribute("encodedImage",encodedImage); 
-		    model.addAttribute("user", combinedCommand.getUser());
-		    model.addAttribute("visitor", combinedCommand.getVisitor());
+		    model.addAttribute("user", userVisitor.getUser());
+		    model.addAttribute("visitor", userVisitor.getVisitor());
 	        return "login";
 		}
 	}
 	
-	@RequestMapping("/userinfo")
+	@RequestMapping("/applynewaccount")
     public String userInfo(Model model) {
-		User user = new User();
-        model.addAttribute("user", user);
-        return "userinfo";
+//		User user = new User();
+//        model.addAttribute("user", user);
+		UserInformation userinformation = new UserInformation();
+		model.addAttribute("userinformation", userinformation);
+        return "applynewaccount";
     }
 	
 	@RequestMapping("/forgetpwd")
@@ -111,19 +118,19 @@ public class UserController {
 		return "forgetpwd";
 	}
 	
-	@RequestMapping("/sendpwd")
-	public String sendPwd(@ModelAttribute("user") User user, Model model){
-//		Visitor
-//		combinedCommand.setVisitor(VisitorManager.createVisitor());
-		String strID = user.getStrID();
-		String email = user.getEmail();
-		user = UserManager.queryUser(strID);
-		if(user == null){
-			String ErrorMsg = StatusCode.LOGIN_STATUS[StatusCode.USERID_NOT_EXIST];
-			model.addAttribute("ErrorMsg", ErrorMsg);
-			model.addAttribute("machineid", "");
-			return "forgetpwd";
-		}
+//	@RequestMapping("/sendpwd")
+//	public String sendPwd(@ModelAttribute("user") User user, Model model){
+////		Visitor
+////		combinedCommand.setVisitor(VisitorManager.createVisitor());
+//		String strID = user.getStrID();
+//		String email = user.getEmail();
+//		user = UserManager.queryUser(strID);
+//		if(user == null){
+//			String ErrorMsg = StatusCode.LOGIN_STATUS[StatusCode.USERID_NOT_EXIST];
+//			model.addAttribute("ErrorMsg", ErrorMsg);
+//			model.addAttribute("machineid", "");
+//			return "forgetpwd";
+//		}
 		
 		
 		
@@ -133,17 +140,122 @@ public class UserController {
 //	    model.addAttribute("encodedImage",encodedImage); 
 //	    model.addAttribute("visitor", combinedCommand.getVisitor());
 		
-	}
+//	}
 	
-	@RequestMapping(value = "/createuser", method = RequestMethod.POST)
-    public String handleLogin(@ModelAttribute("user") User user, Model model) {
+	@RequestMapping("/createuser")
+    public String handleLogin(@ModelAttribute("userinformation") UserInformation userInformation, Model model) {
+		checkUserInfo(userInformation);
+		System.out.println();
+		User user = new User();
+		Security security = new Security();
+		Pii pii = new Pii();
+		PartialPii partialPii = new PartialPii();
+		
+		user.setFirstname(userInformation.getFirstname());
+		user.setLastname(userInformation.getLastname());
+		user.setAddress(userInformation.getAddress());
+		user.setEmail(userInformation.getEmail());
+		user.setTelephone(userInformation.getTelephone());
+		user.setRoletype(userInformation.getRoletype());
+		user.setPassword(userInformation.getPassword());
+		security.setTransPwd(userInformation.getTransPwd());
+		security.setLastPasswordUpdate(new Date());
+		security.setLoginStatus(false);
+//		pii.setDob(userInformation.getDob());
+		pii.setSsn(userInformation.getSsn());
+		pii.setDobYear(userInformation.getDobYear());
+		pii.setDobMonth(userInformation.getDobMonth());
+//		String dobString = pii.getDob().toString();
+//		String yearString = dobString.substring(dobString.length() - 4, dobString.length());
+//		int dobYear = Integer.parseInt(yearString);
+		String ssnString = pii.getSsn();
+		String ssnLastFour = ssnString.substring(ssnString.length() - 4, ssnString.length());
+		partialPii.setDobYear(pii.getDobYear());
+		partialPii.setSsnLastFour(ssnLastFour);
+		
+		
+//		User user = userinfo.getUser();
+//		Security security = userinfo.getSecurity();
+//		Pii pii = userinfo.getPii();
+//		String dobString = pii.getDob().toString();
+//		String yearString = dobString.substring(dobString.length() - 4, dobString.length());
+//		int dobYear = Integer.parseInt(yearString);
+//		String ssnString = pii.getSsn();
+//		String ssnLastFour = ssnString.substring(ssnString.length() - 4, ssnString.length());
+		
         String message = "";    	
     	message = UserManager.createUser(user.getFirstname(), user.getLastname(), user.getAddress(), user.getEmail(), user.getTelephone(), user.getRoletype(),
     			user.getPassword());
-        SecurityManager.createSecurity(message);
+    	security.setStrID(message);
+    	pii.setStrID(message);
+    	partialPii.setStrID(message);
+        SecurityManager.createSecurity(security);
+        pii.setStrID(message);
+//        PartialPii partialPii = new PartialPii(dobYear, ssnLastFour, message);
+        PiiManager.createPii(pii);
+        PiiManager.createPartialPii(partialPii);
     	model.addAttribute("message", message);
         return "result";
     }
+	
+	private String checkUserInfo(UserInformation userInfo){
+		boolean uppercaseAcct = false;
+		boolean lowercaseAcct =false;
+		boolean numberAcct = false;
+		boolean uppercaseTrans = false;
+		boolean lowercaseTrans =false;
+		boolean numberTrans = false;
+		String pwd1 = userInfo.getPassword();
+		String pwd2 = userInfo.getPwdConfirm();
+		String transpwd1 = userInfo.getTransPwd();
+		String transpwd2 = userInfo.getTransPwdConfirm();
+		
+//		String pwd1 = userInfo.getUser().getPassword();
+//		String pwd2 = userInfo.getUser().getPwdconfirm();
+//		String transpwd1 = userInfo.getSecurity().getTransPwd();
+//		String transpwd2 = userInfo.getSecurity().getTransPwdConfirm();
+		if(pwd1.equals(pwd2) != true){
+			return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.ACCOUNT_PASSWORD_NOT_CONFIRMED];
+		}
+		if(transpwd1.equals(transpwd2) != true){
+			return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.TRANSACTION_PASSWORD_NOT_CONFIRMED];
+		}
+		if(pwd1.equals(transpwd1)){
+			return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.SAME_ACCOUNT_TRANSACTION_PASSWORD];
+		}
+		char c;
+		for(int i = 0; i < pwd1.length(); i++){
+			c = pwd1.charAt(i);
+			if (c >= 'a' && c <= 'z'){
+				lowercaseAcct = true;
+			}
+			else if (c >= 'A' && c <= 'Z'){
+				uppercaseAcct = true;
+			}
+			else if (c >= '0' && c <= '9'){
+				numberAcct = true;
+			}			
+		}
+		if(lowercaseAcct == false || uppercaseAcct == false || numberAcct == false){
+			return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.SIMPLE_ACCOUNT_PASSWORD];
+		}
+		for(int i = 0; i < transpwd1.length(); i++){
+			c = transpwd1.charAt(i);
+			if (c >= 'a' && c <= 'z'){
+				lowercaseTrans = true;
+			}
+			else if (c >= 'A' && c <= 'Z'){
+				uppercaseTrans = true;
+			}
+			else if (c >= '0' && c <= '9'){
+				numberTrans = true;
+			}			
+		}
+		if(lowercaseTrans == false || uppercaseTrans == false || numberTrans == false){
+			return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.SIMPLE_TRANSACTION_PASSWORD];
+		}
+		return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.NO_ERROR];		
+	}
 	
 //	@RequestMapping("/userlist")
 //    public ModelAndView userList(Model model) {
