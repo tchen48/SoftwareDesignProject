@@ -255,7 +255,7 @@ public class SecurityManager {
 		Date start = security.getCaptchaStart();
 		Date current = new Date();
 		long difference = current.getTime() - start.getTime();
-		if(difference > 1000 * 60){
+		if(difference > 1000 * 60 * 5){
 //			deleteCaptcha(strID);
 			createCaptcha(strID);
 			return StatusCode.CAPTCHA_EXPIRED;

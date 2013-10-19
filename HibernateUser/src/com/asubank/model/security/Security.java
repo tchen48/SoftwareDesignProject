@@ -75,6 +75,8 @@ public class Security {
 		this.captcha = "";
 		this.captchaInput = "";
 		this.captchaStart = defaultDate;
+		this.lastPasswordUpdate = new Date();
+		this.loginStatus = false;
 	}
 	public void setStrID(String strID){
 		this.strID = new String(strID);

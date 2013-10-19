@@ -5,6 +5,7 @@ import java.util.Date;
 import com.asubank.model.pii.Pii;
 import com.asubank.model.security.Security;
 import com.asubank.model.user.User;
+import com.asubank.model.visitor.Visitor;
 
 public class UserInformation {
 	private String firstname;
@@ -20,6 +21,14 @@ public class UserInformation {
 	private String pwdConfirm;
 	private String transPwd;
 	private String transPwdConfirm;
+	private Visitor visitor;
+	
+	public Visitor getVisitor() {
+		return visitor;
+	}
+	public void setVisitor(Visitor visitor) {
+		this.visitor = visitor;
+	}
 	public String getFirstname() {
 		return firstname;
 	}

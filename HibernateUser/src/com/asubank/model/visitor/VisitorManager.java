@@ -109,18 +109,18 @@ public class VisitorManager {
 		session.getTransaction().commit();
 		session.close();
 	}
-	public static int validateCaptcha(String machineID, String captchaInput) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException{
+	public static int validateCaptcha(String machineID, String captchaInput, int source) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException{
 		Visitor visitor = VisitorManager.queryVisitor(machineID);
 		if(visitor == null)
 			return StatusCode.USERID_NOT_EXIST;
-		if(visitor.getFail() == 0){
+		if(visitor.getFail() == 0 && source == CapValidationRequestSource.LOGIN){
 			return StatusCode.CAPTCHA_VALIDATED;
 		}
 		
 		Date start = visitor.getCaptchaStart();
 		Date current = new Date();
 		long difference = current.getTime() - start.getTime();
-		if(difference > 1000 * 60){
+		if(difference > 1000 * 60 * 5){
 			createCaptcha(machineID);
 			return StatusCode.CAPTCHA_EXPIRED;
 		}

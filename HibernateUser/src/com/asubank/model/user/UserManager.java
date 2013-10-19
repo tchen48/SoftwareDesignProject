@@ -126,8 +126,7 @@ public class UserManager {
 		int num = ((Number)query.uniqueResult()).intValue();
 		session.getTransaction().commit();
 		session.close();
-		return num;
-		
+		return num;		
 	}
 	@SuppressWarnings("unchecked")
 	public static LoginResult validate(String strID, String password){

@@ -47,18 +47,18 @@
                 		</tr>
                 		<tr>
                 			<td>User ID:</td>
-                			<td><form:input  id="textfield" path="user.strID" style="height: 20px;"/></td>
+                			<td><form:input  id="textfield" path="user.strID" required="true" autocomplete="off" style="height: 20px;"/></td>
                 		</tr>
                 		<tr>
                 			<td>Password:</td>
-                			<td><form:input type="password" id="textfield2" path="user.password" style="height: 20px;" /></td>
+                			<td><form:input type="password" id="textfield2" required="true" autocomplete="off" path="user.password" style="height: 20px;" /></td>
                 			<td>
                 				<input type="submit" name="action" id="submit" value="Submit" style="padding:3px 10px;"/>
                 			</td>
                 		</tr>
                 	</table>
                 	<div style="margin:5px 8px 5px 8px">
-						<form:input path="visitor.captchaInput" type="text" id="txtInput" placeholder="Input the captcha below" style="float:left; display:inline;width:200px;height:20px;"/>
+						<form:input path="visitor.captchaInput" type="text" id="txtInput" autocomplete="off" placeholder="Input the captcha below" style="float:left; display:inline;width:200px;height:20px;"/>
 	               	 	<p style="float:left;display:inline;margin-left:10px;margin-top:0px; margin-bottom:0px;height:20px;line-height:20px;color:red">${captchaStatus}</p><br />
 	               	</div>            		
             		<img src="data:image/png;base64,${encodedImage}" alt="Click Refresh" width="250px" height="50px" style="float:left;display:inline;margin:0px 20px 0px 9px" />	
@@ -67,7 +67,7 @@
                 	<form:hidden path="visitor.machineID" value="${visitor.machineID}" />
 			        
 	                <p class="member" style="margin-left: 2px; margin-bottom:0px; margin-top:0px"><a href="forgetpwd.html?machineid=${visitor.machineID}">Lost your Password?</a></p>
-	                <p class="member" style="margin-left: 7px; margin-bottom:5px">Not a member yet? <a href="applynewaccount.html">Create Account now!</a></p>
+	                <p class="member" style="margin-left: 7px; margin-bottom:5px">Not a member yet? <a href="applynewaccount.html?machineid=${visitor.machineID}">Create Account now!</a></p>
 			    </form:form>	
 			    	
 			    	        

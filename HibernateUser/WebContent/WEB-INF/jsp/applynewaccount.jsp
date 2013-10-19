@@ -33,24 +33,24 @@
 		  <div class="box">
 			<h2>Account Registration</h2>
 			<form:form action="createuser.html" method="post" modelAttribute="command" commandName="userinformation" style="width:800px; height=600px; border:0; text-align:center; margin:auto auto">
-				<table border="1" style="border-spacing: 0px 25px;">
+				<table style="border-spacing: 0px 25px;">
 					<tr>
-						<td style="text-align: right;">First name</td><td style="text-align: left;"><form:input type="text" maxlength="20" path="firstname"  required="true"  style="height:30px"  /></td>
-						<td style="text-align: right;">Last name</td><td style="text-align: left;"><form:input path="lastname" type="text" maxlength="20" required="true" style="height:30px" /></td>
+						<td style="text-align: right;">First name</td><td style="text-align: left;"><form:input type="text" maxlength="20" path="firstname"  required="true" autocomplete="off" style="height:30px"  /></td>
+						<td style="text-align: right;">Last name</td><td style="text-align: left;"><form:input path="lastname" type="text" maxlength="20" required="true" autocomplete="off" style="height:30px" /></td>
 					</tr>
 					<tr>
 						<td style="text-align: right;">Birth</td>
-						<td style="text-align: left;padding:0"><form:input path="dobYear" type="number" min="1900" max = "2013" style="margin-left:28px;height:30px"/>
-													  		   <form:input path="dobMonth" type="number" min="1" max = "12" style="height:30px" />
+						<td style="text-align: left;padding:0"><form:input path="dobYear" type="number" min="1900" max = "2013" autocomplete="off" style="margin-left:28px;height:30px"/>
+													  		   <form:input path="dobMonth" type="number" min="1" max = "12" autocomplete="off" style="height:30px" />
 						</td>	
-						<td style="text-align: right;">SSN</td><td style="text-align: left;"><form:input path="ssn" pattern=".{9}" required="true" onkeypress='return event.charCode >= 48 && event.charCode <= 57' style="height:30px" type="text" maxlength="9" /></td>
+						<td style="text-align: right;">SSN</td><td style="text-align: left;"><form:input path="ssn" pattern=".{9}" required="true" autocomplete="off" onkeypress='return event.charCode >= 48 && event.charCode <= 57' style="height:30px" type="text" maxlength="9" /></td>
 					</tr>
 					<tr>
-						<td style="text-align: right;">Address</td><td style="text-align: left;"><form:input path="address" type="text" maxlength="100" style="height:30px"  /></td>
-						<td style="text-align: right;">Email</td><td style="text-align: left;"><form:input type="email" path="email" maxlength="50" required="true" style="height:30px"  /></td>
+						<td style="text-align: right;">Address</td><td style="text-align: left;"><form:input path="address" type="text" maxlength="100" required="true" autocomplete="off" style="height:30px"  /></td>
+						<td style="text-align: right;">Email</td><td style="text-align: left;"><form:input type="email" path="email" maxlength="50" required="true" autocomplete="off" style="height:30px"  /></td>
 					</tr>
 					<tr>
-						<td style="text-align: right;">Telephone</td><td style="text-align: left;"><form:input path="telephone" type="text"  pattern=".{10}" maxlength="10" onkeypress='return event.charCode >= 48 && event.charCode <= 57' style="height:30px"  /></td>
+						<td style="text-align: right;">Telephone</td><td style="text-align: left;"><form:input path="telephone" type="text"  pattern=".{10}" required="true" maxlength="10" autocomplete="off" onkeypress='return event.charCode >= 48 && event.charCode <= 57' style="height:30px"  /></td>
 						<td style="text-align: right;">Role Type</td>
 						<td style="text-align: right; height:25px; width:80px">
 							<form:select path="roletype" style="height:30px">
@@ -61,20 +61,33 @@
 						</td>
 					</tr>
 					<tr>
-						<td style="text-align: right;">Account Password</td><td style="text-align: left;"><form:input path="password" type="password" pattern=".{6,20}" maxlength="20" required="true" style="height:30px"  /></td>
-						<td style="text-align: right;">Confirm Account Password</td><td style="text-align: left;"><form:input path="pwdConfirm" type="password"  pattern=".{6,20}" maxlength="20" required="true" style="height:30px"  /></td>
+						<td style="text-align: right;">Account Password</td><td style="text-align: left;"><form:input path="password" type="password" pattern=".{6,20}" maxlength="20" required="true" autocomplete="off" style="height:30px"  /></td>
+						<td style="text-align: right;">Confirm Account Password</td><td style="text-align: left;"><form:input path="pwdConfirm" type="password"  pattern=".{6,20}" maxlength="20" required="true" autocomplete="off" style="height:30px"  /></td>
 					</tr>
 					<tr>
-						<td style="text-align: right;">Transaction Password</td><td style="text-align: left;"><form:input path="transPwd" type="password"  pattern=".{6,20}"  maxlength="20" required="true" style="height:30px"  /></td>
-						<td style="text-align: right;">Confirm Transaction Password</td><td style="text-align: left;"><form:input path="transPwdConfirm" type="password"  pattern=".{6,20}" maxlength="20" required="true" style="height:30px"  /></td>
-					</tr>
-					
+						<td style="text-align: right;">Transaction Password</td><td style="text-align: left;"><form:input path="transPwd" type="password"  pattern=".{6,20}"  maxlength="20" required="true" autocomplete="off" style="height:30px"  /></td>
+						<td style="text-align: right;">Confirm Transaction Password</td><td style="text-align: left;"><form:input path="transPwdConfirm" type="password"  pattern=".{6,20}" maxlength="20" required="true" autocomplete="off" style="height:30px"  /></td>
+					</tr>					
 				</table>
-				<input type="submit" value="Submit" style="padding:5px 10px">	
-				<input type="reset" value="Reset" style="padding:5px 10px">		  
+				<div style="margin:5px 8px 5px 8px">
+					<form:hidden path="visitor.machineID" value="${visitor.machineID}" />
+					<form:input path="visitor.captchaInput" type="text" id="txtInput" placeholder="Input the captcha below" required="true" autocomplete="off" pattern=".{6}" maxlength="6s" style="float:left; display:inline;width:200px;height:30px;"/>
+               	 	<p style="float:left;display:inline;margin:0px 20px;height:25px;line-height:25px;color:red">${captchaStatus}</p>
+               		<input type="submit" name="action" value="Submit" style="padding:5px 10px;margin-right: 20px;float:left; display:inline;">	
+					<input type="reset" value="Reset" style="padding:5px 10px;float:left; display:inline;">	
+               	</div>
 		    </form:form>
-			<p>&nbsp;</p>
-			<p>&nbsp;</p>
+		    <br />
+		    <form:form action="createuser.html" method="post" modelAttribute="command" commandName="userinformation" style="width:800px; height=600px; border:0; text-align:center; margin-top:10px; margin-left:90px">
+		    	<img src="data:image/png;base64,${encodedImage}" alt="Click Refresh" width="250px" height="50px" style="float:left;display:inline;margin:0px 20px 0px 9px" />	
+               	<input type="submit" name="action" value="Refresh" style="margin-top:10px;padding: 5px 10px;float:left; margin-right:20px;display:inline;" /><br /><br />
+               	<form:hidden path="visitor.machineID" value="${visitor.machineID}" />
+               	<p style="color:red">${userInfoError}</p>
+               	<p style="font-size:10px">* Password must include at least one uppercase letter, one lowercase letter, one number, and the length should be 6-20 characters.</p>
+		    </form:form>
+		    
+			
+			
 		</div>
 			<br class="clearfix" />
 	  </div>

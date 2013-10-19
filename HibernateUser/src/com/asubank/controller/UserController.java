@@ -3,6 +3,7 @@ package com.asubank.controller;
 import com.asubank.model.user.LoginResult;
 import com.asubank.model.user.UserManager;
 import com.asubank.model.user.User;
+import com.asubank.model.visitor.CapValidationRequestSource;
 import com.asubank.model.visitor.Visitor;
 import com.asubank.model.visitor.VisitorManager;
 import com.asubank.model.combinedcommand.UserInformation;
@@ -19,12 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-
-
-
-
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.awt.image.BufferedImage;
@@ -63,7 +58,7 @@ public class UserController {
 	public String home(@RequestParam String action, @ModelAttribute("uservisitor") UserVisitor userVisitor, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException{
 		if(action.equals("Submit")){
 			String machineID = userVisitor.getVisitor().getMachineID();
-			int captchaCode = VisitorManager.validateCaptcha(machineID, userVisitor.getVisitor().getCaptchaInput());
+			int captchaCode = VisitorManager.validateCaptcha(machineID, userVisitor.getVisitor().getCaptchaInput(), CapValidationRequestSource.LOGIN);
 			if(captchaCode != StatusCode.CAPTCHA_VALIDATED){
 				String captchaStatus = StatusCode.CAPTCHA_STATUS[captchaCode];
 				model.addAttribute("captchaStatus", captchaStatus);
@@ -103,9 +98,17 @@ public class UserController {
 	}
 	
 	@RequestMapping("/applynewaccount")
-    public String userInfo(Model model) {
+    public String userInfo(@RequestParam("machineid") String machineID, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException {
 //		User user = new User();
 //        model.addAttribute("user", user);
+		VisitorManager.deleteVisitor(machineID);
+		
+		Visitor visitor = VisitorManager.createVisitor();		
+		machineID = visitor.getMachineID();
+		VisitorManager.createCaptcha(machineID);
+		String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
+	    model.addAttribute("encodedImage",encodedImage); 
+		model.addAttribute("visitor",visitor);		
 		UserInformation userinformation = new UserInformation();
 		model.addAttribute("userinformation", userinformation);
         return "applynewaccount";
@@ -143,62 +146,96 @@ public class UserController {
 //	}
 	
 	@RequestMapping("/createuser")
-    public String handleLogin(@ModelAttribute("userinformation") UserInformation userInformation, Model model) {
-		checkUserInfo(userInformation);
-		System.out.println();
-		User user = new User();
-		Security security = new Security();
-		Pii pii = new Pii();
-		PartialPii partialPii = new PartialPii();
-		
-		user.setFirstname(userInformation.getFirstname());
-		user.setLastname(userInformation.getLastname());
-		user.setAddress(userInformation.getAddress());
-		user.setEmail(userInformation.getEmail());
-		user.setTelephone(userInformation.getTelephone());
-		user.setRoletype(userInformation.getRoletype());
-		user.setPassword(userInformation.getPassword());
-		security.setTransPwd(userInformation.getTransPwd());
-		security.setLastPasswordUpdate(new Date());
-		security.setLoginStatus(false);
-//		pii.setDob(userInformation.getDob());
-		pii.setSsn(userInformation.getSsn());
-		pii.setDobYear(userInformation.getDobYear());
-		pii.setDobMonth(userInformation.getDobMonth());
-//		String dobString = pii.getDob().toString();
-//		String yearString = dobString.substring(dobString.length() - 4, dobString.length());
-//		int dobYear = Integer.parseInt(yearString);
-		String ssnString = pii.getSsn();
-		String ssnLastFour = ssnString.substring(ssnString.length() - 4, ssnString.length());
-		partialPii.setDobYear(pii.getDobYear());
-		partialPii.setSsnLastFour(ssnLastFour);
-		
-		
-//		User user = userinfo.getUser();
-//		Security security = userinfo.getSecurity();
-//		Pii pii = userinfo.getPii();
-//		String dobString = pii.getDob().toString();
-//		String yearString = dobString.substring(dobString.length() - 4, dobString.length());
-//		int dobYear = Integer.parseInt(yearString);
-//		String ssnString = pii.getSsn();
-//		String ssnLastFour = ssnString.substring(ssnString.length() - 4, ssnString.length());
-		
-        String message = "";    	
-    	message = UserManager.createUser(user.getFirstname(), user.getLastname(), user.getAddress(), user.getEmail(), user.getTelephone(), user.getRoletype(),
-    			user.getPassword());
-    	security.setStrID(message);
-    	pii.setStrID(message);
-    	partialPii.setStrID(message);
-        SecurityManager.createSecurity(security);
-        pii.setStrID(message);
-//        PartialPii partialPii = new PartialPii(dobYear, ssnLastFour, message);
-        PiiManager.createPii(pii);
-        PiiManager.createPartialPii(partialPii);
-    	model.addAttribute("message", message);
-        return "result";
+    public String createUser(@RequestParam String action, @ModelAttribute("userinformation") UserInformation userInformation, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException {
+		if(action.equals("Submit")){
+			String machineID = userInformation.getVisitor().getMachineID();
+			int captchaCode = VisitorManager.validateCaptcha(machineID, userInformation.getVisitor().getCaptchaInput(), CapValidationRequestSource.REGISTRATION);
+			if(captchaCode != StatusCode.CAPTCHA_VALIDATED){
+				String captchaStatus = StatusCode.CAPTCHA_STATUS[captchaCode];
+				model.addAttribute("captchaStatus", captchaStatus);
+				String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
+			    model.addAttribute("encodedImage",encodedImage); 
+			    model.addAttribute("userInformation", userInformation);
+			    model.addAttribute("visitor", userInformation.getVisitor());
+			    return "applynewaccount";
+			}
+						
+			int checkInfoCode = checkUserInfo(userInformation);
+			if(checkInfoCode != UserInfoErrorCode.NO_ERROR){
+				VisitorManager.createCaptcha(machineID);
+				String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
+			    model.addAttribute("encodedImage",encodedImage); 
+			    model.addAttribute("userInfoError", UserInfoErrorCode.USERINFOERROR[checkInfoCode]);
+				model.addAttribute("visitor", userInformation.getVisitor());
+				return "applynewaccount";
+			}
+			
+			
+			User user = new User();
+			
+			Pii pii = new Pii();
+			PartialPii partialPii = new PartialPii();
+			
+			user.setFirstname(userInformation.getFirstname());
+			user.setLastname(userInformation.getLastname());
+			user.setAddress(userInformation.getAddress());
+			user.setEmail(userInformation.getEmail());
+			user.setTelephone(userInformation.getTelephone());
+			user.setRoletype(userInformation.getRoletype());
+			user.setPassword(userInformation.getPassword());
+			String message = "";    	
+		    message = UserManager.createUser(user.getFirstname(), user.getLastname(), user.getAddress(), user.getEmail(), user.getTelephone(), user.getRoletype(),
+		    			user.getPassword());
+		    Security security = new Security(message);
+//		    security.setStrID(message);
+			security.setTransPwd(userInformation.getTransPwd());
+			
+	//		pii.setDob(userInformation.getDob());
+			pii.setSsn(userInformation.getSsn());
+			pii.setDobYear(userInformation.getDobYear());
+			pii.setDobMonth(userInformation.getDobMonth());
+	//		String dobString = pii.getDob().toString();
+	//		String yearString = dobString.substring(dobString.length() - 4, dobString.length());
+	//		int dobYear = Integer.parseInt(yearString);
+			String ssnString = pii.getSsn();
+			String ssnLastFour = ssnString.substring(ssnString.length() - 4, ssnString.length());
+			partialPii.setDobYear(pii.getDobYear());
+			partialPii.setSsnLastFour(ssnLastFour);
+			
+			
+	//		User user = userinfo.getUser();
+	//		Security security = userinfo.getSecurity();
+	//		Pii pii = userinfo.getPii();
+	//		String dobString = pii.getDob().toString();
+	//		String yearString = dobString.substring(dobString.length() - 4, dobString.length());
+	//		int dobYear = Integer.parseInt(yearString);
+	//		String ssnString = pii.getSsn();
+	//		String ssnLastFour = ssnString.substring(ssnString.length() - 4, ssnString.length());
+			
+	       
+	    	
+	    	pii.setStrID(message);
+	    	partialPii.setStrID(message);
+	        SecurityManager.createSecurity(security);
+	        pii.setStrID(message);
+	//        PartialPii partialPii = new PartialPii(dobYear, ssnLastFour, message);
+	        PiiManager.createPii(pii);
+	        PiiManager.createPartialPii(partialPii);
+	    	model.addAttribute("message", message);
+	    	VisitorManager.deleteVisitor(machineID);
+	        return "result";
+		}
+		else{
+			String machineID = userInformation.getVisitor().getMachineID();
+			VisitorManager.createCaptcha(machineID);
+			String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
+		    model.addAttribute("encodedImage",encodedImage); 
+		    model.addAttribute("visitor", userInformation.getVisitor());
+	        return "applynewaccount";
+		}
     }
 	
-	private String checkUserInfo(UserInformation userInfo){
+	private int checkUserInfo(UserInformation userInfo){
 		boolean uppercaseAcct = false;
 		boolean lowercaseAcct =false;
 		boolean numberAcct = false;
@@ -209,19 +246,18 @@ public class UserController {
 		String pwd2 = userInfo.getPwdConfirm();
 		String transpwd1 = userInfo.getTransPwd();
 		String transpwd2 = userInfo.getTransPwdConfirm();
-		
-//		String pwd1 = userInfo.getUser().getPassword();
-//		String pwd2 = userInfo.getUser().getPwdconfirm();
-//		String transpwd1 = userInfo.getSecurity().getTransPwd();
-//		String transpwd2 = userInfo.getSecurity().getTransPwdConfirm();
+
 		if(pwd1.equals(pwd2) != true){
-			return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.ACCOUNT_PASSWORD_NOT_CONFIRMED];
+//			return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.ACCOUNT_PASSWORD_NOT_CONFIRMED];
+			return UserInfoErrorCode.ACCOUNT_PASSWORD_NOT_CONFIRMED;
 		}
 		if(transpwd1.equals(transpwd2) != true){
-			return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.TRANSACTION_PASSWORD_NOT_CONFIRMED];
+//			return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.TRANSACTION_PASSWORD_NOT_CONFIRMED];
+			return UserInfoErrorCode.TRANSACTION_PASSWORD_NOT_CONFIRMED;
 		}
 		if(pwd1.equals(transpwd1)){
-			return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.SAME_ACCOUNT_TRANSACTION_PASSWORD];
+//			return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.SAME_ACCOUNT_TRANSACTION_PASSWORD];
+			return UserInfoErrorCode.SAME_ACCOUNT_TRANSACTION_PASSWORD;
 		}
 		char c;
 		for(int i = 0; i < pwd1.length(); i++){
@@ -237,7 +273,8 @@ public class UserController {
 			}			
 		}
 		if(lowercaseAcct == false || uppercaseAcct == false || numberAcct == false){
-			return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.SIMPLE_ACCOUNT_PASSWORD];
+//			return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.SIMPLE_ACCOUNT_PASSWORD];
+			return UserInfoErrorCode.SIMPLE_ACCOUNT_PASSWORD;
 		}
 		for(int i = 0; i < transpwd1.length(); i++){
 			c = transpwd1.charAt(i);
@@ -252,9 +289,11 @@ public class UserController {
 			}			
 		}
 		if(lowercaseTrans == false || uppercaseTrans == false || numberTrans == false){
-			return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.SIMPLE_TRANSACTION_PASSWORD];
+//			return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.SIMPLE_TRANSACTION_PASSWORD];
+			return UserInfoErrorCode.SIMPLE_TRANSACTION_PASSWORD;
 		}
-		return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.NO_ERROR];		
+//		return UserInfoErrorCode.USERINFOERROR[UserInfoErrorCode.NO_ERROR];	
+		return UserInfoErrorCode.NO_ERROR;
 	}
 	
 //	@RequestMapping("/userlist")
