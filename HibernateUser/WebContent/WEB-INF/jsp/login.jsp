@@ -53,7 +53,7 @@
                 			<td>Password:</td>
                 			<td><form:input type="password" id="textfield2" required="true" autocomplete="off" path="user.password" style="height: 20px;" /></td>
                 			<td>
-                				<input type="submit" name="action" id="submit" value="Submit" style="padding:3px 10px;"/>
+                				<input type="submit" name="action" id="submit" value="Login" style="padding:3px 10px;"/>
                 			</td>
                 		</tr>
                 	</table>
@@ -66,8 +66,8 @@
                 	<input type="submit" name="action" value="Refresh" style="padding: 5px 10px;float:left; margin-right: 50px;display:inline;" /><br /><br />
                 	<form:hidden path="visitor.machineID" value="${visitor.machineID}" />
 			        
-	                <p class="member" style="margin-left: 2px; margin-bottom:0px; margin-top:0px"><a href="forgetpwd.html?machineid=${visitor.machineID}">Lost your Password?</a></p>
-	                <p class="member" style="margin-left: 7px; margin-bottom:5px">Not a member yet? <a href="applynewaccount.html?machineid=${visitor.machineID}">Create Account now!</a></p>
+	                <p class="member" style="margin-left: 2px; margin-bottom:0px; margin-top:0px"><a href="forgetpwd/${visitor.machineID}.html">Lost your Password?</a></p>
+	                <p class="member" style="margin-left: 7px; margin-bottom:5px">Not a member yet? <a href="applynewaccount/${visitor.machineID}.html">Create Account now!</a></p>
 			    </form:form>	
 			    	
 			    	        

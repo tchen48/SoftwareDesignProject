@@ -1,5 +1,6 @@
 package com.asubank.model.visitor;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -12,6 +13,7 @@ import java.util.UUID;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.asubank.model.security.ImagePath;
 import com.asubank.model.security.Security;
 import com.asubank.model.security.SessionFactoryUtil;
 import com.asubank.model.security.StatusCode;
@@ -79,7 +81,7 @@ public class VisitorManager {
 	
 	public static void createCaptcha(String machineID) throws ParseException, InvalidKeyException, NoSuchAlgorithmException, IOException{
 		String captcha = SecurityManager.createRandomString();
-		String storagePath = "C:\\Users\\shaosh\\Documents\\workspace-sts-3.4.0.M1\\HibernateUser\\WebContent\\images\\capbg\\visitorcaptcha\\";
+		String storagePath = ImagePath.VISITORCAPTCHA;
 		SecurityManager.createImage(captcha, machineID, storagePath);
 		String captchaNoSpace = captcha.replaceAll("\\s+", "").toLowerCase();
 		
@@ -108,6 +110,11 @@ public class VisitorManager {
 		query.executeUpdate(); 
 		session.getTransaction().commit();
 		session.close();
+		String filepath = ImagePath.VISITORCAPTCHA +  machineID + ".png";
+		File file = new File(filepath);
+		if(file.isFile() && file.exists()){
+			file.delete();
+		}
 	}
 	public static int validateCaptcha(String machineID, String captchaInput, int source) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException{
 		Visitor visitor = VisitorManager.queryVisitor(machineID);

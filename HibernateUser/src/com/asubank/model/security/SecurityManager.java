@@ -220,7 +220,7 @@ public class SecurityManager {
 	
 	public static Security createCaptcha(String strID) throws ParseException, InvalidKeyException, NoSuchAlgorithmException, IOException{
 		String captcha = createRandomString();
-		String storagePath = "C:\\Users\\shaosh\\Documents\\workspace-sts-3.4.0.M1\\HibernateUser\\WebContent\\images\\capbg\\usercaptcha\\";
+		String storagePath = ImagePath.USERCAPTCHA;
 		createImage(captcha, strID, storagePath);
 		String capthaNoSpace = captcha.replaceAll("\\s+", "").toLowerCase();
 		
@@ -306,7 +306,7 @@ public class SecurityManager {
 		int capbg = 1 + (int)(Math.random() * 7 + 1);
 		@SuppressWarnings("unused")
 		String capbgnum = String.valueOf(capbg);
-		String imageLocation = "C:\\Users\\shaosh\\Documents\\workspace-sts-3.4.0.M1\\HibernateUser\\WebContent\\images\\capbg\\" + capbgnum + ".jpg";
+		String imageLocation = ImagePath.BACKGROUND + capbgnum + ".jpg";
 		
 		String storedFile = storagePath + strID + ".png";
 	    BufferedImage image = ImageIO.read(new File(imageLocation));

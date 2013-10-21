@@ -221,6 +221,26 @@ ul h4 {
 	padding-left: 0;
 }
 
+.menuform{
+	
+	margin:0;
+	width: auto;
+	height:20px;
+	margin-left:20px;	
+	padding:0px;
+}
+
+.menuinput {
+	cursor:pointer;
+	color: #FFFFFF;
+	font-size: 1.25em;
+	letter-spacing: -1px;
+	line-height:50px;
+	text-shadow: 0 1px 1px #007D7D;
+	background-color:Transparent;
+	border:none;
+}
+
 #page {
 	padding: 45px 45px 15px 45px;
 	position: relative;
@@ -339,4 +359,30 @@ td{
 }
 input{
 	float:right;	
+}
+
+#profile a{
+	font-size: 1em;
+	float:left;
+	display:inline;
+	margin-bottom:20px;
+}
+#profile p{
+	font-size: 1em;
+	color:#0066FF;
+	float:left;
+	display:inline;
+	margin-bottom:20px;
+	margin-left:20px;
+}
+
+#settings a{
+	font-size: 1em;
+	float:left;
+	display:inline;
+	margin-bottom:20px;
+}
+.settingsubmit{
+	padding: 5px 20px;
+	float:left;
 }

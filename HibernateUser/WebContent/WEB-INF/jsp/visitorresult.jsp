@@ -6,10 +6,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style.css" />
+<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
-<div id="wrapper">
+	<div id="wrapper">
   <div id="header">
 	  <div id="logo">
 			<h1><a href="#">ASU Bank </a></h1>
@@ -32,27 +32,11 @@
 	<div id="page">
 	  <div id="content">
 		  <div class="box">
-                <form:form method="post" action="sendpwd.html" commandName="user" style="border: 1;margin:auto auto; text-align:center">
-                	<table style="margin:auto auto;" cellspacing="0" cellpadding="0" >
-                		<tr>
-                			<div style="padding-left:10px; color:red;">
-                				${ErrorMsg}
-                			</div>
-                		</tr>
-                		<tr>
-                			<td style="text-align: right;">User ID:</td>
-                			<td style="text-align: left;"><form:input  id="textfield" path="strID" required="true" style="width:200px;height: 30px;"/></td>
-                		</tr>
-                		<tr>
-                			<td></td>
-                			<td><input type="submit" id="submit" value="Send Temporary Password" style="width: 200px; padding:5px 10px; margin-top:20px"/></td>
-                		</tr>
-                	</table><br />
-                	
-                		
-                		
-                	
-			      </form:form>	
+				<h4>${resultMessage}</h4>
+                
+                <form:form method="post" action="login.html" style="border:0; text-align:center; margin:auto auto">                	                	
+                	<input type="submit" value="Log In" style="padding: 5px 10px;float:center; margin-right: 50px;display:inline;" /><br /><br />
+                </form:form>	
 			    	
 			    	        
 				<p>&nbsp;</p>

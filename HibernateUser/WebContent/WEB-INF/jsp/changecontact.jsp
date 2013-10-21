@@ -4,8 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>ASU Bank Home</title>
+<title>ASU Bank Profile and Settings</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
+<script type="text/javascript" src="script.js"></script>
 </head>
 <body>
 <div id="wrapper">
@@ -15,14 +16,14 @@
 		</div>
 		<div id="slogan"> <ul>
 			<li class="first current_page_item"><a href="#">Home</a> </li>
-			<li><a href="#">${user.strID}</a></li>
+			<li><a href="#" id="strID">${user.strID}</a></li>
 			<li><a href="#">Services</a></li>
 			<li><a href="#">LogOut</a></li>
           </ul>		</div>
 		
   	</div>
 	<div id="menu">
-		<ul>
+			<ul>
 			<li class="first current_page_item">
 				<form:form class="menuform" action="profilesetting.html" method="POST" commandName="user" style="border:0px; float:left; display:inline; ">
 					<form:hidden path="strID" value="${user.strID}" />
@@ -48,39 +49,33 @@
 				</form:form>
 			</li></ul>
 	</div>
-	<div>
-		<div style="height:500px; width: 800px; padding:20px">
-			<div id="OTP">
-				<form:form action="createotp.html" method="POST" commandName="user" style="border:0px;">				
+	<div style="padding:0">
+		<div style="height:400px; width: 900px; padding:50px; margin:0px 50px; text-align:center">
+			<div id="settings" style="height:300px;width:400px; padding:20px; border: 1;border:thin dashed;float:center; margin:auto auto">
+				<h4 style="text-align:left;margin-bottom:0;margin-top:10px;">Change Contact</h4>
+				<form:form action="updatecontact.html" method="POST" commandName="contactset" style="border:0px;padding-top:0">
 					<form:hidden path="strID" value="${user.strID}" />
-					<input type="submit" value="Create OTP" style="float:left;padding:5px 10px;margin-right:20px;margin-top:7px;"/>	
-				</form:form>			
-				<p style="float:left; display:inline;">${security.otp}</p><br/><br/>
-				<form:form action="validateotp.html" method="POST" commandName="security" style="border:0px;">
-					<p style="float:left;display:inline;margin-top:5px;margin-right:20px;height:20px;line-height:20px;">OTP</p>	
-					<form:hidden path="strID" value="${user.strID}" />			
-					<form:input path="otpInput" placeholder="Enter your OTP" value="" style="width:150px;height:25px;float:left;display:inline;margin-right:20px;"/>
-					<input type="submit" value="Validate OTP" style="float:left;display:inline;padding:5px 10px;margin-right:20px;"/>	
+					<table style="border-spacing: 0px 25px;">
+						<tr>
+							<td>Address</td>
+							<td style="padding-right:60px;"><form:input path="address" type="text" maxlength="100" required="false" autocomplete="off" style="height:30px;width:200px;"  /></td>
+						</tr>
+						<tr>
+							<td>Email</td>
+							<td style="padding-right:60px;"><form:input path="email" type="email" maxlength="50" required="false" autocomplete="off" style="height:30px;width:200px"  /></td>
+						</tr>
+						<tr>
+							<td>Telephone</td>
+							<td style="padding-right:60px;"><form:input path="telephone" type="text" pattern=".{10}" maxlength="10" required="false" autocomplete="off" style="height:30px;width:200px"  /></td>
+						</tr>
+					</table>
+					<input type="submit" name="action" value="Update Contact" style="margin-bottom:15px; margin-right:60px; padding:5px 10px;" /><br />
 				</form:form>
-				<p style="float:left;display:inline;margin-top:0px;height:20px;line-height:20px;">${status}</p>
-			</div>
-			<br/><br/>
-			<div id="Captcha">
-				<div style="float:left; display:inline;margin-right:20px;" >	
-					<img src="data:image/png;base64,${encodedImage}" alt="Click Refresh" width="250px" height="50px" />			
-		    	</div>
-	        	<form:form style="border:0px;" action="createcaptcha.html" method="POST" commandName="user" >
-	        		<form:hidden path="strID" value="${user.strID}" />	
-	        		<input type="submit" value="Refresh" style="padding: 5px 10px;float:left; display:inline; margin-right:20px;" />
-				</form:form>
-				<br/>
-				<form:form style="margin-top:20px;border:0px;" action="validatecaptcha.html" method="POST" commandName="security">
-					<form:hidden path="strID" value="${user.strID}" />
-			        <form:input path="captchaInput" type="text" id="txtInput" placeholder="Case Insensitive" style="float:left; display:inline; margin-right:20px;width:150px;height:25px;"/>    		    
-			        <input type="submit" value="Validate Captcha" onclick="alert(ValidCaptcha());"  style="padding: 5px 10px;float:left; display:inline; margin-right:20px;"/>
-				</form:form>	
-				<p style="float:left;display:inline;margin-top:0px;height:20px;line-height:20px;">${statusCap}</p>		
-			</div>
+				<p style="font-size:10px;float:left">* Only space will not change anything.</p>
+				<!-- <a href="#">Change Password</a><br /><br />
+				<a href="#">Change Contact</a><br /><br />
+				<a href="#">Overdraft Protection</a>-->
+			</div>			
 		</div>
 	</div>
 		

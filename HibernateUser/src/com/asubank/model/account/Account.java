@@ -2,23 +2,36 @@ package com.asubank.model.account;
 
 public class Account{
 	private String strID;
-	private String checkingID;
+	private long checkingID;
 	private double checkingBalance;
-	private String savingID;
+	private long savingID;
 	private double savingBalance;
-	private String creditID;
+	private long creditID;
 	private double creditBalance;
 	private double maxOverdraft;
+	
+	public Account(){}
+	
+	public Account(String strID){
+		this.strID = new String(strID);
+		checkingID = 0;
+		checkingBalance = 0;
+		savingID = 0;
+		savingBalance = 0;
+		creditID = 0;
+		creditBalance = 0;
+		maxOverdraft = 0;
+	}
 	public String getStrID() {
 		return strID;
 	}
 	public void setStrID(String strID) {
 		this.strID = strID;
 	}
-	public String getCheckingID() {
+	public long getCheckingID() {
 		return checkingID;
 	}
-	public void setCheckingID(String checkingID) {
+	public void setCheckingID(long checkingID) {
 		this.checkingID = checkingID;
 	}
 	public double getCheckingBalance() {
@@ -27,10 +40,10 @@ public class Account{
 	public void setCheckingBalance(double checkingBalance) {
 		this.checkingBalance = checkingBalance;
 	}
-	public String getSavingID() {
+	public long getSavingID() {
 		return savingID;
 	}
-	public void setSavingID(String savingID) {
+	public void setSavingID(long savingID) {
 		this.savingID = savingID;
 	}
 	public double getSavingBalance() {
@@ -39,10 +52,10 @@ public class Account{
 	public void setSavingBalance(double savingBalance) {
 		this.savingBalance = savingBalance;
 	}
-	public String getCreditID() {
+	public long getCreditID() {
 		return creditID;
 	}
-	public void setCreditID(String creditID) {
+	public void setCreditID(long creditID) {
 		this.creditID = creditID;
 	}
 	public double getCreditBalance() {

@@ -1,5 +1,8 @@
 package com.asubank.model.user;
  
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -11,6 +14,20 @@ import com.asubank.model.security.StatusCode;
 
 public class UserManager {
 	private static Session session;
+	private static Date defaultDate;
+	private static SimpleDateFormat df;
+	
+	static{
+		String date0 = "1970-01-01 00:00:00";
+		df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			defaultDate = df.parse(date0);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	private static void createSession(){
 		session = SessionFactoryUtil.getSessionFactory().openSession();
         session.beginTransaction();
@@ -71,11 +88,10 @@ public class UserManager {
 		user.setShortname(shortname);
 		user.setStrID(strID);
 		createSession();
-		System.out.println("StrID = " + user.getStrID());
+//		System.out.println("StrID = " + user.getStrID());
 		session.save(user);
 		session.getTransaction().commit();
 		//queryPerson(session);
-//		System.out.println("================================");
 		session.close();
 		return (user.getStrID());
 //		return ("User " + user.getFirstname() + " " + user.getLastname() + " " + user.getUserID() + 
@@ -116,6 +132,63 @@ public class UserManager {
 		session.getTransaction().commit();
 		session.close();
 		return user;		
+	}
+	
+	public static void updatePassword(String strID, String password){
+		createSession();
+		String hql1 = "update User as u set u.password=:password where strID=:strID";
+		Query query1 = session.createQuery(hql1);
+		query1.setString("strID", strID);
+		query1.setString("password", password);
+		query1.executeUpdate(); 
+		
+		String hql2 = "update Security as s set s.lastPasswordUpdate=:lastPasswordUpdate where strID=:strID";
+		Query query2 = session.createQuery(hql2);
+		query2.setString("strID", strID);
+		query2.setString("lastPasswordUpdate", df.format(new Date()));
+		query2.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+	}
+	
+	public static void updateContact(ContactSet contactSet){
+		String strID = contactSet.getStrID();
+		String telephone = contactSet.getTelephone();
+		String email = contactSet.getEmail();
+		String address = contactSet.getAddress();	
+		createSession();
+		if(email != null){
+			String emailNoSpace = email.replaceAll("\\s+", "");
+			if(emailNoSpace != ""){
+				String hql1 = "update User as u set u.email=:email where strID=:strID";
+				Query query1 = session.createQuery(hql1);
+				query1.setString("strID", strID);
+				query1.setString("email", email);
+				query1.executeUpdate();
+			}
+		}
+		if(address != null){
+			String addressNoSpace = address.replaceAll("\\s+", "");
+			if(addressNoSpace != ""){		
+				String hql2 = "update User as u set u.address=:address where strID=:strID";
+				Query query2 = session.createQuery(hql2);
+				query2.setString("strID", strID);
+				query2.setString("address", address);
+				query2.executeUpdate();
+			}
+		}
+		if(telephone != null){
+			String telephoneNoSpace = telephone.replaceAll("\\s+", "");
+			if(telephoneNoSpace != ""){			
+				String hql3 = "update User as u set u.telephone=:telephone where strID=:strID";
+				Query query3 = session.createQuery(hql3);
+				query3.setString("strID", strID);
+				query3.setString("telephone", telephone);
+				query3.executeUpdate(); 
+			}
+		}
+		session.getTransaction().commit();
+		session.close();
 	}
 	
 	private static int queryStrID(String shortname){
