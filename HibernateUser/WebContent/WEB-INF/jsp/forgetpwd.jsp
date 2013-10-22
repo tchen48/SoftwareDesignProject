@@ -29,32 +29,20 @@
 		</ul>
 	</div>
 	
-	<div id="page">
-	  <div id="content">
-		  <div class="box">
-                <form:form method="post" action="sendpwd.html" commandName="user" style="border: 1;margin:auto auto; text-align:center">
-                	<table style="margin:auto auto;" cellspacing="0" cellpadding="0" >
+	<div style="padding:0">
+		<div style="height:300px; width: 900px; padding:50px; margin:0px 50px; text-align:center">
+			<div style="height:200px;width:400px; padding:20px; border: 1;border:thin dashed;float:center; margin:auto auto">
+				<h4 style="text-align:left;margin-bottom:0;margin-top:10px;">Forget Password</h4>
+                <form:form method="post" action="../sendpwd.html" commandName="user" style="border:0px;padding-top:0">
+                	<table style="border-spacing: 0px 25px;">                		
                 		<tr>
-                			<div style="padding-left:10px; color:red;">
-                				${ErrorMsg}
-                			</div>
-                		</tr>
-                		<tr>
-                			<td style="text-align: right;">User ID:</td>
-                			<td style="text-align: left;"><form:input  id="textfield" path="strID" required="true" style="width:200px;height: 30px;"/></td>
-                		</tr>
-                		<tr>
-                			<td></td>
-                			<td><input type="submit" id="submit" value="Send Temporary Password" style="width: 200px; padding:5px 10px; margin-top:20px"/></td>
-                		</tr>
-                	</table><br />
-                	
-                		
-                		
-                	
+                			<td>User ID</td>
+                			<td style="padding-right:60px;"><form:input path="strID" required="true" style="width:200px;height: 30px;"/></td>
+                		</tr>                		
+                	</table>
+                	<input type="submit" id="submit" value="Send Temporary Password" style="margin-bottom:30px; margin-right:60px; padding:5px 10px;"/><br />
+                	<p style="color:red; float:left;margin-top:20px">${ErrorMsg}</p>  
 			      </form:form>	
-			    	
-			    	        
 				<p>&nbsp;</p>
 			</div>
 			<br class="clearfix" />

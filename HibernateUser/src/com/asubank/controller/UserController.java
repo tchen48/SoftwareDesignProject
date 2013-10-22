@@ -148,9 +148,7 @@ public class UserController {
 		String resultMessage = UserResultMessage.TEMP_PASSWORD_EMAIL_SENT;
 		model.addAttribute("resultMessage", resultMessage);
 		return "visitorresult";
-	}
-		
-		
+	}		
 //		String machineID = combinedCommand.getVisitor().getMachineID();
 //		VisitorManager.createCaptcha(machineID);
 //		String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
@@ -446,14 +444,15 @@ public class UserController {
 			model.addAttribute("passwordset",passwordSet);
 			return "changepassword";
 		}
-		else if(action.equals("Change Contact")){
+//		else(action.equals("Change Contact")){
+		else{
 			ContactSet contactSet = new ContactSet();
 			model.addAttribute("contactset",contactSet);
 			return "changecontact";
 		}
-		else{
-			return "overdraftprotection";
-		}
+//		else{
+//			return "overdraftprotection";
+//		}
 	}
 	
 	@RequestMapping("/updatepassword")
@@ -528,14 +527,22 @@ public class UserController {
 	
 	@RequestMapping("/updatecontact")
 	public String updateContact(@ModelAttribute("contactset") ContactSet contactSet, Model model){
-		UserManager.updateContact(contactSet);
-		User user = new User();
+		User user = new User();		
 		user.setStrID(contactSet.getStrID());
+		int validate = UserManager.validatePassword(user.getStrID(), contactSet.getPassword());
+		if(validate != StatusCode.LOGIN_SUCCESS){
+			model.addAttribute("user",user);
+			contactSet = new ContactSet();
+			model.addAttribute("contactset",contactSet);
+			model.addAttribute("ErrorMsg",SettingResultCode.PASSWORD_NOT_VALIDATED);
+			return "changecontact";
+		}		
+		UserManager.updateContact(contactSet);		
 		model.addAttribute("user",user);
 		model.addAttribute("resultMessage", SettingResultCode.CONTACT_UPDATED);
-		return "userresult";
-		
+		return "userresult";		
 	}
+	
 	//From: http://mrbool.com/how-to-convert-image-to-byte-array-and-byte-array-to-image-in-java/25136#
 	private static String imageToByteArray(String strID, String type) throws IOException{
 		BufferedImage image = ImageIO.read(new File(ImagePath.BACKGROUND + type + "\\" + strID + ".png"));

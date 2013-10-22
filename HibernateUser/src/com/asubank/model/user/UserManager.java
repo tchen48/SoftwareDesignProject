@@ -159,7 +159,7 @@ public class UserManager {
 		createSession();
 		if(email != null){
 			String emailNoSpace = email.replaceAll("\\s+", "");
-			if(emailNoSpace != ""){
+			if(emailNoSpace.equals("") == false){
 				String hql1 = "update User as u set u.email=:email where strID=:strID";
 				Query query1 = session.createQuery(hql1);
 				query1.setString("strID", strID);
@@ -169,7 +169,7 @@ public class UserManager {
 		}
 		if(address != null){
 			String addressNoSpace = address.replaceAll("\\s+", "");
-			if(addressNoSpace != ""){		
+			if(addressNoSpace.equals("") == false){		
 				String hql2 = "update User as u set u.address=:address where strID=:strID";
 				Query query2 = session.createQuery(hql2);
 				query2.setString("strID", strID);
@@ -179,7 +179,7 @@ public class UserManager {
 		}
 		if(telephone != null){
 			String telephoneNoSpace = telephone.replaceAll("\\s+", "");
-			if(telephoneNoSpace != ""){			
+			if(telephoneNoSpace.equals("") == false){			
 				String hql3 = "update User as u set u.telephone=:telephone where strID=:strID";
 				Query query3 = session.createQuery(hql3);
 				query3.setString("strID", strID);
@@ -201,6 +201,32 @@ public class UserManager {
 		session.close();
 		return num;		
 	}
+	
+	public static int validatePassword(String strID, String password){
+		createSession();
+		String hql = "from User as user where user.strID=:strID"; //and user.password=:password";
+		Query query = session.createQuery(hql);
+		query.setString("strID", strID);
+		List <User>list = query.list();
+		User user = null;
+		java.util.Iterator<User> iter = list.iterator();
+		while (iter.hasNext()) {
+			user = iter.next();
+		}		
+		session.getTransaction().commit();
+		session.close();
+		if(user == null){
+			return StatusCode.USERID_NOT_EXIST;
+		}
+		String correctPassword = user.getPassword();
+		if(password.equals(correctPassword)){
+			return StatusCode.LOGIN_SUCCESS;
+		}
+		else{
+			return StatusCode.PASSWORD_NOT_CORRECT;
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static LoginResult validate(String strID, String password){
 		LoginResult loginResult = new LoginResult();

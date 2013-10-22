@@ -58,7 +58,7 @@
 					<table style="border-spacing: 0px 25px;">
 						<tr>
 							<td>Old Password</td>
-							<td style="padding-right:60px;"><form:input path="oldPassword" type="password" pattern=".{6,20}" maxlength="20" required="true" autocomplete="off" style="height:30px;width:200px;"  /></td>
+							<td style="padding-right:60px;"><form:input path="oldPassword" type="password" maxlength="20" required="true" autocomplete="off" style="height:30px;width:200px;"  /></td>
 						</tr>
 						<tr>
 							<td>New Password</td>
@@ -72,7 +72,7 @@
 					<input type="submit" name="action" value="Update Password" style="margin-bottom:15px;  margin-right:60px; padding:5px 10px;" /><br />
 					<p style="color:red; float:left;margin-bottom:20px">${ErrorMsg}</p>
 				</form:form>
-				<p style="font-size:10px;float:left">* Password must include at least one uppercase letter, one lowercase letter, one number, and the length should be 6-20 characters.</p>
+				<p style="font-size:10px;float:left;margin-top:20px;">* Password must include at least one uppercase letter, one lowercase letter, one number, and the length should be 6-20 characters.</p>
 				<!-- <a href="#">Change Password</a><br /><br />
 				<a href="#">Change Contact</a><br /><br />
 				<a href="#">Overdraft Protection</a>-->

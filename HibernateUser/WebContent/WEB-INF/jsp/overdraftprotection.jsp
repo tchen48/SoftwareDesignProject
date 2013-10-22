@@ -50,28 +50,25 @@
 			</li></ul>
 	</div>
 	<div style="padding:0">
-		<div style="height:400px; width: 900px; padding:50px; margin:0px 50px">
-			<div id="settings" style="height:300px;width:400px; padding:20px; margin:0;border: 1;border:thin dashed;float:right;display:inline">
-				<h4>Change Password</h4>
-				<form:form action="setting.html" method="POST" commandName="user" style="border:0px; float:left; display:inline; ">
+		<div style="height:500px; width: 900px; padding:50px; margin:0px 50px; text-align:center">
+			<div id="settings" style="height:400px;width:400px; padding:20px; border: 1;border:thin dashed;float:center; margin:auto auto">
+				<h4 style="text-align:left;margin-bottom:0;margin-top:10px;">Change Contact</h4>
+				<form:form action="overdraft.html" method="POST" commandName="accountSet" style="border:0px;padding-top:0">
 					<form:hidden path="strID" value="${user.strID}" />
-					<table>
+					<table style="border-spacing: 0px 25px;">
 						<tr>
-							<td>Old Password</td>
-							<td><form:input path="password" type="password" pattern=".{6,20}" maxlength="20" required="true" autocomplete="off" style="height:30px;width:200px"  /></td>
+							<td>Max Overdraft</td>
+							<td style="padding-right:60px;"><form:input path="maxOverdraft" type="text" pattern=".{10}" maxlength="10" autocomplete="off" style="height:30px;width:200px"  /></td>
 						</tr>
 						<tr>
-							<td>New Password</td>
-							<td><form:input path="password" type="password" pattern=".{6,20}" maxlength="20" required="true" autocomplete="off" style="height:30px;width:200px"  /></td>
-						</tr>
-						<tr>
-							<td>Confirm</td>
-							<td><form:input path="password" type="password" pattern=".{6,20}" maxlength="20" required="true" autocomplete="off" style="height:30px;width:200px"  /></td>
+							<td>Password</td>
+							<td style="padding-right:60px;"><form:input path="password" type="password" maxlength="20" required="true" autocomplete="off" style="height:30px;width:200px;"  /></td>
 						</tr>
 					</table>
-					<input type="submit" name="action" value="Update Password" style="margin-bottom:30px" />
-					<input type="submit" name="action" value="Cancel" style="margin-bottom:30px" />
+					<input type="submit" name="action" value="Update Contact" style="margin-bottom:15px; margin-right:60px; padding:5px 10px;" /><br />
+					<p style="color:red; float:left;margin-bottom:15px">${ErrorMsg}</p>
 				</form:form>
+				<p style="font-size:10px;float:left">* Only space will not change anything.</p>
 				<!-- <a href="#">Change Password</a><br /><br />
 				<a href="#">Change Contact</a><br /><br />
 				<a href="#">Overdraft Protection</a>-->

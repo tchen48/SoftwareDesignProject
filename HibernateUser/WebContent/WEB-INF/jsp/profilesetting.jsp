@@ -64,7 +64,7 @@
 					<form:hidden path="strID" value="${user.strID}" />
 					<input class="settingsubmit" type="submit" name="action" value="Change Password" style="margin-bottom:30px" /><br /><br />
 					<input class="settingsubmit" type="submit" name="action" value="Change Contact" style="margin-bottom:30px" /><br /><br />
-					<input class="settingsubmit" type="submit" name="action" value="Overdraft Protection" style="margin-bottom:0px" /><br />
+		<!-- 	<input class="settingsubmit" type="submit" name="action" value="Overdraft Protection" style="margin-bottom:0px" /><br /> -->		
 				</form:form>
 				<!-- <a href="#">Change Password</a><br /><br />
 				<a href="#">Change Contact</a><br /><br />

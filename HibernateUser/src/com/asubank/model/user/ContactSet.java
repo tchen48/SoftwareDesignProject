@@ -5,6 +5,14 @@ public class ContactSet {
 	private String email;
 	private String address;
 	private String strID;
+	private String password;
+	
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	public String getTelephone() {
 		return telephone;
 	}
@@ -29,5 +37,4 @@ public class ContactSet {
 	public void setStrID(String strID) {
 		this.strID = strID;
 	}
-	
 }
