@@ -29,22 +29,23 @@
 		</ul>
 	</div>
 	
-	<div style="padding:0">
-		<div style="height:300px; width: 900px; padding:50px; margin:0px 50px; text-align:center">
+	<div style="padding:0 0 80px 0">
+		<div style="height:400px; width: 900px; padding:50px; margin:0px 50px; text-align:center">
 		<h4 style="text-align:left;margin-bottom:0;margin-top:10px;">A One-Time-Password(OTP) has been sent to your email.</h4><br />
 		<h4 style="text-align:left;margin-bottom:0;margin-top:10px;">Please validate it as soon as possible, in order to finish registration.</h4><br />
-			<div style="height:200px;width:400px; padding:20px; border: 1;border:thin dashed;float:center; margin:auto auto">
-				<h4 style="text-align:left;margin-bottom:0;margin-top:10px;">OTP Validation</h4>				
-				<form:form action="createotp.html" method="POST" commandName="userinformation" style="border:0px;">				
-					<input type="submit" value="Create another OTP" style="float:left;padding:5px 10px;margin-right:20px;margin-top:7px;"/>	
-				</form:form>	
-				
-                <form:form action="validateotp.html" method="POST" commandName="visitor" style="border:0px;">
-					<p style="float:left;display:inline;margin-top:5px;margin-right:20px;height:20px;line-height:20px;">OTP</p>	
-					<form:input path="otpInput" placeholder="Enter your OTP" value="" style="width:150px;height:25px;float:left;display:inline;margin-right:20px;"/>
-					<input type="submit" value="Validate OTP" style="float:left;display:inline;padding:5px 10px;margin-right:20px;"/>	
-				</form:form>
-				<p style="float:left;display:inline;margin-top:0px;height:20px;line-height:20px;">${status}</p>
+			<div style="height:300px;width:400px; padding:20px; border: 1;border:thin dashed;float:center; margin:auto auto">
+				<h4 style="text-align:left;margin-bottom:0;margin-top:10px;">OTP Validation</h4><br />				
+				<div style="float:center; margin:auto auto">
+					<form:form action="createotp.html" method="POST" style="border:0px;">				
+						<input type="submit" value="Create another OTP" style="float:center;padding:5px 15px;margin-top:7px;"/>	
+					</form:form>	
+	                <form:form action="validateotp.html" method="POST" commandName="visitor" style="border:0px;">
+	                	<form:hidden  path="machineID" value="<%=session.getAttribute(\"machineID\") %>" />
+						<form:input path="otpInput" placeholder="Enter your OTP" style="width:150px;height:25px;float:center;margin-bottom:30px;margin-top:30px;" /><br />
+						<input type="submit" value="Validate OTP" style="float:center;padding:5px 15px;"/>	<br />
+					</form:form>
+					<p style="float:left;display:inline;margin-top:0px;height:20px;line-height:20px;color:red">${status}</p>
+				</div>
 				<p>&nbsp;</p>
 			</div>
 			<br class="clearfix" />

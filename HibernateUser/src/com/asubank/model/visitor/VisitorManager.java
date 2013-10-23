@@ -14,6 +14,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.asubank.model.combinedcommand.UserInformation;
+import com.asubank.model.publicmethod.PublicMethod;
 import com.asubank.model.security.ImagePath;
 import com.asubank.model.security.OneTimePasswordAlgorithm;
 import com.asubank.model.security.Security;
@@ -69,7 +70,7 @@ public class VisitorManager {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static Visitor queryVisitor(String machineID){
+	public static Visitor queryVisitor(String machineID){
 		createSession();
 		Query query = session.createQuery("from Visitor as v where v.machineID=:machineID");
 		query.setString("machineID", machineID);
@@ -160,7 +161,7 @@ public class VisitorManager {
 		}
 	}
 	
-	public static void createOtp(String machineID, UserInformation userInfo) throws ParseException, InvalidKeyException, NoSuchAlgorithmException{
+	public static String createOtp(String machineID, UserInformation userInfo) throws ParseException, InvalidKeyException, NoSuchAlgorithmException{
 		String password = userInfo.getPassword();
 		byte[] secret = password.getBytes();
 		SimpleDateFormat dateformat = new SimpleDateFormat("yy-MM-dd HH:mm");
@@ -182,7 +183,7 @@ public class VisitorManager {
 		query.executeUpdate(); 
 		session.getTransaction().commit();
 		session.close();
-		return;
+		return otp;
 //		System.out.println("OTP: " + otp);
 //		sendEmail(user.get)
 //		Visitor visitor = new Visitor(machineID);
@@ -219,5 +220,20 @@ public class VisitorManager {
 		}	
 		deleteOtp(machineID);
 		return StatusCode.OTP_VALIDATED;	
+	}
+	
+	public static void sendOTP(String otp, String recipient){
+		String subject = "One Time Password from ASUBank";
+		String content = "Dear user, \n This is your One Time Password: " + otp + ". Please validate it within one minute.";
+		PublicMethod.sendEmail(recipient, subject, content);
+	}
+	
+	public static void sendNewAccountInfo(String userID, String password, String transPW, String recipient){
+		String subject = "One Time Password from ASUBank";
+		String content = "Dear user, \nYou just create a new account in ASUBank."
+					   + "\nThe userID is " + userID 
+					   + "\nThe account password is " + password
+					   + "\nThe transaction password is " + transPW;
+		PublicMethod.sendEmail(recipient, subject, content);
 	}
 }

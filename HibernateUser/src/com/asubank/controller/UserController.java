@@ -175,6 +175,7 @@ public class UserController {
 		String machineID = (String)session.getAttribute("machineID");
 		VisitorManager.deleteVisitor(machineID);
 		Visitor visitor = VisitorManager.createVisitor();	
+		session.setAttribute("machineID", visitor.getMachineID());
 //		Visitor visitor = VisitorManager.createVisitor();		
 		machineID = visitor.getMachineID();
 		VisitorManager.createCaptcha(machineID);
@@ -221,7 +222,7 @@ public class UserController {
 //	}
 	
 	@RequestMapping("/createuser")
-    public String createUser(@RequestParam String action, @ModelAttribute("userinformation") UserInformation userInformation, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException {
+    public String createUser(@RequestParam String action, @ModelAttribute("userinformation") UserInformation userInformation, Model model, HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException {
 		if(action.equals("Submit")){
 			String machineID = userInformation.getVisitor().getMachineID();
 			int captchaCode = VisitorManager.validateCaptcha(machineID, userInformation.getVisitor().getCaptchaInput(), CapValidationRequestSource.REGISTRATION);
@@ -243,45 +244,17 @@ public class UserController {
 				model.addAttribute("visitor", userInformation.getVisitor());
 				return "applynewaccount";
 			}
-			
-			
-			User user = new User();
-			
-			Pii pii = new Pii();
-			PartialPii partialPii = new PartialPii();
-			
-			user.setFirstname(userInformation.getFirstname());
-			user.setLastname(userInformation.getLastname());
-			user.setAddress(userInformation.getAddress());
-			user.setEmail(userInformation.getEmail());
-			user.setTelephone(userInformation.getTelephone());
-			user.setRoletype(userInformation.getRoletype());
-			user.setPassword(userInformation.getPassword());
-			String message = "";    	
-		    message = UserManager.createUser(user.getFirstname(), user.getLastname(), user.getAddress(), user.getEmail(), user.getTelephone(), user.getRoletype(),
-		    			user.getPassword());
-		    Security security = new Security(message);
-			security.setTransPwd(userInformation.getTransPwd());
-			
-			pii.setSsn(userInformation.getSsn());
-			pii.setDobYear(userInformation.getDobYear());
-			pii.setDobMonth(userInformation.getDobMonth());
-			pii.setDobDay(userInformation.getDobDay());
-			String ssnString = pii.getSsn();
-			String ssnLastFour = ssnString.substring(ssnString.length() - 4, ssnString.length());
-			partialPii.setDobYear(pii.getDobYear());
-			partialPii.setSsnLastFour(ssnLastFour);
-	
-	    	pii.setStrID(message);
-	    	partialPii.setStrID(message);
-	        SecurityManager.createSecurity(security);
-	        PiiManager.createPii(pii);
-	        PiiManager.createPartialPii(partialPii);
-	        AccountManager.createAccount(message);
-	        String resultMessage = UserResultMessage.NEW_ACCOUNT_APPLICATION_ACCEPTED;
-	    	model.addAttribute("resultMessage", resultMessage);
-//	    	VisitorManager.deleteVisitor(machineID);
-	        return "visitorresult";
+			    
+	        String otp = VisitorManager.createOtp(machineID, userInformation);
+	        VisitorManager.sendOTP(otp, userInformation.getEmail());
+	        session.setAttribute("userinformation", userInformation);
+//	        model.addAttribute("userinformation", userInformation);
+	        model.addAttribute("visitor", userInformation.getVisitor());
+	        return "otpvalidation";
+//	        String resultMessage = UserResultMessage.NEW_ACCOUNT_APPLICATION_ACCEPTED;
+//	    	model.addAttribute("resultMessage", resultMessage);
+////	    	VisitorManager.deleteVisitor(machineID);
+//	        return "visitorresult";
 		}
 		else{
 			String machineID = userInformation.getVisitor().getMachineID();
@@ -487,21 +460,71 @@ public class UserController {
 //    }
 	
 	@RequestMapping("/createotp")
-	public String createOTP(@ModelAttribute("userinformation") UserInformation userinformation) throws InvalidKeyException, NoSuchAlgorithmException, ParseException{
-		VisitorManager.createOtp(visitor.getMachineID());
-		model.addAttribute("user",user);
-		model.addAttribute("security", security);
-		return "home";		
+	public String createOTP(HttpSession session, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException{
+		String machineID = (String)session.getAttribute("machineID");
+		Visitor visitor = VisitorManager.queryVisitor(machineID);	
+		UserInformation userinformation = (UserInformation)session.getAttribute("userinformation");
+		String otp = VisitorManager.createOtp(machineID, userinformation);
+		VisitorManager.sendOTP(otp, userinformation.getEmail());
+		model.addAttribute("visitor",visitor);
+		return "otpvalidation";		
 	}
 	
 	@RequestMapping("/validateotp")
-	public String validateOTP(@ModelAttribute("userinformation") UserInformation userinformation){
-		int statusCode = SecurityManager.validateOtp(security.getStrID(), security.getOtpInput());
+	public String validateOTP(@ModelAttribute("visitor") Visitor visitor, HttpSession session, Model model){
+		String machineID = (String)session.getAttribute("machineID");
+		UserInformation userinformation = (UserInformation)session.getAttribute("userinformation");
+		int statusCode = VisitorManager.validateOtp(machineID, visitor.getOtpInput());	
+		if(statusCode == StatusCode.OTP_VALIDATED){
+			String userID = createUserAccount(userinformation);		
+			String resultMessage = UserResultMessage.NEW_ACCOUNT_CREATED;
+			VisitorManager.sendNewAccountInfo(userID, userinformation.getPassword(), userinformation.getTransPwd(), userinformation.getEmail());
+	    	model.addAttribute("resultMessage", resultMessage);
+	    	VisitorManager.deleteVisitor(machineID);
+	    	session.removeAttribute("machineID");
+	    	session.removeAttribute("userinformation");
+	        return "visitorresult";
+		}
 		String status = StatusCode.STATUS[statusCode];
 		model.addAttribute("status", status);
-		User user = UserManager.queryUser(security.getStrID());
-		model.addAttribute("user",user);
-		return "home";
+		model.addAttribute("visitor",visitor);
+		return "otpvalidation";
+	}
+	
+	private static String createUserAccount(UserInformation userInformation){
+		User user = new User();		
+		Pii pii = new Pii();
+		PartialPii partialPii = new PartialPii();
+		
+		user.setFirstname(userInformation.getFirstname());
+		user.setLastname(userInformation.getLastname());
+		user.setAddress(userInformation.getAddress());
+		user.setEmail(userInformation.getEmail());
+		user.setTelephone(userInformation.getTelephone());
+		user.setRoletype(userInformation.getRoletype());
+		user.setPassword(userInformation.getPassword());
+		String message = "";    	
+	    message = UserManager.createUser(user.getFirstname(), user.getLastname(), user.getAddress(), user.getEmail(), user.getTelephone(), user.getRoletype(),
+	    			user.getPassword());
+	    Security security = new Security(message);
+		security.setTransPwd(userInformation.getTransPwd());
+		
+		pii.setSsn(userInformation.getSsn());
+		pii.setDobYear(userInformation.getDobYear());
+		pii.setDobMonth(userInformation.getDobMonth());
+		pii.setDobDay(userInformation.getDobDay());
+		String ssnString = pii.getSsn();
+		String ssnLastFour = ssnString.substring(ssnString.length() - 4, ssnString.length());
+		partialPii.setDobYear(pii.getDobYear());
+		partialPii.setSsnLastFour(ssnLastFour);
+
+    	pii.setStrID(message);
+    	partialPii.setStrID(message);
+        SecurityManager.createSecurity(security);
+        PiiManager.createPii(pii);
+        PiiManager.createPartialPii(partialPii);
+        AccountManager.createAccount(message);
+        return message;
 	}
 	
 /*otp related functions for user, not visitor

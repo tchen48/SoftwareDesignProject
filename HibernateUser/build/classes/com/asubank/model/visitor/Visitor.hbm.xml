@@ -19,5 +19,13 @@
 		<property name="captchaStart">
 			<column name="captchastart" not-null="false" />
 		</property>
+		
+		<property name="otp">
+			<column name="otp" length="8" not-null="false" />
+		</property>
+		
+		<property name="otpStart">
+			<column name="otpstart" not-null="false" />
+		</property>
 	</class>
 </hibernate-mapping>

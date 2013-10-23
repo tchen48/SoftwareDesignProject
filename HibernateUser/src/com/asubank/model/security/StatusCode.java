@@ -18,5 +18,5 @@ public class StatusCode {
 	public static final int LOGIN_SUCCESS = 0;
 	public static final int PASSWORD_NOT_CORRECT = 2;
 	public static final int ACCOUNT_BLOCK = 3;
-	public static final String[] LOGIN_STATUS = {"Login success", "UserID not exist", "Incorrect Password", "Blocked Account"};
+	public static final String[] LOGIN_STATUS = {"Login success", "UserID/VisitorID not exist", "Incorrect Password", "Blocked Account"};
 }
