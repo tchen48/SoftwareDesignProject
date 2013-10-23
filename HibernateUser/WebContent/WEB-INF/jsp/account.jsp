@@ -31,29 +31,26 @@
 			</ul>
 	</div>
 	<div style="padding:0">
-		<div style="height:400px; width: 900px; padding:50px; margin:0px 50px; text-align:center">
-			<div id="settings" style="height:300px;width:400px; padding:20px; border: 1;border:thin dashed;float:center; margin:auto auto">
-				<h4 style="text-align:left;margin-bottom:0;margin-top:10px;">Change Password</h4>
-				<form:form action="updatepassword.html" method="POST" commandName="passwordset" style="border:0px;padding-top:0">
-					<form:hidden path="strID" value="${user.strID}" />
-					<table style="border-spacing: 0px 25px;">
-						<tr>
-							<td>Old Password</td>
-							<td style="padding-right:60px;"><form:input path="oldPassword" type="password" maxlength="20" required="true" autocomplete="off" style="height:30px;width:200px;"  /></td>
-						</tr>
-						<tr>
-							<td>New Password</td>
-							<td style="padding-right:60px;"><form:input path="newPassword" type="password" pattern=".{6,20}" maxlength="20" required="true" autocomplete="off" style="height:30px;width:200px"  /></td>
-						</tr>
-						<tr>
-							<td>Confirm</td>
-							<td style="padding-right:60px;"><form:input path="confirmPassword" type="password" pattern=".{6,20}" maxlength="20" required="true" autocomplete="off" style="height:30px;width:200px"  /></td>
-						</tr>
-					</table>
-					<input type="submit" name="action" value="Update Password" style="margin-bottom:15px;  margin-right:60px; padding:5px 10px;" /><br />
-					<p style="color:red; float:left;margin-bottom:20px">${ErrorMsg}</p>
-				</form:form>
-				<p style="font-size:10px;float:left;margin-top:20px;">* Password must include at least one uppercase letter, one lowercase letter, one number, and the length should be 6-20 characters.</p>
+		<div style="height:300px; width: 900px; padding:50px; margin:0px 20px; text-align:center">
+			<div id="settings" style="height:300px;width:500px; float:center; margin:auto auto">								
+				<table frame="box" rules="rows" style="border-spacing: 20px 25px;height:300px;margin:0">
+					<tr>
+						<td style="padding:0px 50px;">Accounts</td>
+						<td>Balance</td>
+					</tr>
+					<tr>
+						<td valign="middle"><a href="#" style="margin:0px 50px;">Checking (${checkingLastFour})</a></td>
+						<td valign="middle">${checkingBalance}</td>
+					</tr>
+					<tr">
+						<td valign="middle"><a href="#" style="margin:0px 50px;">Saving (${savingLastFour})</a></td>
+						<td valign="middle">${savingBalance}</td>
+					</tr>
+					<tr">
+						<td valign="middle"><a href="#" style="margin:0px 50px;">Credit (${creditLastFour})</a></td>
+						<td valign="middle">${creditBalance}</td>
+					</tr>
+				</table>
 				<!-- <a href="#">Change Password</a><br /><br />
 				<a href="#">Change Contact</a><br /><br />
 				<a href="#">Overdraft Protection</a>-->

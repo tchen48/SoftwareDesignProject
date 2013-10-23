@@ -20,6 +20,8 @@ import com.asubank.model.security.ImagePath;
 import com.asubank.model.security.Security;
 import com.asubank.model.security.SecurityManager;
 import com.asubank.model.security.StatusCode;
+import com.asubank.model.sessionset.SessionSet;
+import com.asubank.model.sessionset.SessionSetManager;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 import org.springframework.stereotype.Controller;
@@ -35,12 +37,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpSession;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -53,18 +57,19 @@ public class UserController {
 	private static final String VISITORCAPTCHA = "visitorcaptcha";
 	
 	@RequestMapping("/login")
-    public String login(@ModelAttribute("uservisitor") UserVisitor userVisitor, Model model) throws IOException, InvalidKeyException, NoSuchAlgorithmException, ParseException {	
+    public String login(@ModelAttribute("uservisitor") UserVisitor userVisitor, Model model, HttpSession session) throws IOException, InvalidKeyException, NoSuchAlgorithmException, ParseException {	
 		userVisitor.setVisitor(VisitorManager.createVisitor());
 //		String machineID = combinedCommand.getVisitor().getMachineID();
 //		VisitorManager.createCaptcha(machineID);
 //		String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
 //	    model.addAttribute("encodedImage",encodedImage); 
+		session.setAttribute("machineID", userVisitor.getVisitor().getMachineID());
 	    model.addAttribute("visitor", userVisitor.getVisitor());
         return "login";
     }
 	
 	@RequestMapping("/home")
-	public String home(@RequestParam String action, @ModelAttribute("uservisitor") UserVisitor userVisitor, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException{
+	public String home(@RequestParam String action, @ModelAttribute("uservisitor") UserVisitor userVisitor, Model model, HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException{
 		if(action.equals("Login")){
 			String machineID = userVisitor.getVisitor().getMachineID();
 			int captchaCode = VisitorManager.validateCaptcha(machineID, userVisitor.getVisitor().getCaptchaInput(), CapValidationRequestSource.LOGIN);
@@ -90,11 +95,48 @@ public class UserController {
 				model.addAttribute("visitor", userVisitor.getVisitor());
 				return "login";
 			}	
-			Security security = SecurityManager.querySecurity(loginResult.getUser().getStrID());
-			model.addAttribute("user",loginResult.getUser());
-			model.addAttribute("security",security);
+			
+			String strID = loginResult.getUser().getStrID();
+			session.removeAttribute("machineID");
+			session.setAttribute("strID", strID);
+			String sessionID = session.getId();
+			
+			String sessionKey = (String)session.getAttribute("sessionKey");
+			if(sessionKey == null){
+				SessionSet sessionSet = SessionSetManager.createSessionSet(sessionID);
+				sessionKey = sessionSet.getSessionKey();
+				session.setAttribute("sessionKey", sessionKey);
+			}
+			else{
+				SessionSet sessionSet = new SessionSet();
+				sessionSet.setSessionID(sessionID);
+				sessionSet.setSessionKey(sessionKey);
+				if(SessionSetManager.validateSessionSet(sessionSet) == false){
+					machineID = userVisitor.getVisitor().getMachineID();
+					VisitorManager.createCaptcha(machineID);
+					String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
+				    model.addAttribute("encodedImage",encodedImage); 
+				    model.addAttribute("user", userVisitor.getUser());
+				    model.addAttribute("visitor", userVisitor.getVisitor());
+			        return "login";
+				}
+			}
+			
+			Account account = AccountManager.queryAccount(strID);
+			String checkingID = String.valueOf(account.getCheckingID());
+			String savingID = String.valueOf(account.getSavingID());
+			String creditID = String.valueOf(account.getCreditID());			
+			model.addAttribute("checkingLastFour", checkingID.substring(checkingID.length() - 4, checkingID.length()));
+			model.addAttribute("savingLastFour", savingID.substring(savingID.length() - 4, savingID.length()));
+			model.addAttribute("creditLastFour", creditID.substring(creditID.length() - 4, creditID.length()));
+			model.addAttribute("checkingBalance", account.getCheckingBalance());
+			model.addAttribute("savingBalance", account.getSavingBalance());
+			model.addAttribute("creditBalance", account.getCreditBalance());
+//			Security security = SecurityManager.querySecurity(loginResult.getUser().getStrID());
+//			model.addAttribute("user",loginResult.getUser());
+//			model.addAttribute("security",security);
 			VisitorManager.deleteVisitor(machineID);
-			return "home";
+			return "account";
 		}
 		else{
 			String machineID = userVisitor.getVisitor().getMachineID();
@@ -107,13 +149,33 @@ public class UserController {
 		}
 	}
 	
-	@RequestMapping("/applynewaccount/{machineid}")
-    public String userInfo(@PathVariable(value="machineid") String machineID, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException {
+	@RequestMapping("/account")
+	public String account(Model model, HttpSession session){
+		Account account = AccountManager.queryAccount((String)session.getAttribute("strID"));
+		String checkingID = String.valueOf(account.getCheckingID());
+		String savingID = String.valueOf(account.getSavingID());
+		String creditID = String.valueOf(account.getCreditID());			
+		model.addAttribute("checkingLastFour", checkingID.substring(checkingID.length() - 4, checkingID.length()));
+		model.addAttribute("savingLastFour", savingID.substring(savingID.length() - 4, savingID.length()));
+		model.addAttribute("creditLastFour", creditID.substring(creditID.length() - 4, creditID.length()));
+		model.addAttribute("checkingBalance", account.getCheckingBalance());
+		model.addAttribute("savingBalance", account.getSavingBalance());
+		model.addAttribute("creditBalance", account.getCreditBalance());
+		return "account";
+	}
+	
+//	@RequestMapping("/applynewaccount/{machineid}")
+//    public String userInfo(@PathVariable(value="machineid") String machineID, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException {
 //		User user = new User();
 //        model.addAttribute("user", user);
+	@RequestMapping("/applynewaccount")
+	public String userInfo(Model model, HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException{
+//		Visitor visitor = (Visitor) session.getAttribute("visitor");
+//		String machineID = visitor.getMachineID();
+		String machineID = (String)session.getAttribute("machineID");
 		VisitorManager.deleteVisitor(machineID);
-		
-		Visitor visitor = VisitorManager.createVisitor();		
+		Visitor visitor = VisitorManager.createVisitor();	
+//		Visitor visitor = VisitorManager.createVisitor();		
 		machineID = visitor.getMachineID();
 		VisitorManager.createCaptcha(machineID);
 		String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
@@ -124,8 +186,9 @@ public class UserController {
         return "applynewaccount";
     }
 	
-	@RequestMapping("/forgetpwd/{machineid}")
-	public String forgetPwd(@PathVariable(value="machineid") String machineID, Model model){
+	@RequestMapping("/forgetpwd")
+	public String forgetPwd(Model model, HttpSession session){
+		String machineID = (String)session.getAttribute("machineID");
 		if(machineID.equals("") == false)
 			VisitorManager.deleteVisitor(machineID);
 		model.addAttribute("user", new User());
@@ -231,13 +294,6 @@ public class UserController {
     }
 	
 	private int checkUserInfo(UserInformation userInfo){
-//		boolean uppercaseAcct = false;
-//		boolean lowercaseAcct =false;
-//		boolean numberAcct = false;
-//		boolean uppercaseTrans = false;
-//		boolean lowercaseTrans =false;
-//		boolean numberTrans = false;
-//		boolean validDate = false;
 		int year = userInfo.getDobYear();
 		int month = userInfo.getDobMonth();
 		int day = userInfo.getDobDay();
@@ -322,42 +378,80 @@ public class UserController {
 	}
 	
 	@RequestMapping("/profilesetting")
-	public String profilesetting(@ModelAttribute("user") User user, Model model){
+	public String profilesetting(@ModelAttribute("user") User user, Model model, HttpSession session){
 		model.addAttribute("user",user);
 		return "profilesetting";
 	}
 	
-	@RequestMapping("/profilesetting/email")
-	public @ResponseBody String getEmail(@RequestParam(value = "strID") String strID){
-		String str = "";
-		User user = UserManager.queryUser(strID);
-		str = "{\"email\":\"" + user.getEmail() + "\"}";		
-		return str;
-	}
-	
-	@RequestMapping("/profilesetting/acctno")
-	public @ResponseBody String getAcctno(@RequestParam(value = "strID") String strID){
+	@RequestMapping("/acctno")
+	public String getUserAcctno(HttpSession session, Model model){
+		String strID = (String)session.getAttribute("strID");
 		String str = "";
 		Account account = AccountManager.queryAccount(strID);
-		str = "{\"acctno\":\"" + account.getSavingID() + "\"}";		
-		return str;
+		str = String.valueOf(account.getSavingID());
+		model.addAttribute("acctno", str.substring(str.length() - 4, str.length()));
+		model.addAttribute("user",new User());
+		return "profilesetting";
 	}
 	
-	@RequestMapping("/profilesetting/address")
-	public @ResponseBody String getAddress(@RequestParam(value = "strID") String strID){
-		String str = "";
+	@RequestMapping("/email")
+	public String getUserEmail(HttpSession session, Model model){
+		String strID = (String)session.getAttribute("strID");
 		User user = UserManager.queryUser(strID);
-		str = "{\"address\":\"" + user.getAddress() + "\"}";
-		return str;
+		model.addAttribute("email", user.getEmail());
+		model.addAttribute("user",new User());
+		return "profilesetting";
 	}
 	
-	@RequestMapping("/profilesetting/phone")
-	public @ResponseBody String getProfile(@RequestParam(value = "strID") String strID){
-		String str = "";
+	@RequestMapping("/address")
+	public String getUserAddress(HttpSession session, Model model){
+		String strID = (String)session.getAttribute("strID");
 		User user = UserManager.queryUser(strID);
-		str = "{\"phone\":\"" + user.getTelephone() + "\"}";
-		return str;
+		model.addAttribute("address", user.getAddress());
+		model.addAttribute("user",new User());
+		return "profilesetting";
 	}
+	
+	@RequestMapping("/telephone")
+	public String getUserTelephone(HttpSession session, Model model){
+		String strID = (String)session.getAttribute("strID");
+		User user = UserManager.queryUser(strID);
+		model.addAttribute("telephone", user.getTelephone());
+		model.addAttribute("user",new User());
+		return "profilesetting";
+	}
+		
+//	@RequestMapping("/profilesetting/email")
+//	public @ResponseBody String getEmail(HttpSession session, Model model){
+//		String str = "";
+//		User user = UserManager.queryUser(strID);
+//		str = "{\"email\":\"" + user.getEmail() + "\"}";		
+//		return str;
+//	}
+//	
+//	@RequestMapping("/profilesetting/acctno")
+//	public @ResponseBody String getAcctno(@RequestParam(value = "strID") String strID){
+//		String str = "";
+//		Account account = AccountManager.queryAccount(strID);
+//		str = "{\"acctno\":\"" + account.getSavingID() + "\"}";		
+//		return str;
+//	}
+//	
+//	@RequestMapping("/profilesetting/address")
+//	public @ResponseBody String getAddress(@RequestParam(value = "strID") String strID){
+//		String str = "";
+//		User user = UserManager.queryUser(strID);
+//		str = "{\"address\":\"" + user.getAddress() + "\"}";
+//		return str;
+//	}
+//	
+//	@RequestMapping("/profilesetting/phone")
+//	public @ResponseBody String getProfile(@RequestParam(value = "strID") String strID){
+//		String str = "";
+//		User user = UserManager.queryUser(strID);
+//		str = "{\"phone\":\"" + user.getTelephone() + "\"}";
+//		return str;
+//	}
 	
 //	@RequestMapping("/profilesetting/{item}")
 //	public @ResponseBody String getProfile(@RequestParam(value = "strID") String strID,
@@ -444,15 +538,11 @@ public class UserController {
 			model.addAttribute("passwordset",passwordSet);
 			return "changepassword";
 		}
-//		else(action.equals("Change Contact")){
 		else{
 			ContactSet contactSet = new ContactSet();
 			model.addAttribute("contactset",contactSet);
 			return "changecontact";
 		}
-//		else{
-//			return "overdraftprotection";
-//		}
 	}
 	
 	@RequestMapping("/updatepassword")

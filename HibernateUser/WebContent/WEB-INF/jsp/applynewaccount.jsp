@@ -17,6 +17,7 @@
 	</div>
   </div>
 	<div id="menu">
+	<!--   <%= session.getAttribute("machineID")%>-->
 		<ul>
 			<li class="first current_page_item"><a href="#">Homepage</a></li>
 			<li><a href="#">Products</a></li>
@@ -33,7 +34,7 @@
 	  <div id="content">
 		  <div class="box">
 			<h2>Account Registration</h2>
-			<form:form action="../createuser.html" method="post" modelAttribute="command" commandName="userinformation" style="width:800px; height=600px; border:0; text-align:center; margin:auto auto">
+			<form:form action="createuser.html" method="post" modelAttribute="command" commandName="userinformation" style="width:800px; height=600px; border:0; text-align:center; margin:auto auto">
 				<table style="border-spacing: 0px 25px;">
 					<tr>
 						<td style="text-align: right;">First name</td><td style="text-align: left;"><form:input type="text" maxlength="20" path="firstname"  required="true" autocomplete="off" style="height:30px;width:200px"  /></td>

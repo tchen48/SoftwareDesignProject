@@ -18,6 +18,7 @@
 		
   </div>
 	<div id="menu">
+	<!--  <%= session.getAttribute("machineID")%> -->
 		<ul>
 			<li class="first current_page_item"><a href="#">Homepage</a></li>
 			<li><a href="#">Products</a></li>
@@ -66,8 +67,8 @@
                 	<input type="submit" name="action" value="Refresh" style="padding: 5px 10px;float:left; margin-right: 50px;display:inline;" /><br /><br />
                 	<form:hidden path="visitor.machineID" value="${visitor.machineID}" />
 			        
-	                <p class="member" style="margin-left: 2px; margin-bottom:0px; margin-top:0px"><a href="forgetpwd/${visitor.machineID}.html">Lost your Password?</a></p>
-	                <p class="member" style="margin-left: 7px; margin-bottom:5px">Not a member yet? <a href="applynewaccount/${visitor.machineID}.html">Create Account now!</a></p>
+	                <p class="member" style="margin-left: 2px; margin-bottom:0px; margin-top:0px"><a href="forgetpwd.html">Lost your Password?</a></p>
+	                <p class="member" style="margin-left: 7px; margin-bottom:5px">Not a member yet? <a href="applynewaccount.html">Create Account now!</a></p>
 			    </form:form>	
 			    	
 			    	        

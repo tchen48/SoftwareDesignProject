@@ -33,7 +33,7 @@
 		<div style="height:300px; width: 900px; padding:50px; margin:0px 50px; text-align:center">
 			<div style="height:200px;width:400px; padding:20px; border: 1;border:thin dashed;float:center; margin:auto auto">
 				<h4 style="text-align:left;margin-bottom:0;margin-top:10px;">Forget Password</h4>
-                <form:form method="post" action="../sendpwd.html" commandName="user" style="border:0px;padding-top:0">
+                <form:form method="post" action="sendpwd.html" commandName="user" style="border:0px;padding-top:0">
                 	<table style="border-spacing: 0px 25px;">                		
                 		<tr>
                 			<td>User ID</td>

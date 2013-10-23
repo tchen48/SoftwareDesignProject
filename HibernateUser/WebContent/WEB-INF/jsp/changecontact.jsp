@@ -16,7 +16,7 @@
 		</div>
 		<div id="slogan"> <ul>
 			<li class="first current_page_item"><a href="#">Home</a> </li>
-			<li><a href="#" id="strID">${user.strID}</a></li>
+			<li><a href="#" id="strID"><%=session.getAttribute("strID") %></a></li>
 			<li><a href="#">Services</a></li>
 			<li><a href="#">LogOut</a></li>
           </ul>		</div>
@@ -24,30 +24,11 @@
   	</div>
 	<div id="menu">
 			<ul>
-			<li class="first current_page_item">
-				<form:form class="menuform" action="profilesetting.html" method="POST" commandName="user" style="border:0px; float:left; display:inline; ">
-					<form:hidden path="strID" value="${user.strID}" />
-					<input class="menuinput" type="submit" value="Accounts" />
-				</form:form>
-			</li>
-			<li>
-				<form:form class="menuform" action="profilesetting.html" method="POST" commandName="user" style="border:0px; float:left; display:inline;">
-					<form:hidden path="strID" value="${user.strID}" />
-					<input class="menuinput" type="submit" value="Transfer" />
-				</form:form>
-			</li>
-			<li>
-				<form:form class="menuform" action="profilesetting.html" method="POST" commandName="user" style="border:0px; float:left; display:inline;">
-					<form:hidden path="strID" value="${user.strID}" />
-					<input class="menuinput" type="submit" value="Profile & Settings" />
-				</form:form>			
-			</li>			
-			<li>
-				<form:form class="menuform" action="profilesetting.html" method="POST" commandName="user" style="border:0px; float:left; display:inline;">
-					<form:hidden path="strID" value="${user.strID}" />
-					<input class="menuinput" type="submit" value="Help & Support" />
-				</form:form>
-			</li></ul>
+				<li class="first current_page_item"><a href="account.html">Accounts</a></li>
+				<li><a href="#">Transfers</a></li>
+				<li><a href="profilesetting.html">Profile &amp; Settings</a></li>				
+				<li><a href="#">Help &amp; Support</a></li>
+			</ul>
 	</div>
 	<div style="padding:0">
 		<div style="height:500px; width: 900px; padding:50px; margin:0px 50px; text-align:center">
