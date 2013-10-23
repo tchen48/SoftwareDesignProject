@@ -26,7 +26,7 @@
 	<div id="menu">
 			<ul>
 				<li class="first current_page_item"><a href="account.html">Accounts</a></li>
-				<li><a href="#">Transfers</a></li>
+				<li><a href="transfer.html">Transfers</a></li>
 				<li><a href="profilesetting.html">Profile &amp; Settings</a></li>				
 				<li><a href="#">Help &amp; Support</a></li>
 			</ul>

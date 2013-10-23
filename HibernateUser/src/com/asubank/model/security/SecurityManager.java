@@ -127,7 +127,7 @@ public class SecurityManager {
 		Date start = security.getOtpStart();
 		Date current = new Date();
 		long difference = current.getTime() - start.getTime();
-		if(difference > 1000 * 60 * 10){
+		if(difference > 1000 * 60 * 5){
 			deleteOtp(strID);
 			return StatusCode.OTP_EXPIRED;
 		}

@@ -280,7 +280,7 @@ public class UserController {
 	        AccountManager.createAccount(message);
 	        String resultMessage = UserResultMessage.NEW_ACCOUNT_APPLICATION_ACCEPTED;
 	    	model.addAttribute("resultMessage", resultMessage);
-	    	VisitorManager.deleteVisitor(machineID);
+//	    	VisitorManager.deleteVisitor(machineID);
 	        return "visitorresult";
 		}
 		else{
@@ -487,6 +487,25 @@ public class UserController {
 //    }
 	
 	@RequestMapping("/createotp")
+	public String createOTP(@ModelAttribute("userinformation") UserInformation userinformation) throws InvalidKeyException, NoSuchAlgorithmException, ParseException{
+		VisitorManager.createOtp(visitor.getMachineID());
+		model.addAttribute("user",user);
+		model.addAttribute("security", security);
+		return "home";		
+	}
+	
+	@RequestMapping("/validateotp")
+	public String validateOTP(@ModelAttribute("userinformation") UserInformation userinformation){
+		int statusCode = SecurityManager.validateOtp(security.getStrID(), security.getOtpInput());
+		String status = StatusCode.STATUS[statusCode];
+		model.addAttribute("status", status);
+		User user = UserManager.queryUser(security.getStrID());
+		model.addAttribute("user",user);
+		return "home";
+	}
+	
+/*otp related functions for user, not visitor
+	@RequestMapping("/createotp")
 	public String createOTP(@ModelAttribute("user") User user, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException{
 		Security security = SecurityManager.createOtp(user.getStrID());
 		model.addAttribute("user",user);
@@ -503,7 +522,7 @@ public class UserController {
 		model.addAttribute("user",user);
 		return "home";
 	}
-	
+*/	
 	@RequestMapping("/createcaptcha")
 	public String createCaptcha(@ModelAttribute("user") User user, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException{
 		Security security = SecurityManager.createCaptcha(user.getStrID());
@@ -631,6 +650,12 @@ public class UserController {
 		model.addAttribute("user",user);
 		model.addAttribute("resultMessage", SettingResultCode.CONTACT_UPDATED);
 		return "userresult";		
+	}
+	
+	@RequestMapping("/transfer")
+	public String transfer(Model model, HttpSession session){
+//		model.addAttribute("user",user);
+		return "transfer";
 	}
 	
 	//From: http://mrbool.com/how-to-convert-image-to-byte-array-and-byte-array-to-image-in-java/25136#

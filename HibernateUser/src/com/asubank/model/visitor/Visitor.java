@@ -7,10 +7,14 @@ import java.util.Date;
 public class Visitor {
 	private String machineID;
 	private String captcha;
-	private String captchaInput;
-	
+	private String captchaInput;	
 	private Date captchaStart;
 	private int fail;
+	
+	private String otp;
+	private String otpInput;
+	private Date otpStart;
+	
 	private static Date defaultDate;
 	
 	static{
@@ -31,13 +35,19 @@ public class Visitor {
 		this.captchaStart = defaultDate;
 		this.captcha = "";
 		this.captchaInput = "";
+		this.otp = "";
+		this.otpInput = "";
+		this.otpStart = defaultDate;
 	}
-	public Visitor(String machineID, String captcha, Date captchaStart, int fail, String captchaInput){
+	public Visitor(String machineID, String captcha, Date captchaStart, int fail, String captchaInput, String otp, String otpInput, Date otpStart){
 		this.machineID = new String(machineID);
 		this.captcha = new String(captcha);
 		this.captchaStart = captchaStart;
 		this.fail = fail;
 		this.captchaInput = new String(captchaInput);
+		this.otp = new String(otp);
+		this.otpInput = new String(otpInput);
+		this.otpStart = otpStart;
 	}
 	public void setMachineID(String machineID){
 		this.machineID = new String(machineID);
@@ -69,4 +79,23 @@ public class Visitor {
 	public void setCaptchaInput(String captchaInput) {
 		this.captchaInput = captchaInput;
 	}
+	public String getOtp() {
+		return otp;
+	}
+	public void setOtp(String otp) {
+		this.otp = otp;
+	}
+	public String getOtpInput() {
+		return otpInput;
+	}
+	public void setOtpInput(String otpInput) {
+		this.otpInput = otpInput;
+	}
+	public Date getOtpStart() {
+		return otpStart;
+	}
+	public void setOtpStart(Date otpStart) {
+		this.otpStart = otpStart;
+	}
+	
 }

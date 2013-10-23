@@ -13,11 +13,15 @@ import java.util.UUID;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.asubank.model.combinedcommand.UserInformation;
 import com.asubank.model.security.ImagePath;
+import com.asubank.model.security.OneTimePasswordAlgorithm;
 import com.asubank.model.security.Security;
 import com.asubank.model.security.SessionFactoryUtil;
 import com.asubank.model.security.StatusCode;
 import com.asubank.model.security.SecurityManager;
+import com.asubank.model.user.User;
+import com.asubank.model.user.UserManager;
 
 public class VisitorManager {
 	private static Date defaultDate;
@@ -154,5 +158,66 @@ public class VisitorManager {
 			session.close();
 			return;
 		}
+	}
+	
+	public static void createOtp(String machineID, UserInformation userInfo) throws ParseException, InvalidKeyException, NoSuchAlgorithmException{
+		String password = userInfo.getPassword();
+		byte[] secret = password.getBytes();
+		SimpleDateFormat dateformat = new SimpleDateFormat("yy-MM-dd HH:mm");
+		Date date = new Date();
+		String strDate = dateformat.format(date);
+		date = dateformat.parse(strDate);
+		long movingFactor = date.getTime();
+		int codedigit = 8;
+		int offset = (int)(Math.random()*100);
+		boolean addChecksum = false;
+		String otp = OneTimePasswordAlgorithm.generateOTP(secret, movingFactor, codedigit, addChecksum, offset);
+		
+		createSession();
+		String hql = "update Visitor as v set v.otp=:otp, v.otpStart=:otpStart where machineID=:machineID";
+		Query query = session.createQuery(hql);
+		query.setString("otp", otp);
+		query.setString("otpStart", df.format(new Date()));
+		query.setString("machineID", machineID);
+		query.executeUpdate(); 
+		session.getTransaction().commit();
+		session.close();
+		return;
+//		System.out.println("OTP: " + otp);
+//		sendEmail(user.get)
+//		Visitor visitor = new Visitor(machineID);
+//		return visitor;
+//		return new Visitor(machineID, otp);
+	}
+	public static void deleteOtp(String machineID){
+		createSession();
+		String hql = "update Visitor as v set v.otp=:otp, v.otpStart=:otpStart where machineID=:machineID";
+		Query query = session.createQuery(hql);
+		query.setString("machineID", machineID);
+		query.setDate("otpStart", defaultDate);
+		query.setString("otp", "");
+		query.executeUpdate(); 
+		session.getTransaction().commit();
+		session.close();
+	}
+	
+	public static int validateOtp(String machineID, String otpInput){
+		Visitor visitor = queryVisitor(machineID);
+		if(visitor == null)
+			return StatusCode.USERID_NOT_EXIST;
+		
+		Date start = visitor.getOtpStart();
+		Date current = new Date();
+		long difference = current.getTime() - start.getTime();
+		if(difference > 1000 * 60 * 5){
+			deleteOtp(machineID);
+			return StatusCode.OTP_EXPIRED;
+		}
+		if(otpInput.equals(visitor.getOtp()) != true){
+			deleteOtp(machineID);
+			return StatusCode.OTP_NOT_CORRECT;
+		}	
+		deleteOtp(machineID);
+		return StatusCode.OTP_VALIDATED;	
 	}
 }
