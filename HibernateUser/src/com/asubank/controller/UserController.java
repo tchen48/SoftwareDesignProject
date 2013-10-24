@@ -44,6 +44,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.net.InetAddress;
@@ -63,6 +64,7 @@ public class UserController {
 //		VisitorManager.createCaptcha(machineID);
 //		String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
 //	    model.addAttribute("encodedImage",encodedImage); 
+		
 		session.setAttribute("machineID", userVisitor.getVisitor().getMachineID());
 	    model.addAttribute("visitor", userVisitor.getVisitor());
         return "login";
@@ -139,9 +141,11 @@ public class UserController {
 	//			model.addAttribute("user",loginResult.getUser());
 	//			model.addAttribute("security",security);
 				VisitorManager.deleteVisitor(machineID);
+				session.setMaxInactiveInterval(60);
 				return "account";
 			}
 			else{
+				session.setMaxInactiveInterval(60);
 				return "employeeaccount";
 			}
 		}
@@ -729,6 +733,20 @@ public class UserController {
 	public String transfer(Model model, HttpSession session){
 //		model.addAttribute("user",user);
 		return "transfer";
+	}
+	
+	@RequestMapping("/logout")
+	public String logout(HttpSession session, HttpServletRequest request, Model model){
+		Visitor visitor = VisitorManager.createVisitor();
+		session.invalidate();
+		session = request.getSession();
+		session.setAttribute("machineID", visitor.getMachineID());
+		UserVisitor uservisitor = new UserVisitor();
+		uservisitor.setUser(new User());
+		uservisitor.setVisitor(visitor);
+	    model.addAttribute("visitor", visitor);
+	    model.addAttribute("uservisitor", uservisitor);
+        return "login";
 	}
 	
 	//From: http://mrbool.com/how-to-convert-image-to-byte-array-and-byte-array-to-image-in-java/25136#
