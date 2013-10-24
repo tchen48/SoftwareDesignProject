@@ -122,21 +122,28 @@ public class UserController {
 				}
 			}
 			
-			Account account = AccountManager.queryAccount(strID);
-			String checkingID = String.valueOf(account.getCheckingID());
-			String savingID = String.valueOf(account.getSavingID());
-			String creditID = String.valueOf(account.getCreditID());			
-			model.addAttribute("checkingLastFour", checkingID.substring(checkingID.length() - 4, checkingID.length()));
-			model.addAttribute("savingLastFour", savingID.substring(savingID.length() - 4, savingID.length()));
-			model.addAttribute("creditLastFour", creditID.substring(creditID.length() - 4, creditID.length()));
-			model.addAttribute("checkingBalance", account.getCheckingBalance());
-			model.addAttribute("savingBalance", account.getSavingBalance());
-			model.addAttribute("creditBalance", account.getCreditBalance());
-//			Security security = SecurityManager.querySecurity(loginResult.getUser().getStrID());
-//			model.addAttribute("user",loginResult.getUser());
-//			model.addAttribute("security",security);
-			VisitorManager.deleteVisitor(machineID);
-			return "account";
+			User user = loginResult.getUser();
+			int roletype = user.getRoletype();
+			if(roletype != 0){
+				Account account = AccountManager.queryAccount(strID);
+				String checkingID = String.valueOf(account.getCheckingID());
+				String savingID = String.valueOf(account.getSavingID());
+				String creditID = String.valueOf(account.getCreditID());			
+				model.addAttribute("checkingLastFour", checkingID.substring(checkingID.length() - 4, checkingID.length()));
+				model.addAttribute("savingLastFour", savingID.substring(savingID.length() - 4, savingID.length()));
+				model.addAttribute("creditLastFour", creditID.substring(creditID.length() - 4, creditID.length()));
+				model.addAttribute("checkingBalance", account.getCheckingBalance());
+				model.addAttribute("savingBalance", account.getSavingBalance());
+				model.addAttribute("creditBalance", account.getCreditBalance());
+	//			Security security = SecurityManager.querySecurity(loginResult.getUser().getStrID());
+	//			model.addAttribute("user",loginResult.getUser());
+	//			model.addAttribute("security",security);
+				VisitorManager.deleteVisitor(machineID);
+				return "account";
+			}
+			else{
+				return "employeeaccount";
+			}
 		}
 		else{
 			String machineID = userVisitor.getVisitor().getMachineID();
@@ -162,6 +169,27 @@ public class UserController {
 		model.addAttribute("savingBalance", account.getSavingBalance());
 		model.addAttribute("creditBalance", account.getCreditBalance());
 		return "account";
+	}
+	
+	@RequestMapping("/customeraccount")
+	public String customerAccount(HttpSession session, Model model){
+		Account account = AccountManager.queryAccount((String)session.getAttribute("strID"));
+		String checkingID = String.valueOf(account.getCheckingID());
+		String savingID = String.valueOf(account.getSavingID());
+		String creditID = String.valueOf(account.getCreditID());	
+		model.addAttribute("employee", "Employee");
+		model.addAttribute("checkingLastFour", checkingID.substring(checkingID.length() - 4, checkingID.length()));
+		model.addAttribute("savingLastFour", savingID.substring(savingID.length() - 4, savingID.length()));
+		model.addAttribute("creditLastFour", creditID.substring(creditID.length() - 4, creditID.length()));
+		model.addAttribute("checkingBalance", account.getCheckingBalance());
+		model.addAttribute("savingBalance", account.getSavingBalance());
+		model.addAttribute("creditBalance", account.getCreditBalance());
+		return "account";
+	}
+	
+	@RequestMapping("/employeeaccount")
+	public String employeeAccount(HttpSession session, Model model){
+		return "employeeaccount";
 	}
 	
 //	@RequestMapping("/applynewaccount/{machineid}")
@@ -356,13 +384,35 @@ public class UserController {
 		return "profilesetting";
 	}
 	
-	@RequestMapping("/acctno")
-	public String getUserAcctno(HttpSession session, Model model){
+	@RequestMapping("/checkingid")
+	public String getUserCheckingID(HttpSession session, Model model){
+		String strID = (String)session.getAttribute("strID");
+		String str = "";
+		Account account = AccountManager.queryAccount(strID);
+		str = String.valueOf(account.getCheckingID());
+		model.addAttribute("checkingID", str);
+		model.addAttribute("user",new User());
+		return "profilesetting";
+	}
+	
+	@RequestMapping("/savingid")
+	public String getUserSavingID(HttpSession session, Model model){
 		String strID = (String)session.getAttribute("strID");
 		String str = "";
 		Account account = AccountManager.queryAccount(strID);
 		str = String.valueOf(account.getSavingID());
-		model.addAttribute("acctno", str.substring(str.length() - 4, str.length()));
+		model.addAttribute("savingID", str);
+		model.addAttribute("user",new User());
+		return "profilesetting";
+	}
+	
+	@RequestMapping("/creditid")
+	public String getUserCreditID(HttpSession session, Model model){
+		String strID = (String)session.getAttribute("strID");
+		String str = "";
+		Account account = AccountManager.queryAccount(strID);
+		str = String.valueOf(account.getCreditID());
+		model.addAttribute("creditID", str);
 		model.addAttribute("user",new User());
 		return "profilesetting";
 	}

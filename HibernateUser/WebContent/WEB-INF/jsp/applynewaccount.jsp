@@ -57,9 +57,9 @@
 						<td style="text-align: right;">Role Type</td>
 						<td style="text-align: right; height:30px; ;width:200px">
 							<form:select path="roletype" style="height:30px;width:200px">
-								<form:option value="1">Internal User</form:option>
-								<form:option value="2">Personal User</form:option>
-								<form:option value="3">Commercial User</form:option>
+								<form:option value="0">Internal User</form:option>
+								<form:option value="1">Personal User</form:option>
+								<form:option value="2">Commercial User</form:option>
 							</form:select>						
 						</td>
 					</tr>

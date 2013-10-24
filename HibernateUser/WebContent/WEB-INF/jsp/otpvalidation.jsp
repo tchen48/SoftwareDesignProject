@@ -41,7 +41,7 @@
 					</form:form>	
 	                <form:form action="validateotp.html" method="POST" commandName="visitor" style="border:0px;">
 	                	<form:hidden  path="machineID" value="<%=session.getAttribute(\"machineID\") %>" />
-						<form:input path="otpInput" placeholder="Enter your OTP" style="width:150px;height:25px;float:center;margin-bottom:30px;margin-top:30px;" /><br />
+						<form:input path="otpInput" placeholder="Enter your OTP" required="true" autocomplete="off" style="width:150px;height:25px;float:center;margin-bottom:30px;margin-top:30px;" /><br />
 						<input type="submit" value="Validate OTP" style="float:center;padding:5px 15px;"/>	<br />
 					</form:form>
 					<p style="float:left;display:inline;margin-top:0px;height:20px;line-height:20px;color:red">${status}</p>

@@ -167,7 +167,7 @@ ul h4 {
 
 #slogan {
 	line-height: 30px;
-	width: 500px;
+	width: 600px;
 	height: 100px;
 	padding: 40px 0 0 0;
 	position: absolute;
@@ -362,17 +362,17 @@ input{
 }
 
 #profile a{
-	font-size: 1em;
+	font-size: 0.8em;
 	float:left;
 	display:inline;
-	margin-bottom:20px;
+	margin-bottom:10px;
 }
 #profile p{
-	font-size: 1em;
+	font-size: 0.8em;
 	color:#0066FF;
 	float:left;
 	display:inline;
-	margin-bottom:20px;
+	margin-bottom:10px;
 	margin-left:20px;
 }
 
@@ -380,7 +380,7 @@ input{
 	font-size: 1em;
 	float:left;
 	display:inline;
-	margin-bottom:20px;
+	margin-bottom:10px;
 }
 .settingsubmit{
 	padding: 5px 20px;
