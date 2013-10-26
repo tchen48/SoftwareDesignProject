@@ -1,34 +1,39 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ taglib
+    prefix="c"
+    uri="http://java.sun.com/jsp/jstl/core" 
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+
+<title>Checking Balance</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
-	<div id="wrapper">
+<body>
+<div id="wrapper">
   <div id="header">
-	  <div id="logo">
+    <div id="logo">
 			<h1><a href="#">ASU Bank </a></h1>
 		</div>
-		
-  <div id="slogan"> <ul>
+		<div id="slogan"><ul>
 			<li class="first current_page_item"><a href="employeeaccount.html">${employee}</a> </li>
 			<li class="first current_page_item"><a href="#">Home</a> </li>
 			<li><a href="#" id="strID"><%=session.getAttribute("strID") %></a></li>
 			<li><a href="#">Services</a></li>
 			<li><a href="logout.html">LogOut</a></li>
-          </ul>		</div>
-		
-  	</div>
-	<div id="menu">
-			<ul>
-				<li class="first current_page_item"><a href="account.html">Accounts</a></li>
+          </ul>			</div>
+  </div>
+		<div id="menu">
+		<ul>
+				<li class="account"><a href="account.html">Accounts</a></li>
 				<li><a href="Transfer.html">Transfers</a></li>
-				<li><a href="profilesetting.html">Profile &amp; Settings</a></li>				
+				<li><a href="merchant.html">Merchants Click Here!</a>
+				<li><a href="profilesetting.html">Profile &amp; Settings</a></li>
+				
 				<li><a href="#">Help &amp; Support</a></li>
 			</ul>
 	</div>
@@ -36,17 +41,37 @@
 	<div id="page">
 	  <div id="content">
 		  <div class="box">
-				<h4>${resultMessage}</h4>
+				<h2>Checking Account</h2>
+			<p>
+			  <label for="textfield">${user.checking}</label>
+              <input type="text" name="textfield" id="textfield">
+			</p>
+				
+				<table width="892" height="159" border="1" align="center">
+				<c:forEach items="${transactions}" var="transactions">
+				  <tr>
+	
+				    <td width="167" height="45"><c:out value="${transactions.getId()}"/></td>
+				    <td width="117"><c:out value="${transactions.getFromID()}"/></td>
+				    <td width="142">"${transactions.getToID()}"</td>
+				    <td width="142">"${transactions.getAmount()}"</td>
+				    
+			      </tr>
+				  
+			    </c:forEach>
+		    </table>
 				<p>&nbsp;</p>
-			</div>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+		</div>
 			<br class="clearfix" />
 		</div>
 		
 		<br class="clearfix" />
 	</div>
 	<div id="page-bottom">
-		<div id="page-bottom-content">
-			<h3>ASU Bank Policy</h3>
+	  <div id="page-bottom-content">
+		<h3>ASU Bank Policy</h3>
 		  <p>Banking products are provided by Bank of America, N.A. and affiliated banks, Members FDIC and wholly owned subsidiaries of Bank of America Corporation.<br>
 			  Investing in securities involves risks, and there is always the potential of losing money when you invest in securities. You should review any planned financial transactions that may have tax or legal implications with your personal tax or legal advisor.<br>
 		  </p>
@@ -54,7 +79,7 @@
 		<div id="page-bottom-sidebar">
 			<h3>Popular Links</h3>
 			<ul class="list">
-				<li class="first"><a href="#">Order checks</a></li>
+				<li><a href="#">Order checks</a></li>
 				<li><a href="#">Order a Debit Card</a></li>
 				<li class="last"><a href="#">Order a Foreign Currency</a></li>
 			</ul>
@@ -63,7 +88,7 @@
 	</div>
 </div>
 <div id="footer">
-	Copyright (c) 2013 ASUBank.com. All rights reserved.
+	Copyright (c) 2012 Sitename.com. All rights reserved. 
 </div>
 </body>
 </html>

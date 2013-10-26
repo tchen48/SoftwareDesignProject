@@ -1,5 +1,8 @@
 package com.asubank.controller;
 
+import com.asubank.model.transfer.Transaction;
+import com.asubank.model.transfer.TransactionErrorCode;
+import com.asubank.model.transfer.TransactionManager;
 import com.asubank.model.user.ContactSet;
 import com.asubank.model.user.LoginResult;
 import com.asubank.model.user.PasswordSet;
@@ -16,6 +19,8 @@ import com.asubank.model.combinedcommand.UserVisitor;
 import com.asubank.model.pii.PartialPii;
 import com.asubank.model.pii.Pii;
 import com.asubank.model.pii.PiiManager;
+import com.asubank.model.recipient.Recipient;
+import com.asubank.model.recipient.RecipientManager;
 import com.asubank.model.security.ImagePath;
 import com.asubank.model.security.Security;
 import com.asubank.model.security.SecurityManager;
@@ -42,6 +47,8 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -141,11 +148,11 @@ public class UserController {
 	//			model.addAttribute("user",loginResult.getUser());
 	//			model.addAttribute("security",security);
 				VisitorManager.deleteVisitor(machineID);
-				session.setMaxInactiveInterval(60);
+				session.setMaxInactiveInterval(1200);
 				return "account";
 			}
 			else{
-				session.setMaxInactiveInterval(60);
+				session.setMaxInactiveInterval(1200);
 				return "employeeaccount";
 			}
 		}
@@ -163,25 +170,15 @@ public class UserController {
 	@RequestMapping("/account")
 	public String account(Model model, HttpSession session){
 		Account account = AccountManager.queryAccount((String)session.getAttribute("strID"));
-		String checkingID = String.valueOf(account.getCheckingID());
-		String savingID = String.valueOf(account.getSavingID());
-		String creditID = String.valueOf(account.getCreditID());			
-		model.addAttribute("checkingLastFour", checkingID.substring(checkingID.length() - 4, checkingID.length()));
-		model.addAttribute("savingLastFour", savingID.substring(savingID.length() - 4, savingID.length()));
-		model.addAttribute("creditLastFour", creditID.substring(creditID.length() - 4, creditID.length()));
-		model.addAttribute("checkingBalance", account.getCheckingBalance());
-		model.addAttribute("savingBalance", account.getSavingBalance());
-		model.addAttribute("creditBalance", account.getCreditBalance());
-		return "account";
-	}
-	
-	@RequestMapping("/customeraccount")
-	public String customerAccount(HttpSession session, Model model){
-		Account account = AccountManager.queryAccount((String)session.getAttribute("strID"));
+		if(account == null){
+			return "sessionTimeOut";
+		}
 		String checkingID = String.valueOf(account.getCheckingID());
 		String savingID = String.valueOf(account.getSavingID());
 		String creditID = String.valueOf(account.getCreditID());	
-		model.addAttribute("employee", "Employee");
+		User user = UserManager.queryUser((String)session.getAttribute("strID"));
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
 		model.addAttribute("checkingLastFour", checkingID.substring(checkingID.length() - 4, checkingID.length()));
 		model.addAttribute("savingLastFour", savingID.substring(savingID.length() - 4, savingID.length()));
 		model.addAttribute("creditLastFour", creditID.substring(creditID.length() - 4, creditID.length()));
@@ -191,8 +188,147 @@ public class UserController {
 		return "account";
 	}
 	
+//	@RequestMapping("/customeraccount")
+//	public String customerAccount(HttpSession session, Model model){
+//		Account account = AccountManager.queryAccount((String)session.getAttribute("strID"));
+//		String checkingID = String.valueOf(account.getCheckingID());
+//		String savingID = String.valueOf(account.getSavingID());
+//		String creditID = String.valueOf(account.getCreditID());	
+//		model.addAttribute("employee", "Employee");
+//		model.addAttribute("checkingLastFour", checkingID.substring(checkingID.length() - 4, checkingID.length()));
+//		model.addAttribute("savingLastFour", savingID.substring(savingID.length() - 4, savingID.length()));
+//		model.addAttribute("creditLastFour", creditID.substring(creditID.length() - 4, creditID.length()));
+//		model.addAttribute("checkingBalance", account.getCheckingBalance());
+//		model.addAttribute("savingBalance", account.getSavingBalance());
+//		model.addAttribute("creditBalance", account.getCreditBalance());
+//		return "account";
+//	}
+//	
+	@RequestMapping("/merchant")
+    public String merchant(Model model,HttpSession session){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+	String strID=(String)session.getAttribute("strID");
+		
+		return "merchant";
+	}
+	
+	@RequestMapping("/Transfer")
+	public String MakeTransfer(Model model,HttpSession session){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		String strID=(String)session.getAttribute("strID");
+		User user = UserManager.queryUser(strID);
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
+			
+		model.addAttribute("strID",strID);
+		Transaction transfer = new Transaction();
+		
+		model.addAttribute("transfer", transfer);
+			return "MakeTransfer";
+		}
+	
+	@RequestMapping("/MakeTransfer")
+	public String Transfer(@RequestParam String action,Model model,@ModelAttribute("transfer")Transaction transfer,HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException, ParseException{
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		String strID=(String)session.getAttribute("strID");
+		String message=null;
+		model.addAttribute("strID",strID);
+		User user = UserManager.queryUser(strID);
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
+		TransactionManager transfermanager = new TransactionManager();
+		if(action.equals("Continue")){
+			Account account = AccountManager.queryAccount(strID);
+			double balance = getBalance(account, transfer.getFromID());
+			if(balance < transfer.getAmount()){
+				message = TransactionErrorCode.OVERDRAFT;
+				model.addAttribute("message", message);
+				return "MakeTransfer";
+			}
+			
+			if(transfer.getAmount() >= 1000){
+				Security security = SecurityManager.createOtp(strID);
+				String otp = security.getOtp();
+				SecurityManager.sendOTP(otp, user.getEmail());
+				session.setAttribute("transfer", transfer);
+				model.addAttribute("security", security);
+				return "UserOtpValidation";
+			}
+			
+			message = transfermanager.transferMoney(strID, transfer.getFromID(), transfer.getToID(), transfer.getAmount());
+		}
+		
+		model.addAttribute("message", message);
+		return "MakeTransfer";
+	}
+	
+	@RequestMapping("/CheckingBalance")
+	public String Checking(Model model,HttpSession session,Map<String, Object> map){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		String strID=(String)session.getAttribute("strID");
+		model.addAttribute("strID",strID);
+		List transactions = TransactionManager.getTransactionsById(strID);
+
+		map.put("transactions", transactions);
+		User user = UserManager.queryUser(strID);
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
+			return "CheckingBalance";
+		}
+	
+	@RequestMapping("/RecipientInfo")
+	public String RecipientInfo(Model model, HttpSession session){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		Recipient recipient = new Recipient();
+		model.addAttribute("recipient",recipient);
+		User user = UserManager.queryUser((String)session.getAttribute("strID"));
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
+		return "AddRecipient";
+	}
+	
+	@RequestMapping(value="/AddRecipient")
+	public String AddRecipient(@RequestParam String action, @ModelAttribute("recipient") Recipient recipient ,Model model,HttpSession session){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		String strID=(String)session.getAttribute("strID");
+		model.addAttribute("strID",strID);
+		String message = null;
+		if(action.equals("Verify"))
+			{	
+			RecipientManager rm=new RecipientManager();
+			String result=	rm.verifyRecipient(strID, recipient.getRecipient_accountnumber());
+			if(result.equals("1")){
+				rm.addRecipient(strID, recipient.getRecipient_accountnumber(), recipient.getRecipient_lastname(),recipient.getRecipient_nickname());
+			 message="Valid Recipient..Recipient Added to your list!!!";
+			 }
+			else{
+			message="NO Account with such account number Exists in this BANK";
+				}
+			}
+		User user = UserManager.queryUser(strID);
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
+		model.addAttribute("message",message);
+		return "AddRecipient";
+		}
+	
 	@RequestMapping("/employeeaccount")
 	public String employeeAccount(HttpSession session, Model model){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
 		return "employeeaccount";
 	}
 	
@@ -204,6 +340,9 @@ public class UserController {
 	public String userInfo(Model model, HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException{
 //		Visitor visitor = (Visitor) session.getAttribute("visitor");
 //		String machineID = visitor.getMachineID();
+		if((String)session.getAttribute("machineID") == null){
+			return "sessionTimeOut";
+		}
 		String machineID = (String)session.getAttribute("machineID");
 		VisitorManager.deleteVisitor(machineID);
 		Visitor visitor = VisitorManager.createVisitor();	
@@ -221,6 +360,9 @@ public class UserController {
 	
 	@RequestMapping("/forgetpwd")
 	public String forgetPwd(Model model, HttpSession session){
+		if((String)session.getAttribute("machineID") == null){
+			return "sessionTimeOut";
+		}
 		String machineID = (String)session.getAttribute("machineID");
 		if(machineID.equals("") == false)
 			VisitorManager.deleteVisitor(machineID);
@@ -299,9 +441,12 @@ public class UserController {
     }
 	
 	private int checkUserInfo(UserInformation userInfo){
-		int year = userInfo.getDobYear();
-		int month = userInfo.getDobMonth();
-		int day = userInfo.getDobDay();
+		int year = Integer.valueOf(userInfo.getDobYear());
+		int month = Integer.valueOf(userInfo.getDobMonth());
+		int day = Integer.valueOf(userInfo.getDobDay());
+//		int year = userInfo.getDobYear();
+//		int month = userInfo.getDobMonth();
+//		int day = userInfo.getDobDay();
 		String pwd1 = userInfo.getPassword();
 		String pwd2 = userInfo.getPwdConfirm();
 		String transpwd1 = userInfo.getTransPwd();
@@ -384,67 +529,107 @@ public class UserController {
 	
 	@RequestMapping("/profilesetting")
 	public String profilesetting(@ModelAttribute("user") User user, Model model, HttpSession session){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
 		model.addAttribute("user",user);
+		String strID = (String)session.getAttribute("strID");
+		User user0 = UserManager.queryUser(strID);
+		if(user0.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
 		return "profilesetting";
 	}
 	
 	@RequestMapping("/checkingid")
 	public String getUserCheckingID(HttpSession session, Model model){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
 		String strID = (String)session.getAttribute("strID");
 		String str = "";
 		Account account = AccountManager.queryAccount(strID);
 		str = String.valueOf(account.getCheckingID());
 		model.addAttribute("checkingID", str);
 		model.addAttribute("user",new User());
+		User user = UserManager.queryUser(strID);
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
 		return "profilesetting";
 	}
 	
 	@RequestMapping("/savingid")
 	public String getUserSavingID(HttpSession session, Model model){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
 		String strID = (String)session.getAttribute("strID");
 		String str = "";
 		Account account = AccountManager.queryAccount(strID);
 		str = String.valueOf(account.getSavingID());
 		model.addAttribute("savingID", str);
 		model.addAttribute("user",new User());
+		User user = UserManager.queryUser(strID);
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
 		return "profilesetting";
 	}
 	
 	@RequestMapping("/creditid")
 	public String getUserCreditID(HttpSession session, Model model){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
 		String strID = (String)session.getAttribute("strID");
 		String str = "";
 		Account account = AccountManager.queryAccount(strID);
 		str = String.valueOf(account.getCreditID());
 		model.addAttribute("creditID", str);
 		model.addAttribute("user",new User());
+		User user = UserManager.queryUser(strID);
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
 		return "profilesetting";
 	}
 	
 	@RequestMapping("/email")
 	public String getUserEmail(HttpSession session, Model model){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
 		String strID = (String)session.getAttribute("strID");
 		User user = UserManager.queryUser(strID);
 		model.addAttribute("email", user.getEmail());
 		model.addAttribute("user",new User());
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
 		return "profilesetting";
 	}
 	
 	@RequestMapping("/address")
 	public String getUserAddress(HttpSession session, Model model){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
 		String strID = (String)session.getAttribute("strID");
 		User user = UserManager.queryUser(strID);
 		model.addAttribute("address", user.getAddress());
 		model.addAttribute("user",new User());
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
 		return "profilesetting";
 	}
 	
 	@RequestMapping("/telephone")
 	public String getUserTelephone(HttpSession session, Model model){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
 		String strID = (String)session.getAttribute("strID");
 		User user = UserManager.queryUser(strID);
 		model.addAttribute("telephone", user.getTelephone());
 		model.addAttribute("user",new User());
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
 		return "profilesetting";
 	}
 		
@@ -515,6 +700,9 @@ public class UserController {
 	
 	@RequestMapping("/createotp")
 	public String createOTP(HttpSession session, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException{
+		if((String)session.getAttribute("machineID") == null){
+			return "sessionTimeOut";
+		}
 		String machineID = (String)session.getAttribute("machineID");
 		Visitor visitor = VisitorManager.queryVisitor(machineID);	
 		UserInformation userinformation = (UserInformation)session.getAttribute("userinformation");
@@ -526,6 +714,9 @@ public class UserController {
 	
 	@RequestMapping("/validateotp")
 	public String validateOTP(@ModelAttribute("visitor") Visitor visitor, HttpSession session, Model model){
+		if((String)session.getAttribute("machineID") == null){
+			return "sessionTimeOut";
+		}
 		String machineID = (String)session.getAttribute("machineID");
 		UserInformation userinformation = (UserInformation)session.getAttribute("userinformation");
 		int statusCode = VisitorManager.validateOtp(machineID, visitor.getOtpInput());	
@@ -543,6 +734,41 @@ public class UserController {
 		model.addAttribute("status", status);
 		model.addAttribute("visitor",visitor);
 		return "otpvalidation";
+	}
+	
+	@RequestMapping("/usercreateotp")
+	public String createUserOTP(HttpSession session, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException{
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		String strID = (String)session.getAttribute("strID");
+		User user = UserManager.queryUser(strID);	
+		Security security = SecurityManager.createOtp(strID);
+		String otp = security.getOtp();
+		SecurityManager.sendOTP(otp, user.getEmail());
+		model.addAttribute("security",security);
+		return "UserOtpValidation";		
+	}
+	
+	@RequestMapping("/uservalidateotp")
+	public String validateOTP(@ModelAttribute("security") Security security, HttpSession session, Model model){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		String strID = (String)session.getAttribute("strID");
+		int statusCode = SecurityManager.validateOtp(strID, security.getOtpInput());	
+		if(statusCode == StatusCode.OTP_VALIDATED){
+			Transaction transfer = (Transaction)session.getAttribute("transfer");
+			TransactionManager transactionManager = new TransactionManager();
+			String message = transactionManager.transferMoney(strID, transfer.getFromID(), transfer.getToID(), transfer.getAmount());
+	    	model.addAttribute("resultMessage", message);
+	    	session.removeAttribute("transfer");
+	        return "userresult";
+		}
+		String status = StatusCode.STATUS[statusCode];
+		model.addAttribute("status", status);
+		model.addAttribute("security",security);
+		return "UserOtpValidation";
 	}
 	
 	private static String createUserAccount(UserInformation userInformation){
@@ -564,9 +790,12 @@ public class UserController {
 		security.setTransPwd(userInformation.getTransPwd());
 		
 		pii.setSsn(userInformation.getSsn());
-		pii.setDobYear(userInformation.getDobYear());
-		pii.setDobMonth(userInformation.getDobMonth());
-		pii.setDobDay(userInformation.getDobDay());
+		pii.setDobYear(Integer.valueOf(userInformation.getDobYear()));
+		pii.setDobMonth(Integer.valueOf(userInformation.getDobMonth()));
+		pii.setDobDay(Integer.valueOf(userInformation.getDobDay()));
+//		pii.setDobYear(userInformation.getDobYear());
+//		pii.setDobMonth(userInformation.getDobMonth());
+//		pii.setDobDay(userInformation.getDobDay());
 		String ssnString = pii.getSsn();
 		String ssnLastFour = ssnString.substring(ssnString.length() - 4, ssnString.length());
 		partialPii.setDobYear(pii.getDobYear());
@@ -627,8 +856,14 @@ public class UserController {
 	}
 	
 	@RequestMapping("/setting")
-	public String setting(@RequestParam String action, @ModelAttribute("user") User user, Model model){
+	public String setting(@RequestParam String action, @ModelAttribute("user") User user, Model model, HttpSession session){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
 		model.addAttribute("user", user);
+		User user0 = UserManager.queryUser((String)session.getAttribute("strID"));
+		if(user0.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
 		if(action.equals("Change Password")){
 			PasswordSet passwordSet = new PasswordSet();
 			model.addAttribute("passwordset",passwordSet);
@@ -642,8 +877,14 @@ public class UserController {
 	}
 	
 	@RequestMapping("/updatepassword")
-	public String updatePassword(@ModelAttribute("passwordset") PasswordSet passwordSet, Model model){
+	public String updatePassword(@ModelAttribute("passwordset") PasswordSet passwordSet, Model model, HttpSession session){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
 //		if(action.equals("Update Password")){	
+		User user0 = UserManager.queryUser((String)session.getAttribute("strID"));
+		if(user0.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
 		if(passwordSet.getOldPassword().equals(passwordSet.getNewPassword())){
 			User user = new User();
 			user.setStrID(passwordSet.getStrID());
@@ -712,7 +953,13 @@ public class UserController {
 	}
 	
 	@RequestMapping("/updatecontact")
-	public String updateContact(@ModelAttribute("contactset") ContactSet contactSet, Model model){
+	public String updateContact(@ModelAttribute("contactset") ContactSet contactSet, Model model, HttpSession session){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		User user0 = UserManager.queryUser((String)session.getAttribute("strID"));
+		if(user0.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
 		User user = new User();		
 		user.setStrID(contactSet.getStrID());
 		int validate = UserManager.validatePassword(user.getStrID(), contactSet.getPassword());
@@ -731,6 +978,9 @@ public class UserController {
 	
 	@RequestMapping("/transfer")
 	public String transfer(Model model, HttpSession session){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
 //		model.addAttribute("user",user);
 		return "transfer";
 	}
@@ -747,6 +997,28 @@ public class UserController {
 	    model.addAttribute("visitor", visitor);
 	    model.addAttribute("uservisitor", uservisitor);
         return "login";
+	}
+	
+	@RequestMapping("/errorhandling")
+	public String errorhandling(HttpSession session, HttpServletRequest request, Model model){
+		Visitor visitor = VisitorManager.createVisitor();
+		session.invalidate();
+		session = request.getSession();
+		session.setAttribute("machineID", visitor.getMachineID());
+		UserVisitor uservisitor = new UserVisitor();
+		uservisitor.setUser(new User());
+		uservisitor.setVisitor(visitor);
+	    model.addAttribute("visitor", visitor);
+	    model.addAttribute("uservisitor", uservisitor);
+        return "login";
+	}
+	
+	private static double getBalance(Account account, long accountID){
+		if(account.getCheckingID() == accountID){
+			return account.getCheckingBalance();
+		}
+		else
+			return account.getSavingBalance();
 	}
 	
 	//From: http://mrbool.com/how-to-convert-image-to-byte-array-and-byte-array-to-image-in-java/25136#

@@ -1,5 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" errorPage="/WEB-INF/jsp/except.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -26,7 +26,7 @@
 	<div id="menu">
 			<ul>
 				<li class="first current_page_item"><a href="account.html">Accounts</a></li>
-				<li><a href="transfer.html">Transfers</a></li>
+				<li><a href="Transfer.html">Transfers</a></li>
 				<li><a href="profilesetting.html">Profile &amp; Settings</a></li>				
 				<li><a href="#">Help &amp; Support</a></li>
 			</ul>
@@ -40,7 +40,7 @@
 						<td>Balance</td>
 					</tr>
 					<tr>
-						<td valign="middle"><a href="#" style="margin:0px 50px;">Checking (${checkingLastFour})</a></td>
+						<td valign="middle"><a href="CheckingBalance.html" style="margin:0px 50px;">Checking (${checkingLastFour})</a></td>
 						<td valign="middle">${checkingBalance}</td>
 					</tr>
 					<tr">

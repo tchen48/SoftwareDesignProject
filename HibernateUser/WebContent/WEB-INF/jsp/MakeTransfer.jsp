@@ -5,9 +5,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Add Recepient</title>
+<title>Transfer</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
+<body>
 <body>
 <div id="wrapper">
   <div id="header">
@@ -27,8 +28,7 @@
 				<li class="account"><a href="account.html">Accounts</a></li>
 				<li><a href="Transfer.html">Transfers</a></li>
 				<li><a href="merchant.html">Merchants Click Here!</a>
-				<li><a href="profilesetting.html">Profile &amp; Settings</a></li>
-				
+				<li><a href="profilesetting.html">Profile &amp; Settings</a></li>				
 				<li><a href="#">Help &amp; Support</a></li>
 			</ul>
 	</div>
@@ -37,43 +37,39 @@
 	  <div id="content">
 		  <div class="box">
 			<h2>&nbsp;</h2>
-			<form:form id="form1" method="post" action="AddRecipient.html" commandName="recipient">
-			 <p style="float:left;display:inline;margin-top:0px;height:20px;line-height:20px;">${message}</p>
+			<form:form id="form1" method="post" action="MakeTransfer.html" commandName="transfer">
+			<p style="float:left;display:inline;margin-top:0px;height:20px;line-height:20px;">${message}</p>
 			<table width="680" height="313" border="0" align="center">
 			  <tr>
-			    <td width="169" style="text-align: left"><a href="Transfer.html">Make Transfer</a></td>
-			    <td width="285" style="text-align: right">LastName :</td>
-			    <td width="212"><form:input type="text" id="textfield" required="true" autocomplete="off" path="recipient_lastname" maxlength="20"
-			    				 onkeypress='return (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122)' style="height: 20px;" />
-                </td>
+			    <td width="150" style="text-align: left"><a href="Transfer.html">Make Transfer</a></td>
+			    <td width="142" style="text-align: right">From</td>
+			    <td width="302"><label for="textfield">:</label>
+                <form:input type="text" name="textfield" id="textfield" required="true" autocomplete="off" path="fromID" style="height: 20px;" /></td>
 		      </tr>
 			  <tr>
 			    <td style="text-align: left"><a href="#">Review Transfers</a></td>
-			    <td style="text-align: right">NickName</td>
+			    <td style="text-align: right">To</td>
 			    <td><label for="textfield2">:</label>
-                <form:input type="text" name="textfield2" id="textfield2"  path="recipient_nickname"  maxlength="20" 
-                 onkeypress='return (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122)' required="true" autocomplete="off"/></td>
+                <form:input type="text" name="textfield2" id="textfield2" required="true" autocomplete="off" path="toID" style="height: 20px;" /></td>
 		      </tr>
 			  <tr>
-			    <td style="text-align: left"><a href="#">Add Recipients</a></td>
-			    <td style="text-align: right">Account Number</td>
+			    <td style="text-align: left"><a href="RecipientInfo.html">Add Recipients</a></td>
+			    <td style="text-align: right">Amount $</td>
 			    <td><label for="textfield3">:</label>
-                <form:input path="recipient_accountnumber" required="true" autocomplete="off" pattern=".{12}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' /></td>
+                <form:input type="text" name="textfield3" id="textfield3" required="true" autocomplete="off" path="amount" style="height: 20px;" /></td>
 		      </tr>
 			  <tr>
 			    <td style="text-align: left"><a href="#">Edit Recipients</a></td>
-			    
+			    <td>&nbsp;</td>
+			    <td>&nbsp;</td>
 		      </tr>
 			  <tr>
 			    <td><a href="#"></a></td>
-			  
-		      	<td style="text-align: right"><input type="submit" name="action" id="button" value="Verify"  align="middle"/></td>
-			    <td style="text-align: center"><input type="button" name="action" id="button2"  value="Add" /></td>
-		      
+			    <td style="text-align: right"><input type="submit" name="action" id="button" value="Continue" align="middle"></td>
+			    <td style="text-align: center"><input type="button" name="action" id="button2" value="Cancel"></td>
 		      </tr>
 		    </table>
 		    </form:form>
-		   
 			<p>&nbsp;</p>
 			<p>&nbsp;</p>
 		</div>
@@ -85,14 +81,14 @@
 	<div id="page-bottom">
 	  <div id="page-bottom-content">
 		<h3>ASU Bank Policy</h3>
-		  <p>Banking products are provided by Bank of America, N.A. and affiliated banks, Members FDIC and wholly owned subsidiaries of Bank of America Corporation.<br>
+	    <p>Banking products are provided by Bank of America, N.A. and affiliated banks, Members FDIC and wholly owned subsidiaries of Bank of America Corporation.<br>
 			  Investing in securities involves risks, and there is always the potential of losing money when you invest in securities. You should review any planned financial transactions that may have tax or legal implications with your personal tax or legal advisor.<br>
-		  </p>
+	    </p>
 	  </div>
 		<div id="page-bottom-sidebar">
 			<h3>Popular Links</h3>
 			<ul class="list">
-				<li><a href="#">Order checks</a></li>
+				<li class="first"><a href="#">Order checks</a></li>
 				<li><a href="#">Order a Debit Card</a></li>
 				<li class="last"><a href="#">Order a Foreign Currency</a></li>
 			</ul>
@@ -101,7 +97,7 @@
 	</div>
 </div>
 <div id="footer">
-	Copyright (c) 2012 Sitename.com. All rights reserved. >FreeCSSTemplates.org</a>.
+	Copyright (c) 2012 Sitename.com. All rights reserved. Design by <a href="http://www.freecsstemplates.org/" rel="nofollow">FreeCSSTemplates.org</a>.
 </div>
 </body>
 </html>

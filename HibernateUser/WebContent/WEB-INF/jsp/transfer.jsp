@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Transfer</title>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style.css" />
+<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
 <body>
@@ -15,43 +15,46 @@
 			<h1><a href="#">ASU Bank </a></h1>
 	</div>
 		<div id="slogan"> <ul>
+			<li class="first current_page_item"><a href="employeeaccount.html">${employee}</a> </li>
 			<li class="first current_page_item"><a href="#">Home</a> </li>
-			<li><a href="#"><%=session.getAttribute("strID") %></a></li>
+			<li><a href="#" id="strID"><%=session.getAttribute("strID") %></a></li>
 			<li><a href="#">Services</a></li>
-			<li><a href="#">LogOut</a></li>
+			<li><a href="logout.html">LogOut</a></li>
           </ul>		</div>
   </div>
-	<div id="menu">
+		<div id="menu">
 		<ul>
-			<li class="first current_page_item"><a href="account.html">Accounts</a></li>
-			<li><a href="transfer.html">Transfers</a></li>
-			<li><a href="profilesetting.html">Profile &amp; Settings</a></li>				
-			<li><a href="#">Help &amp; Support</a></li>
-		</ul>
+				<li class="account"><a href="account.html">Accounts</a></li>
+				<li><a href="Transfer.html">Transfers</a></li>
+				<li><a href="merchant.html">Merchants Click Here!</a>
+				<li><a href="profilesetting.html">Profile &amp; Settings</a></li>
+				
+				<li><a href="#">Help &amp; Support</a></li>
+			</ul>
 	</div>
 	
 	<div id="page">
 	  <div id="content">
 		  <div class="box">
-			<h4>Transfer</h4>
+			<h2>&nbsp;</h2>
 			<table width="680" height="313" border="0" align="center">
 			  <tr>
 			    <td width="150" style="text-align: left"><a href="Transfer.html">Make Transfer</a></td>
 			    <td width="142" style="text-align: right">From</td>
-			    <td width="302" style="padding-right:60px">
-                <input type="text" name="textfield" id="textfield" style="height:30px" /></td>
+			    <td width="302"><label for="textfield">:</label>
+                <input type="text" name="textfield" id="textfield"></td>
 		      </tr>
 			  <tr>
 			    <td style="text-align: left"><a href="#">Review Transfers</a></td>
 			    <td style="text-align: right">To</td>
-			    <td style="padding-right:60px">
-                <input type="text" name="textfield2" id="textfield2" style="height:30px" /></td>
+			    <td><label for="textfield2">:</label>
+                <input type="text" name="textfield2" id="textfield2"></td>
 		      </tr>
 			  <tr>
-			    <td style="text-align: left"><a href="AddRecipient.html">Add Recipients</a></td>
+			    <td style="text-align: left"><a href="RecipientInfo.html">Add Recipients</a></td>
 			    <td style="text-align: right">Amount $</td>
-			    <td style="padding-right:60px">
-                <input type="text" name="textfield3" id="textfield3" style="height:30px" /></td>
+			    <td><label for="textfield3">:</label>
+                <input type="text" name="textfield3" id="textfield3"></td>
 		      </tr>
 			  <tr>
 			    <td style="text-align: left"><a href="#">Edit Recipients</a></td>
@@ -60,8 +63,8 @@
 		      </tr>
 			  <tr>
 			    <td><a href="#"></a></td>
-			    <td style="text-align: right"><input type="button" name="action" id="button" value="Continue" align="middle" style="padding:5px 10px"></td>
-			    <td style="text-align: center"><input type="button" name="button2" id="button2" value="Cancel" style="padding:5px 10px"></td>
+			    <td style="text-align: right"><input type="button" name="button" id="button" value="Continue" align="middle"></td>
+			    <td style="text-align: center"><input type="button" name="button2" id="button2" value="Cancel"></td>
 		      </tr>
 		    </table>
 			<p>&nbsp;</p>

@@ -15,28 +15,30 @@
 			<h1><a href="#">ASU Bank </a></h1>
 		</div>
 		
-  <div id="slogan"> <ul>
-			<li class="first current_page_item"><a href="employeeaccount.html">${employee}</a> </li>
-			<li class="first current_page_item"><a href="#">Home</a> </li>
-			<li><a href="#" id="strID"><%=session.getAttribute("strID") %></a></li>
-			<li><a href="#">Services</a></li>
-			<li><a href="logout.html">LogOut</a></li>
-          </ul>		</div>
-		
-  	</div>
+  </div>
 	<div id="menu">
-			<ul>
-				<li class="first current_page_item"><a href="account.html">Accounts</a></li>
-				<li><a href="Transfer.html">Transfers</a></li>
-				<li><a href="profilesetting.html">Profile &amp; Settings</a></li>				
-				<li><a href="#">Help &amp; Support</a></li>
-			</ul>
+		<ul>
+			<li class="first current_page_item"><a href="#">Homepage</a></li>
+			<li><a href="#">Products</a></li>
+			<li><a href="#">Services</a></li>
+			<li><a href="#">Clients</a></li>
+			<li><a href="#">Support</a></li>
+			<li><a href="#">About</a></li>
+			<li class="last"><a href="#">Contact</a><br class="clearfix" />
+	</li>
+		</ul>
 	</div>
 	
 	<div id="page">
 	  <div id="content">
 		  <div class="box">
-				<h4>${resultMessage}</h4>
+				<h4>404 Error</h4>
+                
+                <form:form method="post" action="errorhandling.html" style="border:0; text-align:center; margin:auto auto">                	                	
+                	<input type="submit" value="Log In" style="padding: 5px 10px;float:center; margin-right: 50px;display:inline;" /><br /><br />
+                </form:form>	
+			    	
+			    	        
 				<p>&nbsp;</p>
 			</div>
 			<br class="clearfix" />

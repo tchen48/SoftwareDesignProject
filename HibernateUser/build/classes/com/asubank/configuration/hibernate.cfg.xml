@@ -34,6 +34,8 @@
         <mapping resource="com/asubank/model/pii/Pii.hbm.xml" />
         <mapping resource="com/asubank/model/sessionset/SessionSet.hbm.xml" />
 		<mapping resource="com/asubank/model/pii/PartialPii.hbm.xml" />
+		<mapping resource="com/asubank/model/recipient/Recipient.hbm.xml" />
+		<mapping resource="com/asubank/model/transfer/Transaction.hbm.xml" />
 		
     </session-factory>
 </hibernate-configuration>

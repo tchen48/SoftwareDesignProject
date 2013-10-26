@@ -37,19 +37,23 @@
 			<form:form action="createuser.html" method="post" modelAttribute="command" commandName="userinformation" style="width:800px; height=600px; border:0; text-align:center; margin:auto auto">
 				<table style="border-spacing: 0px 25px;">
 					<tr>
-						<td style="text-align: right;">First name</td><td style="text-align: left;"><form:input type="text" maxlength="20" path="firstname"  required="true" autocomplete="off" style="height:30px;width:200px"  /></td>
-						<td style="text-align: right;">Last name</td><td style="text-align: left;"><form:input path="lastname" type="text" maxlength="20" required="true" autocomplete="off" style="height:30px;width:200px" /></td>
+						<td style="text-align: right;">First name</td><td style="text-align: left;"><form:input type="text" maxlength="20" path="firstname"  onkeypress='return (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122)' required="true" autocomplete="off" style="height:30px;width:200px"  /></td>
+						<td style="text-align: right;">Last name</td><td style="text-align: left;"><form:input path="lastname" type="text" maxlength="20" onkeypress='return (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122)' required="true" autocomplete="off" style="height:30px;width:200px" /></td>
 					</tr>
 					<tr>
 						<td style="text-align: right;">Birth</td>
-						<td style="text-align: left;padding:0"><form:input id="dobYear" path="dobYear" type="number" min="1900" max = "2013" autocomplete="off" style="margin-left:18px;height:30px"/>
+						<td style="text-align: left;padding:0"><form:input id="dobYear" path="dobYear" type="text" pattern=".{4}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' autocomplete="off" style="margin-left:18px;height:30px"/>
+													  		   <form:input id="dobDay" path="dobDay" type="text" pattern=".{1,2}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' autocomplete="off" style="margin-left:18px;height:30px" />
+													  		   <form:input id="dobMonth" path="dobMonth" type="text" pattern=".{1,2}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' autocomplete="off" style="height:30px" />
+						</td> 
+				<!-- 		<td style="text-align: left;padding:0"><form:input id="dobYear" path="dobYear" type="number" min="1900" max = "2013" autocomplete="off" style="margin-left:18px;height:30px"/>
 													  		   <form:input id="dobDay" path="dobDay" type="number" min="1" max = "31" autocomplete="off" style="margin-left:18px;height:30px" />
 													  		   <form:input id="dobMonth" path="dobMonth" type="number" min="1" max = "12" autocomplete="off" style="height:30px" />
-						</td>	
+						</td> -->	
 						<td style="text-align: right;">SSN</td><td style="text-align: left;"><form:input path="ssn" pattern=".{9}" required="true" autocomplete="off" onkeypress='return event.charCode >= 48 && event.charCode <= 57' style="height:30px;width:200px" type="text" maxlength="9" /></td>
 					</tr>
 					<tr>
-						<td style="text-align: right;">Address</td><td style="text-align: left;"><form:input path="address" type="text" maxlength="100" required="true" autocomplete="off" style="height:30px;width:200px"  /></td>
+						<td style="text-align: right;">Address</td><td style="text-align: left;"><form:input path="address" type="text" maxlength="100" onkeypress='return (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122) || event.charCode == 32' required="true" autocomplete="off" style="height:30px;width:200px"  /></td>
 						<td style="text-align: right;">Email</td><td style="text-align: left;"><form:input type="email" path="email" maxlength="50" required="true" autocomplete="off" style="height:30px;width:200px"  /></td>
 					</tr>
 					<tr>

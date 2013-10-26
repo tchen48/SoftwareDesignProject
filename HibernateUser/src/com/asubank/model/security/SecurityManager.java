@@ -320,7 +320,7 @@ public class SecurityManager {
 	    return true;
 	}
 	
-	private static void sendOTP(String otp, String recipient){
+	public static void sendOTP(String otp, String recipient){
 		//"shaosh0913@gmail.com";
 		String subject = "One Time Password from ASUBank";
 		String content = "Dear user, \n This is your One Time Password: " + otp + ". Please validate it within one minute.";
@@ -362,7 +362,7 @@ public class SecurityManager {
 			     'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
 			     'y', 'z', 'A', 'B','C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
 			     'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y',
-			     'Z','!','@','#','$','%','^','&','*','~','|'};
+			     'Z'};
 		Random random = new Random();
 		int randomLength = 3 + random.nextInt(2);
 		int randomCount = 4 + random.nextInt(2);

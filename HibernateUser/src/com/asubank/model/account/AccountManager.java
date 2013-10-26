@@ -95,4 +95,23 @@ public class AccountManager {
 		return account;		
 	}
 	
+	public static String queryAccountOwnerID(String accountID){
+		createSession();
+		String hql = "from Account as a where a.checkingID=:accountID or a.savingID=:accountID or a.creditID=:accountID";
+		Query query = session.createQuery(hql);
+		query.setString("accountID", accountID);
+		List <Account>list = query.list();
+		Account account = null;
+		java.util.Iterator<Account> iter = list.iterator();
+		while (iter.hasNext()) {
+			account = iter.next();
+		}					
+		session.getTransaction().commit();
+		session.close();
+		if(account != null)
+			return account.getStrID();	
+		else
+			return null;
+	}
+	
 }

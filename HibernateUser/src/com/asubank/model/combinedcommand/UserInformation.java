@@ -10,9 +10,12 @@ import com.asubank.model.visitor.Visitor;
 public class UserInformation {
 	private String firstname;
 	private String lastname;
-	private int dobYear;
-	private int dobDay;
-	private int dobMonth;
+	private String dobYear;
+	private String dobDay;
+	private String dobMonth;
+//	private int dobYear;
+//	private int dobDay;
+//	private int dobMonth;
 	private String ssn;
 	private String address;
 	private String email;
@@ -30,12 +33,12 @@ public class UserInformation {
 	public void setVisitor(Visitor visitor) {
 		this.visitor = visitor;
 	}
-	public int getDobDay() {
-		return dobDay;
-	}
-	public void setDobDay(int dobDay) {
-		this.dobDay = dobDay;
-	}
+//	public int getDobDay() {
+//		return dobDay;
+//	}
+//	public void setDobDay(int dobDay) {
+//		this.dobDay = dobDay;
+//	}
 	public String getFirstname() {
 		return firstname;
 	}
@@ -108,18 +111,37 @@ public class UserInformation {
 	public void setTransPwdConfirm(String transPwdConfirm) {
 		this.transPwdConfirm = transPwdConfirm;
 	}
-	public int getDobYear() {
+	public String getDobYear() {
 		return dobYear;
 	}
-	public void setDobYear(int dobYear) {
+	public void setDobYear(String dobYear) {
 		this.dobYear = dobYear;
 	}
-	public int getDobMonth() {
+	public String getDobDay() {
+		return dobDay;
+	}
+	public void setDobDay(String dobDay) {
+		this.dobDay = dobDay;
+	}
+	public String getDobMonth() {
 		return dobMonth;
 	}
-	public void setDobMonth(int dobMonth) {
+	public void setDobMonth(String dobMonth) {
 		this.dobMonth = dobMonth;
 	}
+	
+//	public int getDobYear() {
+//		return dobYear;
+//	}
+//	public void setDobYear(int dobYear) {
+//		this.dobYear = dobYear;
+//	}
+//	public int getDobMonth() {
+//		return dobMonth;
+//	}
+//	public void setDobMonth(int dobMonth) {
+//		this.dobMonth = dobMonth;
+//	}
 	
 	
 	
