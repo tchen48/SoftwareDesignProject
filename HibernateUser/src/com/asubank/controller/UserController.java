@@ -305,7 +305,7 @@ public class UserController {
 		if((String)session.getAttribute("strID") == null){
 			return "sessionTimeOut";
 		}
-		String strID=(String)session.getAttribute("strID");
+		String strID = (String)session.getAttribute("strID");
 		model.addAttribute("strID",strID);
 		List transactions = TransactionManager.getTransactionsById(strID);
 
@@ -353,6 +353,9 @@ public class UserController {
 		recipient.setRecipient_nickname(recipientInput.getRecipient_nicknameInput());
 		recipient.setRecipient_accountnumber(Long.valueOf(recipientInput.getRecipient_accountnumberInput()));
 		//Validate Recipient input end
+		//filter xss recipientinput
+//		XSSProtection.filterRecipientInput(recipientInput);
+		//filter xss recipientinput
 //		String strID=(String)session.getAttribute("strID");
 //		model.addAttribute("strID",strID);
 		String message = null;
@@ -477,6 +480,9 @@ public class UserController {
 				return "applynewaccount";
 			}
 			//validate userinfo end
+			//filter xss
+//			XSSProtection.filterUserInfo(userInformation);
+			//filter xss
 			int checkInfoCode = checkUserInfo(userInformation);
 			if(checkInfoCode != UserInfoErrorCode.NO_ERROR){
 				VisitorManager.createCaptcha(machineID);
@@ -965,6 +971,9 @@ public class UserController {
 			return "changepassword";
 		}
 		//updatepassword input validate end
+		//filter xss passwordset
+//		XSSProtection.filterPasswordSet(passwordSet);
+		//filter xss passwordset
 		if(passwordSet.getOldPassword().equals(passwordSet.getNewPassword())){
 			User user = new User();
 			user.setStrID(passwordSet.getStrID());
@@ -1053,6 +1062,9 @@ public class UserController {
 			return "changecontact";
 		}
 		//updatepassword input validate end
+		//filter xss contactset
+//		XSSProtection.filterContactSet(contactSet);
+		//filter xss contactset
 		
 		int validate = UserManager.validatePassword(user.getStrID(), contactSet.getPassword());
 		if(validate != StatusCode.LOGIN_SUCCESS){
