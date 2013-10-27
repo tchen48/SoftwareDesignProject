@@ -37,13 +37,13 @@
 	  <div id="content">
 		  <div class="box">
 			<h2>&nbsp;</h2>
-			<form:form id="form1" method="post" action="AddRecipient.html" commandName="recipient">
+			<form:form id="form1" method="post" action="AddRecipient.html" commandName="recipientInput">
 			 <p style="float:left;display:inline;margin-top:0px;height:20px;line-height:20px;">${message}</p>
 			<table width="680" height="313" border="0" align="center">
 			  <tr>
 			    <td width="169" style="text-align: left"><a href="Transfer.html">Make Transfer</a></td>
 			    <td width="285" style="text-align: right">LastName :</td>
-			    <td width="212"><form:input type="text" id="textfield" required="true" autocomplete="off" path="recipient_lastname" maxlength="20"
+			    <td width="212"><form:input type="text" id="textfield" required="true" autocomplete="off" path="recipient_lastnameInput" maxlength="20"
 			    				 onkeypress='return (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122)' style="height: 20px;" />
                 </td>
 		      </tr>
@@ -51,14 +51,14 @@
 			    <td style="text-align: left"><a href="#">Review Transfers</a></td>
 			    <td style="text-align: right">NickName</td>
 			    <td><label for="textfield2">:</label>
-                <form:input type="text" name="textfield2" id="textfield2"  path="recipient_nickname"  maxlength="20" 
+                <form:input type="text" name="textfield2" id="textfield2"  path="recipient_nicknameInput"  maxlength="20" 
                  onkeypress='return (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122)' required="true" autocomplete="off"/></td>
 		      </tr>
 			  <tr>
 			    <td style="text-align: left"><a href="#">Add Recipients</a></td>
 			    <td style="text-align: right">Account Number</td>
 			    <td><label for="textfield3">:</label>
-                <form:input path="recipient_accountnumber" required="true" autocomplete="off" pattern=".{12}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' /></td>
+                <form:input path="recipient_accountnumberInput" required="true" autocomplete="off" pattern=".{12}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' /></td>
 		      </tr>
 			  <tr>
 			    <td style="text-align: left"><a href="#">Edit Recipients</a></td>

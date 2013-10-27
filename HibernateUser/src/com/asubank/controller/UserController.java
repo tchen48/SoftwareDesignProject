@@ -2,6 +2,7 @@ package com.asubank.controller;
 
 import com.asubank.model.transfer.Transaction;
 import com.asubank.model.transfer.TransactionErrorCode;
+import com.asubank.model.transfer.TransactionInput;
 import com.asubank.model.transfer.TransactionManager;
 import com.asubank.model.user.ContactSet;
 import com.asubank.model.user.LoginResult;
@@ -20,6 +21,7 @@ import com.asubank.model.pii.PartialPii;
 import com.asubank.model.pii.Pii;
 import com.asubank.model.pii.PiiManager;
 import com.asubank.model.recipient.Recipient;
+import com.asubank.model.recipient.RecipientInput;
 import com.asubank.model.recipient.RecipientManager;
 import com.asubank.model.security.ImagePath;
 import com.asubank.model.security.Security;
@@ -91,7 +93,19 @@ public class UserController {
 			    model.addAttribute("visitor", userVisitor.getVisitor());
 			    return "login";
 			}
-			
+			//Validate login input format
+			String LoginInputValidate = InputValidation.validateLogin(userVisitor.getUser().getStrID(), userVisitor.getUser().getPassword());
+			if(LoginInputValidate != null){
+				VisitorManager.increaseFail(machineID);
+				VisitorManager.createCaptcha(machineID);
+				String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
+			    model.addAttribute("encodedImage",encodedImage); 
+				String ErrorMsg = LoginInputValidate;
+				model.addAttribute("ErrorMsg", ErrorMsg);
+				model.addAttribute("visitor", userVisitor.getVisitor());
+				return "login";
+			}
+			//Match credential
 			LoginResult loginResult = UserManager.validate(userVisitor.getUser().getStrID(), userVisitor.getUser().getPassword());
 			
 			if(loginResult.getUser() == null){
@@ -225,14 +239,17 @@ public class UserController {
 			model.addAttribute("employee", "Employee");
 			
 		model.addAttribute("strID",strID);
-		Transaction transfer = new Transaction();
+//		Transaction transfer = new Transaction();
 		
-		model.addAttribute("transfer", transfer);
+//		model.addAttribute("transfer", transfer);
+		TransactionInput transactionInput = new TransactionInput();
+		model.addAttribute("transferinput", transactionInput);
 			return "MakeTransfer";
 		}
 	
 	@RequestMapping("/MakeTransfer")
-	public String Transfer(@RequestParam String action,Model model,@ModelAttribute("transfer")Transaction transfer,HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException, ParseException{
+//	public String Transfer(@RequestParam String action,Model model,@ModelAttribute("transfer")Transaction transfer,HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException, ParseException{
+	public String Transfer(@RequestParam String action,Model model,@ModelAttribute("transferinput")TransactionInput transferInput,HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException, ParseException{
 		if((String)session.getAttribute("strID") == null){
 			return "sessionTimeOut";
 		}
@@ -242,9 +259,24 @@ public class UserController {
 		User user = UserManager.queryUser(strID);
 		if(user.getRoletype() == 0)
 			model.addAttribute("employee", "Employee");
+		//Validate Transfer input start
+		String transferValidate = InputValidation.validateTransfer(transferInput);
+		if(transferValidate != null){
+			model.addAttribute("message", transferValidate);
+			return "MakeTransfer";
+		}
+		Transaction transfer = new Transaction();
+		transfer.setAmount(Double.valueOf(transferInput.getAmountInput()));
+		transfer.setFromID(Long.valueOf(transferInput.getFromIDInput()));
+		transfer.setToID(Long.valueOf(transferInput.getToIDInput()));
+		//Validate Transfer input end
 		TransactionManager transfermanager = new TransactionManager();
 		if(action.equals("Continue")){
 			Account account = AccountManager.queryAccount(strID);
+			if(transfer.getFromID() != account.getCheckingID() && transfer.getFromID() != account.getSavingID()){
+				model.addAttribute("message", TransactionErrorCode.NOTYOURACCOUNT);
+				return "MakeTransfer";
+			}
 			double balance = getBalance(account, transfer.getFromID());
 			if(balance < transfer.getAmount()){
 				message = TransactionErrorCode.OVERDRAFT;
@@ -289,8 +321,10 @@ public class UserController {
 		if((String)session.getAttribute("strID") == null){
 			return "sessionTimeOut";
 		}
-		Recipient recipient = new Recipient();
-		model.addAttribute("recipient",recipient);
+//		Recipient recipient = new Recipient();
+		RecipientInput recipientInput = new RecipientInput();
+//		model.addAttribute("recipient",recipient);
+		model.addAttribute("recipientInput", recipientInput);
 		User user = UserManager.queryUser((String)session.getAttribute("strID"));
 		if(user.getRoletype() == 0)
 			model.addAttribute("employee", "Employee");
@@ -298,12 +332,29 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/AddRecipient")
-	public String AddRecipient(@RequestParam String action, @ModelAttribute("recipient") Recipient recipient ,Model model,HttpSession session){
+//	public String AddRecipient(@RequestParam String action, @ModelAttribute("recipient") Recipient recipient ,Model model,HttpSession session){
+	public String AddRecipient(@RequestParam String action, @ModelAttribute("recipientInput") RecipientInput recipientInput ,Model model,HttpSession session){
 		if((String)session.getAttribute("strID") == null){
 			return "sessionTimeOut";
 		}
 		String strID=(String)session.getAttribute("strID");
 		model.addAttribute("strID",strID);
+		User user = UserManager.queryUser(strID);
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
+		//Validate Recipient input start
+		String recipientValidate = InputValidation.validateRecipient(recipientInput);
+		if(recipientValidate != null){
+			model.addAttribute("message", recipientValidate);
+			return "AddRecipient";
+		}
+		Recipient recipient = new Recipient();
+		recipient.setRecipient_lastname(recipientInput.getRecipient_lastnameInput());
+		recipient.setRecipient_nickname(recipientInput.getRecipient_nicknameInput());
+		recipient.setRecipient_accountnumber(Long.valueOf(recipientInput.getRecipient_accountnumberInput()));
+		//Validate Recipient input end
+//		String strID=(String)session.getAttribute("strID");
+//		model.addAttribute("strID",strID);
 		String message = null;
 		if(action.equals("Verify"))
 			{	
@@ -317,9 +368,7 @@ public class UserController {
 			message="NO Account with such account number Exists in this BANK";
 				}
 			}
-		User user = UserManager.queryUser(strID);
-		if(user.getRoletype() == 0)
-			model.addAttribute("employee", "Employee");
+		
 		model.addAttribute("message",message);
 		return "AddRecipient";
 		}
@@ -373,6 +422,14 @@ public class UserController {
 	@RequestMapping("/sendpwd")
 	public String sendPwd(@ModelAttribute("user") User user, Model model){
 		String strID = user.getStrID();
+		//validate strID start
+		String strIDValidate = InputValidation.validateStrID(strID);
+		if(strIDValidate != null){
+			model.addAttribute("ErrorMsg", strIDValidate);
+			model.addAttribute("machineid", "");
+			return "forgetpwd";
+		}
+		//validate strID end		
 		user = UserManager.queryUser(strID);
 		if(user == null){
 			String ErrorMsg = StatusCode.LOGIN_STATUS[StatusCode.USERID_NOT_EXIST];
@@ -408,7 +465,18 @@ public class UserController {
 			    model.addAttribute("userInformation", userInformation);
 			    model.addAttribute("visitor", userInformation.getVisitor());
 			    return "applynewaccount";
-			}			
+			}	
+			//validate userinfo start
+			String userInfoValidate = InputValidation.validateUserInformation(userInformation);
+			if(userInfoValidate != null){
+				VisitorManager.createCaptcha(machineID);
+				String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
+			    model.addAttribute("encodedImage",encodedImage); 
+			    model.addAttribute("userInfoError", userInfoValidate);
+				model.addAttribute("visitor", userInformation.getVisitor());
+				return "applynewaccount";
+			}
+			//validate userinfo end
 			int checkInfoCode = checkUserInfo(userInformation);
 			if(checkInfoCode != UserInfoErrorCode.NO_ERROR){
 				VisitorManager.createCaptcha(machineID);
@@ -885,6 +953,18 @@ public class UserController {
 		User user0 = UserManager.queryUser((String)session.getAttribute("strID"));
 		if(user0.getRoletype() == 0)
 			model.addAttribute("employee", "Employee");
+		//updatepassword input validate start
+		String passwordSetValidate = InputValidation.validatePasswordSet(passwordSet);
+		if(passwordSetValidate != null){
+			User user = new User();
+			user.setStrID(passwordSet.getStrID());
+			passwordSet = new PasswordSet();
+			model.addAttribute("passwordset",passwordSet);
+			model.addAttribute("ErrorMsg", InputErrorCode.PASSWORD_ERROR);
+			model.addAttribute("user",user);
+			return "changepassword";
+		}
+		//updatepassword input validate end
 		if(passwordSet.getOldPassword().equals(passwordSet.getNewPassword())){
 			User user = new User();
 			user.setStrID(passwordSet.getStrID());
@@ -962,6 +1042,18 @@ public class UserController {
 			model.addAttribute("employee", "Employee");
 		User user = new User();		
 		user.setStrID(contactSet.getStrID());
+		//updatepassword input validate start
+		String contactSetValidate = InputValidation.validateContactSet(contactSet);
+		if(contactSetValidate != null){
+			user.setStrID(contactSet.getStrID());
+			contactSet = new ContactSet();
+			model.addAttribute("contactSet",contactSet);
+			model.addAttribute("ErrorMsg", contactSetValidate);
+			model.addAttribute("user",user);
+			return "changecontact";
+		}
+		//updatepassword input validate end
+		
 		int validate = UserManager.validatePassword(user.getStrID(), contactSet.getPassword());
 		if(validate != StatusCode.LOGIN_SUCCESS){
 			model.addAttribute("user",user);

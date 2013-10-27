@@ -13,6 +13,7 @@ import java.util.UUID;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.asubank.controller.InputValidation;
 import com.asubank.model.combinedcommand.UserInformation;
 import com.asubank.model.publicmethod.PublicMethod;
 import com.asubank.model.security.ImagePath;
@@ -128,6 +129,9 @@ public class VisitorManager {
 		if(visitor.getFail() == 0 && source == CapValidationRequestSource.LOGIN){
 			return StatusCode.CAPTCHA_VALIDATED;
 		}
+		if(InputValidation.validateCaptcha(captchaInput) != null){
+			return StatusCode.CAPTCHA_NOT_CORRECT;
+		}
 		
 		Date start = visitor.getCaptchaStart();
 		Date current = new Date();
@@ -206,6 +210,9 @@ public class VisitorManager {
 		Visitor visitor = queryVisitor(machineID);
 		if(visitor == null)
 			return StatusCode.USERID_NOT_EXIST;
+		if(InputValidation.validateOTP(otpInput) != null){
+			return StatusCode.OTP_NOT_CORRECT;
+		}
 		
 		Date start = visitor.getOtpStart();
 		Date current = new Date();

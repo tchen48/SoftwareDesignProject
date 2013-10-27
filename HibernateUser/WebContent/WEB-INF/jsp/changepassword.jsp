@@ -40,7 +40,7 @@
 					<table style="border-spacing: 0px 25px;">
 						<tr>
 							<td>Old Password</td>
-							<td style="padding-right:60px;"><form:input path="oldPassword" type="password" maxlength="20" required="true" autocomplete="off" style="height:30px;width:200px;"  /></td>
+							<td style="padding-right:60px;"><form:input path="oldPassword" type="password" pattern=".{6,20}" maxlength="20" required="true" autocomplete="off" style="height:30px;width:200px;"  /></td>
 						</tr>
 						<tr>
 							<td>New Password</td>

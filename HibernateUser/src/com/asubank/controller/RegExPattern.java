@@ -87,7 +87,7 @@ public class RegExPattern {
 	}
 	
 	public static boolean validateDobDay(String input){
-		Pattern dobDay = Pattern.compile("[1-3]?[0-9]{1}"); 
+		Pattern dobDay = Pattern.compile("[0-3]?[0-9]{1}"); 
 		Matcher m = dobDay.matcher(input);
 		if(m.matches()){
 			int day = Integer.valueOf(input);
@@ -98,7 +98,7 @@ public class RegExPattern {
 	}
 	
 	public static boolean validateDobMonth(String input){
-		Pattern dobMonth = Pattern.compile("[1]?[0-9]{1}"); 
+		Pattern dobMonth = Pattern.compile("[01]?[0-9]{1}"); 
 		Matcher m = dobMonth.matcher(input);
 		if(m.matches()){
 			int month = Integer.valueOf(input);

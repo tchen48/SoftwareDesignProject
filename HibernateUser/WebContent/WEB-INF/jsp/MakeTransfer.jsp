@@ -37,26 +37,26 @@
 	  <div id="content">
 		  <div class="box">
 			<h2>&nbsp;</h2>
-			<form:form id="form1" method="post" action="MakeTransfer.html" commandName="transfer">
+			<form:form id="form1" method="post" action="MakeTransfer.html" commandName="transferinput">
 			<p style="float:left;display:inline;margin-top:0px;height:20px;line-height:20px;">${message}</p>
 			<table width="680" height="313" border="0" align="center">
 			  <tr>
 			    <td width="150" style="text-align: left"><a href="Transfer.html">Make Transfer</a></td>
 			    <td width="142" style="text-align: right">From</td>
 			    <td width="302"><label for="textfield">:</label>
-                <form:input type="text" name="textfield" id="textfield" required="true" autocomplete="off" path="fromID" style="height: 20px;" /></td>
+                <form:input type="text" name="textfield" id="textfield" required="true" autocomplete="off" path="fromIDInput" style="height: 20px;" /></td>
 		      </tr>
 			  <tr>
 			    <td style="text-align: left"><a href="#">Review Transfers</a></td>
 			    <td style="text-align: right">To</td>
 			    <td><label for="textfield2">:</label>
-                <form:input type="text" name="textfield2" id="textfield2" required="true" autocomplete="off" path="toID" style="height: 20px;" /></td>
+                <form:input type="text" name="textfield2" id="textfield2"  required="true" autocomplete="off" path="toIDInput" style="height: 20px;" /></td>
 		      </tr>
 			  <tr>
 			    <td style="text-align: left"><a href="RecipientInfo.html">Add Recipients</a></td>
 			    <td style="text-align: right">Amount $</td>
 			    <td><label for="textfield3">:</label>
-                <form:input type="text" name="textfield3" id="textfield3" required="true" autocomplete="off" path="amount" style="height: 20px;" /></td>
+                <form:input type="text" name="textfield3" id="textfield3"  required="true" autocomplete="off" path="amountInput" style="height: 20px;" /></td>
 		      </tr>
 			  <tr>
 			    <td style="text-align: left"><a href="#">Edit Recipients</a></td>

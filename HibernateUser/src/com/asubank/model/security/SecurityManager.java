@@ -25,6 +25,7 @@ import javax.mail.internet.MimeMessage;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.asubank.controller.InputValidation;
 import com.asubank.model.publicmethod.PublicMethod;
 import com.asubank.model.user.User;
 import com.asubank.model.user.UserManager;
@@ -123,6 +124,9 @@ public class SecurityManager {
 		Security security = querySecurity(strID);
 		if(security == null)
 			return StatusCode.USERID_NOT_EXIST;
+		if(InputValidation.validateOTP(otpInput) != null){
+			return StatusCode.OTP_NOT_CORRECT;
+		}
 		
 		Date start = security.getOtpStart();
 		Date current = new Date();
@@ -373,7 +377,7 @@ public class SecurityManager {
 	    for (int i = 0; i < randomCount; i++) {
 	    	StringBuilder password = new StringBuilder("");
     		for (int m = 1; m <= randomLength; m++) {
-    			password.append(chars[random.nextInt(72)]);
+    			password.append(chars[random.nextInt(62)]);
     		}
     		passwords[i] = password.toString();
     		finalpw = finalpw.concat(passwords[i]);
