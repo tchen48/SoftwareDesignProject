@@ -226,12 +226,14 @@ public class TransactionManager {
 		session.close();
 	
 	}
-	public static List<Transaction> getTransactionsById(String strID){
+//	public static List<Transaction> getTransactionsById(String strID){
+	public static List<Transaction> getTransactionsById(Long accountID){
 		createSession();
-		String hql = "from Transaction as t where t.strID=:strID";
+		String hql = "from Transaction as t where t.fromID=:accountID or toID=:accountID";
 		Query query = session.createQuery(hql);
-		query.setString("strID", strID);
-		query.setString("strID", strID);
+		query.setLong("accountID", accountID);
+//		query.setString("strID", strID);
+//		query.setString("strID", strID);
 		List <Transaction>list = query.list();					
 		session.getTransaction().commit();
 		session.close();

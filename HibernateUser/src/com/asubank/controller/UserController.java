@@ -365,14 +365,16 @@ public class UserController {
 			return "sessionTimeOut";
 		}
 		String strID = (String)session.getAttribute("strID");
+		Account account = AccountManager.queryAccount(strID);
 		model.addAttribute("strID",strID);
-		List transactions = TransactionManager.getTransactionsById(strID);
+//		List transactions = TransactionManager.getTransactionsById(strID);
+		List transactions = TransactionManager.getTransactionsById(account.getCheckingID());
 
 		map.put("transactions", transactions);
 		User user = UserManager.queryUser(strID);
 		if(user.getRoletype() == 0)
 			model.addAttribute("employee", "Employee");
-			return "CheckingBalance";
+		return "CheckingBalance";
 		}
 	
 	@RequestMapping("/SavingBalance")
@@ -382,7 +384,9 @@ public class UserController {
 		}
 		String strID = (String)session.getAttribute("strID");
 		model.addAttribute("strID",strID);
-		List transactions = TransactionManager.getTransactionsById(strID);
+		Account account = AccountManager.queryAccount(strID);
+		List transactions = TransactionManager.getTransactionsById(account.getSavingID());
+//		List transactions = TransactionManager.getTransactionsById(strID);
 
 		map.put("transactions", transactions);
 		User user = UserManager.queryUser(strID);
@@ -398,7 +402,9 @@ public class UserController {
 		}
 		String strID = (String)session.getAttribute("strID");
 		model.addAttribute("strID",strID);
-		List transactions = TransactionManager.getTransactionsById(strID);
+		Account account = AccountManager.queryAccount(strID);
+		List transactions = TransactionManager.getTransactionsById(account.getCreditID());
+//		List transactions = TransactionManager.getTransactionsById(strID);
 
 		map.put("transactions", transactions);
 		User user = UserManager.queryUser(strID);
