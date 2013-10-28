@@ -18,10 +18,10 @@
 		</div>
 		<div id="slogan"><ul>
 		    <li><a href="account.html">Customer</a></li>
-			<li class="first current_page_item"><a href="#">Home</a> </li>
-			<li><a href="#" id="strID"><%=session.getAttribute("strID") %></a></li>
-			<li><a href="#">Services</a></li>
-			<li><a href="logout.html">LogOut</a></li>
+            <li class="first current_page_item"><a href="#">Home</a> </li>
+            <li><a href="#" id="strID"><%=session.getAttribute("strID") %></a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="logout.html">LogOut</a></li>
           </ul>			</div>
   </div>
 		<div id="menu">

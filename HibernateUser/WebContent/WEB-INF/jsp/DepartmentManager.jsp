@@ -18,10 +18,10 @@
 		</div>
 		<div id="slogan"><ul>
 			<li><a href="account.html">Customer</a></li>
-			<li class="first current_page_item"><a href="#">Home</a> </li>
-			<li><a href="#" id="strID"><%=session.getAttribute("strID") %></a></li>
-			<li><a href="#">Services</a></li>
-			<li><a href="logout.html">LogOut</a></li>
+            <li class="first current_page_item"><a href="#">Home</a> </li>
+            <li><a href="#" id="strID"><%=session.getAttribute("strID") %></a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="logout.html">LogOut</a></li>
           </ul>			</div>
   </div>
 	<div id="menu">
@@ -41,16 +41,16 @@
 				<h2>Welcome Department Manager! <br></h2><h4>This is the Account Management Page for your Department/s !</h4>
 				<table width="690" height="235" border="1" align="center">
 				  <tr>
-				    <th width="378" scope="col"><a href="Add_User.html">Add User to a Department</a></th>
+				    <th width="378" scope="col"><a href="Add_User_Dept.html">Add User to a Department</a></th>
 				    
 			      </tr>
 				  <tr>
-                  <th width="378" scope="col"><a href="Delete_User.html">Delete User From a Department</a></th>
+                  <th width="378" scope="col"><a href="Delete_User_Dept.html">Delete User From a Department</a></th>
 
 				    
 			      </tr>
 				  <tr>
-				    <th width="378" scope="col"><a href="Transfer_User.html">Transfer User From One Department to Another</a></th>
+				    <th width="378" scope="col"><a href="Transfer_User_Dept.html">Transfer User From One Department to Another</a></th>
 				    
 			      </tr>
 			      

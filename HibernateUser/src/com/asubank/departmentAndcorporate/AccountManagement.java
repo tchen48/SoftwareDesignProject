@@ -170,8 +170,7 @@ public class AccountManagement {
         			System.out.println(auth.getuser_id()+"\n"+auth.getdescription()+"\n"+auth.getdepartment());
         			
         		
-        	}
-            
+        	}            
             
         session.getTransaction().commit();  
         session.close();

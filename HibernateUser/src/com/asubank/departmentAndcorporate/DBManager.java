@@ -122,25 +122,52 @@ public class DBManager {
 		
 	}
 	
-	/*public static void deleteAuthorization(Auth obj)
+	public static String find_department(String userid)
+	{
+		String department=null;
+		createSession();
+		try
+		{
+		//Find department	
+				Query query1 = session.createQuery("from Employee where user_id= :userid");			
+				query1.setString("userid", userid);
+				@SuppressWarnings("unchecked")
+				List <Employee>list = query1.list();
+				java.util.Iterator<Employee> iter = list.iterator();        
+				Employee employee=iter.next();
+				department=employee.getdepartment();
+		}
+		catch(Exception e)
+   	 	{
+			throw new IllegalArgumentException();
+   	 	}
+			finally
+			{
+				session.getTransaction().commit();
+				session.close();
+			}
+		return department;
+		
+	}
+	
+	public static void deleteAuthorizations(Employee obj)
 	{
 		createSession();
-		//session.delete(obj);
-		try{
-		Query query = session.createQuery("delete Employee where user_id= :userid");
-		String userid=obj.getuser_id();		
-		query.setString("userid", userid);
-		int result = query.executeUpdate();
-		if (result!=1)
+		String userid=obj.getuser_id();
+		try
 		{
-			
+			Query query2 = session.createQuery("delete Authorizations where employee_to_transfer= :employee_to_transfer");				
+			query2.setString("employee_to_transfer", userid);				
+			query2.executeUpdate();
+		}
+		catch(Exception e)
+   	 	{
 			throw new IllegalArgumentException();
-		}
-		}
+   	 	}
 		finally
 		{
-		session.getTransaction().commit();
-		session.close();
+			session.getTransaction().commit();
+			session.close();
 		}
-	}*/
+	}
 }
