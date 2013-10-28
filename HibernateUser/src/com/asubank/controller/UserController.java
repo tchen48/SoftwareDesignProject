@@ -375,6 +375,38 @@ public class UserController {
 			return "CheckingBalance";
 		}
 	
+	@RequestMapping("/SavingBalance")
+	public String Saving(Model model,HttpSession session,Map<String, Object> map){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		String strID = (String)session.getAttribute("strID");
+		model.addAttribute("strID",strID);
+		List transactions = TransactionManager.getTransactionsById(strID);
+
+		map.put("transactions", transactions);
+		User user = UserManager.queryUser(strID);
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
+			return "SavingBalance";
+		}
+	
+	@RequestMapping("/CreditBalance")
+	public String Credit(Model model,HttpSession session,Map<String, Object> map){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		String strID = (String)session.getAttribute("strID");
+		model.addAttribute("strID",strID);
+		List transactions = TransactionManager.getTransactionsById(strID);
+
+		map.put("transactions", transactions);
+		User user = UserManager.queryUser(strID);
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
+			return "CreditBalance";
+		}
+	
 	@RequestMapping("/RecipientInfo")
 	public String RecipientInfo(Model model, HttpSession session){
 		if((String)session.getAttribute("strID") == null){

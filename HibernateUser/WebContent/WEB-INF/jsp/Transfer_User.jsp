@@ -18,19 +18,18 @@
 <div id="wrapper">
   <div id="header">
     <div id="logo">
-			<h1><a href="#">ASU Bank </a></h1>
+			<h1><a href="CorporateHomePage.html">ASU Bank </a></h1>
 	</div>
 		<div id="slogan"> <ul>
 			<li><a href="account.html">Customer</a></li>
-            <li class="first current_page_item"><a href="#">Home</a> </li>
-            <li><a href="#" id="strID"><%=session.getAttribute("strID") %></a></li>
-            <li><a href="#">Services</a></li>
+            <li class="first current_page_item"><a href="CorporateHomePage.html">Home</a> </li>
+            <li><a href="profilesetting.html" id="strID"><%=session.getAttribute("strID") %></a></li>
             <li><a href="logout.html">LogOut</a></li>
           </ul>		</div>
   </div>
 	<div id="menu">
 		<ul><li><a href="CorporateHomePage.html">Go Back to Account Management &emsp;</a></li>			 
-			<li><a href="#">Profile&amp;Settings &emsp;</a></li>
+			<li><a href="profilesetting.html">Profile&amp;Settings &emsp;</a></li>
 			<li><a href="HelpAndSupport.html">Help &amp;Support</a></li></ul>
 	</div>
 	

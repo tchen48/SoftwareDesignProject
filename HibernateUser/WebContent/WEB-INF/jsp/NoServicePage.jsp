@@ -14,13 +14,11 @@
 <div id="wrapper">
   <div id="header">
     <div id="logo">
-			<h1><a href="#">ASU Bank </a></h1>
+			<h1><a href="account.html">ASU Bank </a></h1>
 		</div>
 		<div id="slogan"><ul>
-		    <li><a href="account.html">Customer</a></li>
-            <li class="first current_page_item"><a href="#">Home</a> </li>
-            <li><a href="#" id="strID"><%=session.getAttribute("strID") %></a></li>
-            <li><a href="#">Services</a></li>
+            <li class="first current_page_item"><a href="account.html">Home</a> </li>
+            <li><a href="profilesetting.html" id="strID"><%=session.getAttribute("strID") %></a></li>
             <li><a href="logout.html">LogOut</a></li>
           </ul>			</div>
   </div>

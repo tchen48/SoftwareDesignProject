@@ -12,20 +12,14 @@
 	<div id="wrapper">
   <div id="header">
 	  <div id="logo">
-			<h1><a href="#">ASU Bank </a></h1>
+			<h1><a href="login.html">ASU Bank </a></h1>
 		</div>
 		
   </div>
 	<div id="menu">
 		<ul>
-			<li class="first current_page_item"><a href="#">Homepage</a></li>
-			<li><a href="#">Products</a></li>
-			<li><a href="#">Services</a></li>
-			<li><a href="#">Clients</a></li>
-			<li><a href="#">Support</a></li>
-			<li><a href="#">About</a></li>
-			<li class="last"><a href="#">Contact</a><br class="clearfix" />
-	</li>
+			<li class="first current_page_item"><a href="login.html">Homepage</a></li>
+			
 		</ul>
 	</div>
 	
@@ -55,10 +49,7 @@
 		</div>
 		<div id="page-bottom-sidebar">
 			<h3>Popular Links</h3>
-			<ul class="list">
-				<li class="first"><a href="#">Order checks</a></li>
-				<li><a href="#">Order a Debit Card</a></li>
-				<li class="last"><a href="#">Order a Foreign Currency</a></li>
+			<ul class="list"> 
 			</ul>
 		</div>
 		<br class="clearfix" />

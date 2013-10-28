@@ -13,13 +13,12 @@
 <div id="wrapper">
   <div id="header">
     <div id="logo">
-			<h1><a href="#">ASU Bank </a></h1>
+			<h1><a href="account.html">ASU Bank </a></h1>
 		</div>
 		<div id="slogan"> <ul>
 			<li class="first current_page_item"><a href="<%=session.getAttribute("employeepage") %>">${employee}</a> </li>
-			<li class="first current_page_item"><a href="#">Home</a> </li>
-			<li><a href="#" id="strID"><%=session.getAttribute("strID") %></a></li>
-			<li><a href="#">Services</a></li>
+			<li class="first current_page_item"><a href="accounth.html">Home</a> </li>
+			<li><a href="profilesetting.html" id="strID"><%=session.getAttribute("strID") %></a></li>
 			<li><a href="logout.html">LogOut</a></li>
           </ul>		</div>
 		
@@ -31,7 +30,7 @@
 				<li><a href="Merchant.html">Merchants Click Here!</a>
 				<li><a href="profilesetting.html">Profile &amp; Settings</a></li>
 				
-				<li><a href="#">Help &amp; Support</a></li>
+				<li><a href="HelpAndSupport.html">Help &amp; Support</a></li>
 			</ul>
 	</div>
 	
@@ -78,9 +77,9 @@
 		<div id="page-bottom-sidebar">
 			<h3>Popular Links</h3>
 			<ul class="list">
-				<li><a href="#">Order checks</a></li>
-				<li><a href="#">Order a Debit Card</a></li>
-				<li class="last"><a href="#">Order a Foreign Currency</a></li>
+				<li><a href="NoServicePage.html">Order checks</a></li>
+				<li><a href="NoServicePage.html">Order a Debit Card</a></li>
+				<li class="last"><a href="NoServicePage.html">Order a Foreign Currency</a></li>
 			</ul>
 		</div>
 		<br class="clearfix" />
