@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping package="com.asubank.departmentAndcorporate">
+ 
+    <class name="Transactions" table="transactions">
+        <id name="transaction_id" column="transaction_id" >            
+            <generator class="native"/>
+        </id>
+       <property name="from_user" column="from_user" />     
+      <property name="transaction_type" column="transaction_type" />
+      <property name="transaction_amount" column="transaction_amount" />
+      <property name="to_user" column="to_user" />      
+      <property name="transaction_time" column="transaction_time" />
+      <property name="status" column="status" />
+    </class>
+ 
+</hibernate-mapping>

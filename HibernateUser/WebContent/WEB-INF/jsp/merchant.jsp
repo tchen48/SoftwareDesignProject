@@ -16,10 +16,11 @@
 			<h1><a href="#">ASU Bank </a></h1>
 		</div>
 		<div id="slogan"> <ul>
+			<li class="first current_page_item"><a href="<%=session.getAttribute("employeepage") %>">${employee}</a> </li>
 			<li class="first current_page_item"><a href="#">Home</a> </li>
-			<li><a href="#" id="strID">${strID}</a></li>
+			<li><a href="#" id="strID"><%=session.getAttribute("strID") %></a></li>
 			<li><a href="#">Services</a></li>
-			<li><a href="#">LogOut</a></li>
+			<li><a href="logout.html">LogOut</a></li>
           </ul>		</div>
 		
   	</div>
@@ -27,7 +28,7 @@
 		<ul>
 				<li class="account"><a href="account.html">Accounts</a></li>
 				<li><a href="Transfer.html">Transfers</a></li>
-				<li><a href="merchant.html">Merchants Click Here!</a>
+				<li><a href="Merchant.html">Merchants Click Here!</a>
 				<li><a href="profilesetting.html">Profile &amp; Settings</a></li>
 				
 				<li><a href="#">Help &amp; Support</a></li>
@@ -37,27 +38,26 @@
 	<div id="page">
 	  <div id="content">
 		  <div class="box">
-				<h2>Welcome To Your Account</h2>
+				<h2>Merchants please make your payments here.</h2>
 				
-				<table width="596" height="213" border="1" align="center">
-				  <tr>
-				    <td width="167">&nbsp;</td>
-				    <td width="117">&nbsp;</td>
-				    <td width="142">&nbsp;</td>
-				    <td width="142">&nbsp;</td>
-			      </tr>
-				  <tr>
-				    <td>&nbsp;</td>
-				    <td>&nbsp;</td>
-				    <td>&nbsp;</td>
-				    <td>&nbsp;</td>
-			      </tr>
-				  <tr>
-				    <td>&nbsp;</td>
-				    <td>&nbsp;</td>
-				    <td>&nbsp;</td>
-				    <td>&nbsp;</td>
-			      </tr>
+				<table width="680" height="313" border="0" align="center">
+			  <tr>
+			    <td width="150" style="text-align: left"><a href="Merchant.html">Make Payment</a></td>
+			    <td width="142" style="text-align: right">CustomerID</td>
+			    <td width="302"><label for="textfield">:</label>
+                <input type="text" name="textfield" id="textfield"></td>
+		      </tr>
+			  <tr>
+			    <td style="text-align: left"><a href="#">Review Transfers</a></td>
+			    <td style="text-align: right">To</td>
+			    <td><label for="textfield2">:</label>
+                <input type="text" name="textfield2" id="textfield2"></td>
+		      </tr>
+			   <tr>
+			    <td><a href="#"></a></td>
+			    <td style="text-align: right"><input type="submit" name="button" id="button" value="Submit" align="middle"></td>
+			    <td style="text-align: center"><input type="button" name="button2" id="button2" value="Cancel"></td>
+		      </tr>
 		    </table>
 				<p>&nbsp;</p>
 				<p>&nbsp;</p>

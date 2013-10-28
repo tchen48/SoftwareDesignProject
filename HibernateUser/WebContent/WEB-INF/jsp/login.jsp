@@ -24,9 +24,9 @@
 			<li><a href="#">Products</a></li>
 			<li><a href="#">Services</a></li>
 			<li><a href="#">Clients</a></li>
-			<li><a href="#">Support</a></li>
+			<li><a href="HelpAndSupport.html">Support</a></li>
 			<li><a href="#">About</a></li>
-			<li class="last"><a href="#">Contact</a><br class="clearfix" />
+			<li class="last"><a href="HelpAndSupport.html">Contact</a><br class="clearfix" />
 	</li>
 		</ul>
 	</div>

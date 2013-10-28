@@ -1,6 +1,7 @@
 package com.asubank.controller;
 
 import com.asubank.model.combinedcommand.UserInformation;
+import com.asubank.model.merchant.MerchantInput;
 import com.asubank.model.recipient.RecipientInput;
 import com.asubank.model.transfer.Transaction;
 import com.asubank.model.transfer.TransactionInput;
@@ -126,6 +127,12 @@ public class InputValidation {
 		}
 		if(RegExPattern.validatePassword(contactSet.getPassword()) == false){
 			return InputErrorCode.PASSWORD_ERROR;
+		}
+		return null;
+	}
+	public static String validateAccount(MerchantInput merchantInput){
+		if(RegExPattern.validateAccountID(merchantInput.getCustomerid()) == false){
+			return InputErrorCode.ACCOUNTID_ERROR;
 		}
 		return null;
 	}

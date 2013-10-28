@@ -1,5 +1,7 @@
 package com.asubank.controller;
 
+import com.asubank.departmentAndcorporate.Employee;
+import com.asubank.departmentAndcorporate.EmployeeManager;
 import com.asubank.model.transfer.Transaction;
 import com.asubank.model.transfer.TransactionErrorCode;
 import com.asubank.model.transfer.TransactionInput;
@@ -17,6 +19,9 @@ import com.asubank.model.account.Account;
 import com.asubank.model.account.AccountManager;
 import com.asubank.model.combinedcommand.UserInformation;
 import com.asubank.model.combinedcommand.UserVisitor;
+import com.asubank.model.merchant.Merchant;
+import com.asubank.model.merchant.MerchantInput;
+import com.asubank.model.merchant.MerchantManager;
 import com.asubank.model.pii.PartialPii;
 import com.asubank.model.pii.Pii;
 import com.asubank.model.pii.PiiManager;
@@ -167,7 +172,20 @@ public class UserController {
 			}
 			else{
 				session.setMaxInactiveInterval(1200);
-				return "employeeaccount";
+				Employee employee = EmployeeManager.queryEmployee(strID);
+				if(((String)employee.getdepartment()).equalsIgnoreCase("Corporate Management") && ((String)employee.getrole()).equalsIgnoreCase("Manager")){
+					session.setAttribute("employeepage", "CorporateHomePage.html");
+					return "CorporateHomePage";
+				}
+				else if(((String)employee.getrole()).equalsIgnoreCase("Manager")){
+					session.setAttribute("employeepage", "DepartmentManager.html");
+					return "DepartmentManager";
+				}
+				else{
+					session.setAttribute("employeepage", "employeeaccount.html");
+					return "employeeaccount";
+				}
+					
 			}
 		}
 		else{
@@ -218,15 +236,56 @@ public class UserController {
 //		return "account";
 //	}
 //	
-	@RequestMapping("/merchant")
-    public String merchant(Model model,HttpSession session){
-		if((String)session.getAttribute("strID") == null){
+	@RequestMapping("/Merchant")
+    public String MerchantTrans(Model model,HttpSession session){
+	String strID=(String)session.getAttribute("strID");
+	if(strID == null){
+		return "sessionTimeOut";
+	}
+	model.addAttribute("strID",strID);
+	
+	User user= UserManager.queryUser(strID);
+	int roletype = user.getRoletype();
+	if(roletype==2){
+		MerchantInput merchantInput = new MerchantInput();
+		
+		model.addAttribute("merchantinput", merchantInput);
+		return "MerchantTrans";
+	}
+	else{
+		return "MerchantError";
+	}
+	
+	}
+	
+	@RequestMapping("/MerchantTrans")
+	public String Merchant(@RequestParam String action,Model model,@ModelAttribute("merchantinput")MerchantInput merInput,HttpSession session){
+		String strID=(String)session.getAttribute("strID");
+		if(strID == null){
 			return "sessionTimeOut";
 		}
-	String strID=(String)session.getAttribute("strID");
-		
-		return "merchant";
-	}
+		String message=null;
+		model.addAttribute("strID",strID);
+		//Validate merchantInput start
+		String merchantInputValidate = InputValidation.validateAccount(merInput);
+		if(merchantInputValidate != null){
+			MerchantInput merchantInput = new MerchantInput();			
+			model.addAttribute("merchantinput", merchantInput);
+			model.addAttribute("message", merchantInputValidate);
+			return "MerchantTrans";
+		}
+		Merchant mer = new Merchant();
+		mer.setcustomerid(Long.valueOf(merInput.getCustomerid()));		
+		//Validate merchantInput end
+		MerchantManager merchantmgr = new MerchantManager();
+		if(action.equals("Submit")){
+			message = merchantmgr.merchant_payment(strID, mer.getcustomerid());
+		}
+		System.out.println("message: " + message);
+		model.addAttribute("message", message);
+			return "MerchantTrans";
+		}
+	
 	
 	@RequestMapping("/Transfer")
 	public String MakeTransfer(Model model,HttpSession session){

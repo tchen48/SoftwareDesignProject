@@ -16,6 +16,7 @@
 
         <!-- Automatic schema creation (begin) === -->
         <!--<property name="hibernate.hbm2ddl.auto">create</property>-->
+		<property name="hibernate.hbm2ddl.auto">update</property>
 
         <!-- Simple memory-only cache -->
         <property name="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
@@ -36,6 +37,9 @@
 		<mapping resource="com/asubank/model/pii/PartialPii.hbm.xml" />
 		<mapping resource="com/asubank/model/recipient/Recipient.hbm.xml" />
 		<mapping resource="com/asubank/model/transfer/Transaction.hbm.xml" />
-		
+		<mapping resource="com/asubank/departmentAndcorporate/authorizations.hbm.xml" />
+		<mapping resource="com/asubank/departmentAndcorporate/employee.hbm.xml" />
+		<mapping resource="com/asubank/departmentAndcorporate/Transactions.hbm.xml" />		
+		<mapping resource="com/asubank/model/merchant/Merchant.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

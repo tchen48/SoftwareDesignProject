@@ -16,18 +16,30 @@ public class RecipientManager {
         session.beginTransaction();
 	}
 	public String verifyRecipient(String strID,long recipient_accountnumber ){
-		int check;
+		String result = null;
 		String hql="select count(strID) from Account as a where a.checkingID=:recipient_accountnumber";
+		String hql1="select count(strID) from Account as a where a.savingID=:recipient_accountnumber";
 		createSession();
 		Query query = session.createQuery(hql);
+		Query query1 = session.createQuery(hql1);
 		
 		query.setDouble("recipient_accountnumber",recipient_accountnumber);
-		String check1=query.uniqueResult().toString();
-				
-		//check = ((Number)query.uniqueResult()).intValue();		
+		query1.setDouble("recipient_accountnumber",recipient_accountnumber);
+		String check=query.uniqueResult().toString();
+				int one=Integer.parseInt(check);
+		String check1=query1.uniqueResult().toString();
+				int two=Integer.parseInt(check1);
+		if((one|two)==1)	
+		{
+			result="1";
+		}
+		else
+		{
+			result="0";
+		}
 		session.getTransaction().commit();
 		session.close();
-		return check1;
+		return result;
 	}
 
 	public void addRecipient(String strID, long recipient_accountnumber, String recipient_lastname, String recipient_nickname)
