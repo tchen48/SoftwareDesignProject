@@ -46,19 +46,19 @@
                 <form:input type="text" name="textfield" id="textfield" required="true" autocomplete="off" path="fromIDInput" style="height: 20px;" /></td>
 		      </tr>
 			  <tr>
-			    <td style="text-align: left"><a href="#">Review Transfers</a></td>
+			    <td style="text-align: left"><a href="RecipientInfo.html">Add Recipients</a></td>
 			    <td style="text-align: right">To</td>
 			    <td><label for="textfield2">:</label>
                 <form:input type="text" name="textfield2" id="textfield2"  required="true" autocomplete="off" path="toIDInput" style="height: 20px;" /></td>
 		      </tr>
 			  <tr>
-			    <td style="text-align: left"><a href="RecipientInfo.html">Add Recipients</a></td>
+			    <td style="text-align: left"><a href="ViewRecipient.html">View Recipients</a></td>
 			    <td style="text-align: right">Amount $</td>
 			    <td><label for="textfield3">:</label>
                 <form:input type="text" name="textfield3" id="textfield3"  required="true" autocomplete="off" path="amountInput" style="height: 20px;" /></td>
 		      </tr>
 			  <tr>
-			    <td style="text-align: left"><a href="#">Edit Recipients</a></td>
+			    <td style="text-align: left"><a href="ViewRecipient.html"></a></td>
 			    <td>&nbsp;</td>
 			    <td>&nbsp;</td>
 		      </tr>

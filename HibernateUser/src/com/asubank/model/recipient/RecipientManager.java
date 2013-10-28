@@ -2,11 +2,14 @@ package com.asubank.model.recipient;
 
 import java.util.List;
 import java.util.Random;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
+
 import com.asubank.model.account.Account;
 import com.asubank.model.security.Security;
 import com.asubank.model.security.SessionFactoryUtil;
+import com.asubank.model.transfer.Transaction;
 import com.asubank.model.user.User;
 
 public class RecipientManager {
@@ -59,6 +62,16 @@ public class RecipientManager {
 	
 	}
 	
+	public static List<Recipient> getRecipientsById(String strID){
+		createSession();
+		String hql = "from Recipient as r where r.strID=:strID";
+		Query query = session.createQuery(hql);
+		query.setString("strID", strID);
+		List <Recipient>list = query.list();					
+		session.getTransaction().commit();
+		session.close();
+		return list;		
+	}
 	
 	
 }

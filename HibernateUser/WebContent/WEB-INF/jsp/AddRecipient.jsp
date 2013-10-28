@@ -46,20 +46,20 @@
                 </td>
 		      </tr>
 			  <tr>
-			    <td style="text-align: left"><a href="#">Review Transfers</a></td>
+			    <td style="text-align: left"><a href="#">Add Recipients</a></td>
 			    <td style="text-align: right">NickName</td>
 			    <td><label for="textfield2">:</label>
                 <form:input type="text" name="textfield2" id="textfield2"  path="recipient_nicknameInput"  maxlength="20" 
                  onkeypress='return (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122)' required="true" autocomplete="off"/></td>
 		      </tr>
 			  <tr>
-			    <td style="text-align: left"><a href="#">Add Recipients</a></td>
+			    <td style="text-align: left"><a href="ViewRecipient.html">View Recipients</a></td>
 			    <td style="text-align: right">Account Number</td>
 			    <td><label for="textfield3">:</label>
                 <form:input path="recipient_accountnumberInput" required="true" autocomplete="off" pattern=".{12}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' /></td>
 		      </tr>
 			  <tr>
-			    <td style="text-align: left"><a href="#">Edit Recipients</a></td>
+			    <td style="text-align: left"><a href="#"></a></td>
 			    
 		      </tr>
 			  <tr>

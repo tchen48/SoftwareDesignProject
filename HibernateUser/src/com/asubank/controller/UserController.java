@@ -473,6 +473,21 @@ public class UserController {
 		return "AddRecipient";
 		}
 	
+	@RequestMapping("/ViewRecipient")
+	public String viewRecipient(Model model,HttpSession session,Map<String, Object> map){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		String strID = (String)session.getAttribute("strID");
+		model.addAttribute("strID",strID);
+		List recipients = RecipientManager.getRecipientsById(strID);
+		map.put("recipients", recipients);
+		User user = UserManager.queryUser(strID);
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
+			return "ViewRecipient";
+		}
+	
 	@RequestMapping("/employeeaccount")
 	public String employeeAccount(HttpSession session, Model model){
 		if((String)session.getAttribute("strID") == null){
