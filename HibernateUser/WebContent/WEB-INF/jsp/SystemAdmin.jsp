@@ -26,7 +26,7 @@
 	<div id="menu">
 		<ul>
 			<li ><a href="ViewEmployeesAll.html">List of Employees</a></li>
-			<li><a href="ViewAccount.html">Accounts</a></li>
+			<li><a href="accounts.html">Accounts</a></li>
 			<li><a href="ViewLogs.html">View Logs</a></li>			
 			<li><a href="profilesetting.html">Profile &amp;Settings</a></li>
 			<li><a href="HelpAndSupport.html">Help &amp;Support</a></li>

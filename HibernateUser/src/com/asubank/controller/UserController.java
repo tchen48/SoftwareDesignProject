@@ -3,6 +3,7 @@ package com.asubank.controller;
 import com.asubank.departmentAndcorporate.DBManager;
 import com.asubank.departmentAndcorporate.Employee;
 import com.asubank.departmentAndcorporate.EmployeeManager;
+import com.asubank.departmentAndcorporate.RegularEmployee;
 import com.asubank.departmentAndcorporate.log;
 import com.asubank.model.transfer.Transaction;
 import com.asubank.model.transfer.TransactionErrorCode;
@@ -155,12 +156,6 @@ public class UserController {
 			User user = loginResult.getUser();
 			int roletype = user.getRoletype();
 			
-			log lg = new log();
-			String content = "This user " + strID + " logged in";
-			lg.setcontent(content);
-			lg.settime(new Date());
-			DBManager.addlog(lg);
-			
 			if(roletype != 0){
 				Account account = AccountManager.queryAccount(strID);
 				String checkingID = String.valueOf(account.getCheckingID());
@@ -195,8 +190,8 @@ public class UserController {
 					return "DepartmentManager";
 				}
 				else{
-					session.setAttribute("employeepage", "employeeaccount.html");
-					return "employeeaccount";
+					session.setAttribute("employeepage", "RegularEmployee.html");
+					return "RegularEmployee";
 				}
 					
 			}
@@ -424,6 +419,115 @@ public class UserController {
 		if(user.getRoletype() == 0)
 			model.addAttribute("employee", "Employee");
 			return "CreditBalance";
+		}
+	
+	@RequestMapping("/RegularEmployee")
+    public String regEmployee(Model model,HttpSession session){
+	String strID=(String)session.getAttribute("strID");
+	if(strID == null){
+		return "sessionTimeOut";
+	}
+	model.addAttribute("strID",strID);
+	
+	User user= new User();
+	
+	model.addAttribute("user", user);
+		return "RegularEmployee";
+	}
+	
+	@RequestMapping("/PII")
+	public String PII(Model model,HttpSession session){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		User user=new User();
+		model.addAttribute("user",user);
+			return "ViewPII";
+		}
+	
+	@RequestMapping("/ViewPII")
+public String viewPII(@RequestParam String action,Model model,@ModelAttribute("user")User user,HttpSession session){		
+		String strID = (String)session.getAttribute("strID");
+		if(strID == null){
+			return "sessionTimeOut";
+		}
+		model.addAttribute("strID",strID);
+		//Validate strID
+    	String strIDValidate = InputValidation.validateStrID(user.getStrID());
+    	if(strIDValidate != null){
+    		return "ErrorPage";
+    	}
+    	//Validate strID		
+		if(action.equals("view")){
+			PartialPii info = RegularEmployee.getPIIById(user.getStrID());		
+			model.addAttribute("pii", info);
+			
+			return "ViewPII";
+			}
+		
+		return "ViewPII";
+		
+		}
+	@RequestMapping("/transaction")
+	public String transaction(Model model,HttpSession session){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		User user=new User();
+		model.addAttribute("user",user);
+			return "ViewTransaction";
+		}
+	
+	@RequestMapping("/ViewTransaction")
+public String viewTransaction(@RequestParam String action,Model model,@ModelAttribute("user")User user,HttpSession session,Map<String, Object> map){
+		String strID = (String)session.getAttribute("strID");
+		if(strID == null){
+			return "sessionTimeOut";
+		}
+		model.addAttribute("strID",strID);
+		//Validate strID
+    	String strIDValidate = InputValidation.validateStrID(user.getStrID());
+    	if(strIDValidate != null){
+    		return "ErrorPage";
+    	}
+    	//Validate strID
+		if(action.equals("view")){
+			List transactions = TransactionManager.getTransactionsById(strID);
+			map.put("transaction", transactions);		
+			
+			return "ViewTransaction";
+			}
+		
+		return "ViewTransaction";
+		
+		}
+	
+	@RequestMapping("/accounts")
+	public String accounts(Model model,HttpSession session){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		User user=new User();
+		model.addAttribute("user",user);
+			return "ViewAccount";
+		}
+	
+	@RequestMapping("/ViewAccount")
+public String viewAccount(@RequestParam String action,Model model,@ModelAttribute("user")User user,HttpSession session,Map<String, Object> map){
+		String strID = (String)session.getAttribute("strID");
+		if(strID == null){
+			return "sessionTimeOut";
+		}
+		model.addAttribute("strID",strID);		
+		if(action.equals("view")){
+			List<Account> accounts = RegularEmployee.getAccounts();
+
+			map.put("account",accounts);
+			return "ViewAccount";
+			}
+		
+		return "ViewAccount";
+		
 		}
 	
 	@RequestMapping("/RecipientInfo")

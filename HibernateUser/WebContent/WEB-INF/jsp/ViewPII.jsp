@@ -1,15 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%@ taglib
-    prefix="c"
-    uri="http://java.sun.com/jsp/jstl/core" 
-%>
+     <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+    
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
-<title>Credit Balance</title>
+<title>PII</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
@@ -17,11 +16,11 @@
 <div id="wrapper">
   <div id="header">
     <div id="logo">
-			<h1><a href="account.html">ASU Bank </a></h1>
+			<h1><a href="RegularEmployee.html">ASU Bank </a></h1>
 		</div>
 		<div id="slogan"><ul>
-			<li class="first current_page_item"><a href="<%=session.getAttribute("employeepage") %>">${employee}</a> </li>
-			<li class="first current_page_item"><a href="account.html">Home</a> </li>
+			<li><a href="account.html">Customer</a></li>
+			<li class="first current_page_item"><a href="RegularEmployee.html">Home</a> </li>
 			<li><a href="profilesetting.html" id="strID"><%=session.getAttribute("strID") %></a></li>
 			<li><a href="logout.html">LogOut</a></li>
           </ul>			</div>
@@ -39,27 +38,38 @@
 	<div id="page">
 	  <div id="content">
 		  <div class="box">
-				<h2>Credit Account</h2>
-			<p>
-			  <label for="textfield">${user.credit}</label>
-              <input type="text" name="textfield" id="textfield">
-			</p>
+				<h2>View customer's PII</h2>
+				<form:form id="form1" method="post" action="ViewPII.html" commandName="user">
 				
-				<table width="892" height="159" border="1" align="center">
-				<c:forEach items="${transactions}" var="transactions">
-				  <tr>
+				<table width="500" height="100" border="0" align="left">
+			 <tr> 
+			    <td style="text-align: Left">Enter UserID</td>
+			    <td><label for="textfield2">:</label>
+                <form:input type="text" name="textfield2" id="textfield2" required="true" autocomplete="off" path="strID" style="height: 20px;" /></td>
+		      </tr>
+			  
+			   <tr>
+			    <td><a href="#"></a></td>
+			    <td style="text-align: center"><input type="submit" name="action" id="button" value="view" align="left"></td>
+			 
+		      </tr>
+		      </table>
+		      <table width="500" height="100" border="1" align="left">
+		      <tr>
+				<td> <b><u> DOB</u></b></td>
+				<td> <b><u> SSN </u></b></td>
+				
+				
+				</tr>
+		      <tr>
 	
-				    <td width="167" height="45"><c:out value="${transactions.getId()}"/></td>
-				    <td width="117"><c:out value="${transactions.getFromID()}"/></td>
-				    <td width="142">"${transactions.getToID()}"</td>
-				    <td width="142">"${transactions.getAmount()}"</td>
-				     <td width="142">"${transactions.getType()}"</td>
-				    <td width="142">"${transactions.getTime()}"</td>
+				    <td width="167" height="45">${pii.getDobYear()}</td>
+				    <td width="117">${pii.getSsnLastFour()}</td>
+				    
 				    
 			      </tr>
-				  
-			    </c:forEach>
 		    </table>
+		    </form:form>
 				<p>&nbsp;</p>
 				<p>&nbsp;</p>
 				<p>&nbsp;</p>

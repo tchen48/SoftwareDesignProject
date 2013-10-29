@@ -1,5 +1,7 @@
 package com.asubank.model.transfer;
 
+import java.util.Date;
+
 public class Transaction {
 	
 	    private int Id;
@@ -7,6 +9,22 @@ public class Transaction {
 		private long fromID;
 		private long toID;
 		private double amount;
+		private Date time;
+		private String type;
+		
+		
+		public Date getTime() {
+			return time;
+		}
+		public void setTime(Date time) {
+			this.time = time;
+		}
+		public String getType() {
+			return type;
+		}
+		public void setType(String type) {
+			this.type = type;
+		}
 		
 		public int getId() {
 			return Id;

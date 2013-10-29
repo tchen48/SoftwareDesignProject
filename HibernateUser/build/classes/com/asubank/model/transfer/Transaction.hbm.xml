@@ -20,6 +20,8 @@
 		<property name="amount">
 		    <column name="amount" length="12" not-null="true" />
 		</property>
+		<property name="time" column="time" />
+		<property name="type" column="type" />
 		
 		
 	</class>

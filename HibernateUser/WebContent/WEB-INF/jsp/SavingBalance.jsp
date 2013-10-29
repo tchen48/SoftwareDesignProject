@@ -53,6 +53,8 @@
 				    <td width="117"><c:out value="${transactions.getFromID()}"/></td>
 				    <td width="142">"${transactions.getToID()}"</td>
 				    <td width="142">"${transactions.getAmount()}"</td>
+				     <td width="142">"${transactions.getType()}"</td>
+				    <td width="142">"${transactions.getTime()}"</td>
 				    
 			      </tr>
 				  

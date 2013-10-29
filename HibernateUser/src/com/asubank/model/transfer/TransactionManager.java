@@ -1,5 +1,7 @@
 package com.asubank.model.transfer;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +16,19 @@ import com.asubank.model.security.SessionFactoryUtil;
 
 public class TransactionManager {
 	Transaction transaction = new Transaction();
+	private static Date defaultDate;
+	private static SimpleDateFormat df;	
 	private static Session session;
+	static{
+		String date0 = "1970-01-01 00:00:00";
+		df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			defaultDate = df.parse(date0);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	private static void createSession(){
 		session = SessionFactoryUtil.getSessionFactory().openSession();
         session.beginTransaction();
@@ -131,11 +145,11 @@ public class TransactionManager {
 		session.getTransaction().commit();
 		session.close();
 		
-		addTransaction(strID,fromID,toID,amount);
+		addTransaction(strID,fromID,toID,amount, "debit");
 		
 		
 		String tostrID=AccountManager.queryAccountOwnerID(toID);
-		addTransaction(tostrID,fromID,toID,amount);
+		addTransaction(tostrID,fromID,toID,amount, "credit");
 		log lg = new log();
 		String content = "Transaction done from " + fromID + " to " + toID + " of amount " + amount;
 		lg.setcontent(content);
@@ -210,7 +224,7 @@ public class TransactionManager {
 			}	
 			session.getTransaction().commit();
 			session.close();
-			addTransaction(strID,fromID,toID,amount);
+			addTransaction(strID,fromID,toID,amount, "debit");
 			log lg = new log();
 			String content = "Transaction done from " + fromID + " to " + toID + " of amount " + amount;
 			lg.setcontent(content);
@@ -226,14 +240,18 @@ public class TransactionManager {
 	  }
 	
 	
-	public void addTransaction(String strID, long from_accountnumber, long to_accountnumber, double amount)
+	public void addTransaction(String strID, long from_accountnumber, long to_accountnumber, double amount, String type)
 	{
 		createSession();
+		Date d = new Date();
+//		String strDate = df.format(d);		
 		Transaction transaction=new Transaction();
 		transaction.setStrID(strID);
 		transaction.setFromID(from_accountnumber);
 		transaction.setToID(to_accountnumber);
 		transaction.setAmount(amount);
+		transaction.setTime(d);
+		transaction.setType(type);
 		session.save(transaction);
 		session.getTransaction().commit();
 		session.close();
@@ -252,5 +270,19 @@ public class TransactionManager {
 		session.close();
 		return list;		
 	}
+	
+	public static List<Transaction> getTransactionsById(String strID){
+		//public static List<Transaction> getTransactionsById(Long accountID){
+			createSession();
+			String hql = "from Transaction as t where t.strID=:strID";
+			Query query = session.createQuery(hql);
+			//query.setLong("accountID", accountID);
+			query.setString("strID", strID);
+//			query.setString("strID", strID);
+			List <Transaction>list = query.list();					
+			session.getTransaction().commit();
+			session.close();
+			return list;		
+		}
 
 }

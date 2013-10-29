@@ -6,7 +6,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>ASU Bank Profile and Settings</title>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style.css" />
-<script type="text/javascript" src="script.js"></script>
 </head>
 <body>
 <div id="wrapper">
@@ -48,11 +47,7 @@
 					<form:hidden path="strID" value="<%=session.getAttribute(\"strID\") %>" />
 					<input class="settingsubmit" type="submit" name="action" value="Change Password" style="margin-bottom:30px" /><br /><br />
 					<input class="settingsubmit" type="submit" name="action" value="Change Contact" style="margin-bottom:30px" /><br /><br />
-		<!-- 	<input class="settingsubmit" type="submit" name="action" value="Overdraft Protection" style="margin-bottom:0px" /><br /> -->		
 				</form:form>
-				<!-- <a href="#">Change Password</a><br /><br />
-				<a href="#">Change Contact</a><br /><br />
-				<a href="#">Overdraft Protection</a>-->
 			</div>			
 		</div>
 	</div>

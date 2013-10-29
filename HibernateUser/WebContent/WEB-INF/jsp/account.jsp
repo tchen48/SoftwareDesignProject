@@ -6,7 +6,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>ASU Bank Profile and Settings</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
-<script type="text/javascript" src="script.js"></script>
 </head>
 <body>
 <div id="wrapper">
