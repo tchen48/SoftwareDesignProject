@@ -177,5 +177,84 @@ public class AccountManagement {
         return list1;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static List<Employee> ViewEmployeesAll()
+	{
+		List <Employee>list=null;
+		try
+		{
+		createSession();
+		
+		
+		//Find department	
+		Query query1 = session.createQuery("from Employee");			
+		
+		 list= query1.list();
+		}
+		catch(Exception e)
+  	 	{
+			throw new IllegalArgumentException();
+  	 	}
+		finally
+		{
+        session.getTransaction().commit();  
+        session.close();
+		}
+        return list;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<Employee> ViewAccounts()
+	{
+		List <Employee>list=null;
+		try
+		{
+		createSession();
+		
+		
+		//Find department	
+		Query query1 = session.createQuery("from Account");			
+		
+		 list= query1.list();
+		}
+		catch(Exception e)
+  	 	{
+			throw new IllegalArgumentException();
+  	 	}
+		finally
+		{
+        session.getTransaction().commit();  
+        session.close();
+		}
+        return list;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<log> ViewLogs()
+	{
+		List <log>list=null;
+		try
+		{
+		createSession();
+		
+		
+		//Find department	
+		Query query1 = session.createQuery("from log");			
+		
+		 list= query1.list();
+		}
+		catch(Exception e)
+  	 	{
+			throw new IllegalArgumentException();
+  	 	}
+		finally
+		{
+        session.getTransaction().commit();  
+        session.close();
+		}
+        return list;
+	}
+	
+	
 	
 }

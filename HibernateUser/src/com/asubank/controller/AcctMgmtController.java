@@ -5,6 +5,9 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 
+
+
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -19,6 +22,7 @@ import com.asubank.departmentAndcorporate.Authorizations;
 import com.asubank.departmentAndcorporate.DBManager;
 import com.asubank.departmentAndcorporate.Employee;
 import com.asubank.departmentAndcorporate.Transactions;
+import com.asubank.departmentAndcorporate.log;
 
 @Controller
 public class AcctMgmtController {
@@ -40,6 +44,13 @@ public class AcctMgmtController {
         return "DepartmentManager";
     }
 	
+	@RequestMapping("/SystemAdmin")
+    public String SystemAdmin(HttpSession session) { 
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+        return "SystemAdmin";
+    }
 		
 	@RequestMapping("/NoServicePage")
     public String NoServicePage(HttpSession session) {    
@@ -371,6 +382,26 @@ public class AcctMgmtController {
     	return "ViewEmployees";
     }
     
+    @RequestMapping("/ViewEmployeesAll")
+   	public String ViewEmployeesAll(Model model,HttpSession session ) 
+       {     
+    	if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+       	try
+       	{
+       	  
+       	   List<Employee> list = AccountManagement.ViewEmployeesAll();
+       	   model.addAttribute("list", list);    
+              
+       	 }
+      	 	catch(Exception e)
+      	 	{
+      	 		return "ErrorPage";
+      	 	}
+       	return "ViewEmployeesAll";
+       }
+    
     @RequestMapping("/ViewAuthorizations")
    	public String ViewAuthorizations(Model model,HttpSession session) 
        {
@@ -430,4 +461,24 @@ public class AcctMgmtController {
     	 }
 		  return "DepartmentManager";
     }
+    
+    @RequestMapping("/ViewLogs")
+   	public String ViewLogs(Model model,HttpSession session ) 
+       {     
+    	if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+       	try
+       	{
+       	  
+       	   List<log> list = AccountManagement.ViewLogs();
+       	   model.addAttribute("list", list);    
+              
+       	 }
+      	 	catch(Exception e)
+      	 	{
+      	 		return "ErrorPage";
+      	 	}
+       	return "ViewLogs";
+       }
 }

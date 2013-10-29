@@ -17,7 +17,7 @@ public class Account{
 		checkingID = 0;
 		checkingBalance = 0;
 		savingID = 0;
-		savingBalance = 0;
+		savingBalance = 100;
 		creditID = 0;
 		creditBalance = 0;
 		maxOverdraft = 0;

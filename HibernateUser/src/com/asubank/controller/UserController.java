@@ -1,7 +1,9 @@
 package com.asubank.controller;
 
+import com.asubank.departmentAndcorporate.DBManager;
 import com.asubank.departmentAndcorporate.Employee;
 import com.asubank.departmentAndcorporate.EmployeeManager;
+import com.asubank.departmentAndcorporate.log;
 import com.asubank.model.transfer.Transaction;
 import com.asubank.model.transfer.TransactionErrorCode;
 import com.asubank.model.transfer.TransactionInput;
@@ -152,6 +154,13 @@ public class UserController {
 			
 			User user = loginResult.getUser();
 			int roletype = user.getRoletype();
+			
+			log lg = new log();
+			String content = "This user " + strID + " logged in";
+			lg.setcontent(content);
+			lg.settime(new Date());
+			DBManager.addlog(lg);
+			
 			if(roletype != 0){
 				Account account = AccountManager.queryAccount(strID);
 				String checkingID = String.valueOf(account.getCheckingID());
@@ -173,7 +182,11 @@ public class UserController {
 			else{
 				session.setMaxInactiveInterval(1200);
 				Employee employee = EmployeeManager.queryEmployee(strID);
-				if(((String)employee.getdepartment()).equalsIgnoreCase("Corporate Management") && ((String)employee.getrole()).equalsIgnoreCase("Manager")){
+				if(user.getStrID().equals("admin1")){
+					session.setAttribute("employeepage", "SystemAdmin.html");
+					return "SystemAdmin";
+				}
+				else if(((String)employee.getdepartment()).equalsIgnoreCase("Corporate Management") && ((String)employee.getrole()).equalsIgnoreCase("Manager")){
 					session.setAttribute("employeepage", "CorporateHomePage.html");
 					return "CorporateHomePage";
 				}

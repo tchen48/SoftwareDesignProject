@@ -170,4 +170,28 @@ public class DBManager {
 			session.close();
 		}
 	}
+	
+	public static void addlog(log obj)
+	{
+		try
+		{
+		createSession();		
+		session.save(obj);
+		System.out.println("Inside DMManager");
+		}
+		catch(Exception e)
+		{	
+			
+				throw new IllegalArgumentException();
+		}	
+		
+		finally
+		{
+		session.getTransaction().commit();
+		session.close();
+		}
+		
+	}
+	
+	
 }

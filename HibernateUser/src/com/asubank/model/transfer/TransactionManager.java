@@ -1,10 +1,13 @@
 package com.asubank.model.transfer;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.asubank.departmentAndcorporate.DBManager;
+import com.asubank.departmentAndcorporate.log;
 import com.asubank.model.account.Account;
 import com.asubank.model.account.AccountManager;
 import com.asubank.model.security.SessionFactoryUtil;
@@ -133,6 +136,11 @@ public class TransactionManager {
 		
 		String tostrID=AccountManager.queryAccountOwnerID(toID);
 		addTransaction(tostrID,fromID,toID,amount);
+		log lg = new log();
+		String content = "Transaction done from " + fromID + " to " + toID + " of amount " + amount;
+		lg.setcontent(content);
+		lg.settime(new Date());
+		DBManager.addlog(lg);
 		}
 		else if(AccountManager.queryAccountOwnerID(toID).equals(AccountManager.queryAccountOwnerID(fromID))){
 			createSession();
@@ -203,6 +211,11 @@ public class TransactionManager {
 			session.getTransaction().commit();
 			session.close();
 			addTransaction(strID,fromID,toID,amount);
+			log lg = new log();
+			String content = "Transaction done from " + fromID + " to " + toID + " of amount " + amount;
+			lg.setcontent(content);
+			lg.settime(new Date());
+			DBManager.addlog(lg);
 		}
 		
 		else{

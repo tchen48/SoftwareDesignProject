@@ -41,5 +41,6 @@
 		<mapping resource="com/asubank/departmentAndcorporate/employee.hbm.xml" />
 		<mapping resource="com/asubank/departmentAndcorporate/Transactions.hbm.xml" />		
 		<mapping resource="com/asubank/model/merchant/Merchant.hbm.xml"/>
+		<mapping resource="com/asubank/departmentAndcorporate/log.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

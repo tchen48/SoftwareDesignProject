@@ -45,7 +45,7 @@
 						<td style="text-align: right;">SSN</td><td style="text-align: left;"><form:input path="ssn" placeholder="9 digits" pattern=".{9}" required="true" autocomplete="off" onkeypress='return event.charCode >= 48 && event.charCode <= 57' style="height:30px;width:200px" type="text" maxlength="9" /></td>
 					</tr>
 					<tr>
-						<td style="text-align: right;">Address</td><td style="text-align: left;"><form:input path="address" placeholder="100 letters and numbers" type="text" maxlength="100" onkeypress='return (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122) || event.charCode == 32' required="true" autocomplete="off" style="height:30px;width:200px"  /></td>
+						<td style="text-align: right;">Address</td><td style="text-align: left;"><form:input path="address" placeholder="100 letters and numbers" type="text" maxlength="100" onkeypress='return (event.charCode >= 48 && event.charCode <= 57) || (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122) || event.charCode == 32' required="true" autocomplete="off" style="height:30px;width:200px"  /></td>
 						<td style="text-align: right;">Email</td><td style="text-align: left;"><form:input type="email" path="email" placeholder="example@sth.com" maxlength="50" required="true" autocomplete="off" style="height:30px;width:200px"  /></td>
 					</tr>
 					<tr>
