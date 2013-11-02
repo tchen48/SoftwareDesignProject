@@ -70,7 +70,7 @@ public class UserManager {
 //		session.save(user);
 //	}
 	public static String createUser(String firstname, String lastname, String address, String email, String telephone, int roletype,
-			String password){
+			String password, String transactionPassword){
 		createSession();
 		User user = new User();
 		user.setFirstname(firstname);
@@ -79,6 +79,7 @@ public class UserManager {
 		user.setEmail(email);
 		user.setTelephone(telephone);
 		user.setRoletype(roletype);
+		user.setTransactionpassword(transactionPassword);
 		//encryption - Bhumik
 		
 		user.setPassword(EncryptBase64.encodeString(password));
@@ -103,22 +104,15 @@ public class UserManager {
 //				 	" " + user.getPinno() + " " + user.getPassword() + " is created.");
 	}
 	
-//	public static List queryAllUsers() {
-//		createSession();
-//		Query query = session.createQuery("from User");                
-//		List <User>list = query.list();
-//		java.util.Iterator<User> iter = list.iterator();
-//		while (iter.hasNext()) {
-//			User user = iter.next();
-//			System.out.println("User: \"" + user.getFirstname() +"\", " + user.getLastname() +"\", "+user.getUserID()+"\", "+user.getDeptID()+"\", "+
-//					user.getRoleID() +"\", " + user.getAccno() +"\", "+user.getAmount()+"\", "+user.getPinno()+"\", "+
-//					user.getPassword() +"\", " + user.getCardno() );
-//		}
-//		
-//		session.getTransaction().commit();
-//		session.close();
-//		return list;
-//	}
+	public static List queryAllUsers(int roletype) {
+		createSession();
+		Query query = session.createQuery("from User as user where user.roletype=:roletype");  
+		query.setInteger("roletype",roletype);
+		List <User>list = query.list();		
+		session.getTransaction().commit();
+		session.close();
+		return list;
+	}
 	
 	@SuppressWarnings("unchecked")
 	public static User queryUser(String strID){

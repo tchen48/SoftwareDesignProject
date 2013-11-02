@@ -4,6 +4,13 @@ public class TransactionInput {
 	private String fromIDInput;
 	private String toIDInput;
 	private String amountInput;
+	private String transactionpasswordInput;
+	public String getTransactionpasswordInput() {
+		return transactionpasswordInput;
+	}
+	public void setTransactionpasswordInput(String transactionpasswordInput) {
+		this.transactionpasswordInput = transactionpasswordInput;
+	}
 	public String getFromIDInput() {
 		return fromIDInput;
 	}

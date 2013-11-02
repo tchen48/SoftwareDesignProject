@@ -35,6 +35,9 @@
 		<property name="password">
 			<column name="password" length="20" not-null="true"/>
 		</property>
+		<property name="transactionpassword">
+			<column name="transactionpassword" length="20" not-null="true"/>
+		</property>
 		
 		<property name="shortname">
 			<column name="shortname" length="20" not-null="true"/>

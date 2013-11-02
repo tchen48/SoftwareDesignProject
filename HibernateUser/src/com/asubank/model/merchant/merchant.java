@@ -3,6 +3,15 @@ package com.asubank.model.merchant;
 public class Merchant {
 
 	private int Id;
+	private long checkingID;
+	public long getCheckingID() {
+		return checkingID;
+	}
+
+	public void setCheckingID(long checkingID) {
+		this.checkingID = checkingID;
+	}
+
 	private long customerid;
 	private double pay_amount;
 
@@ -13,7 +22,7 @@ public class Merchant {
 	public void setId(int id) {
 		Id = id;
 	}
-
+	
 	public long getcustomerid() {
 		return customerid;
 	}

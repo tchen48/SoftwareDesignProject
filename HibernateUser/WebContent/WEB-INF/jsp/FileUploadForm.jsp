@@ -25,6 +25,7 @@
 			<ul>
 				<li class="first current_page_item"><a href="account.html">Accounts</a></li>
 				<li><a href="Transfer.html">Transfers</a></li>
+				<li><a href="Payment.html">Make Payment</a></li>
 				<li><a href="Merchant.html">Merchants Click Here!</a>
 				<li><a href="profilesetting.html">Profile &amp; Settings</a></li>				
 				<li><a href="HelpAndSupport.html">Help &amp; Support</a></li>
@@ -32,7 +33,8 @@
 	</div>
 	<div style="padding:0">
 		<div style="height:300px; width: 900px; padding:50px; margin:0px 20px; text-align:center">
-			<div id="settings" style="height:300px;width:500px; float:center; margin:auto auto">								
+			<div id="settings" style="height:300px;width:500px; float:center; margin:auto auto">	
+				<h4>Please upload your client certificate. If you don't have it, please contact system administrator.</h4>							
 				<form:form method="post" action="save.html" 
 					modelAttribute="uploadForm" enctype="multipart/form-data">
 				<table id="fileTable">
@@ -43,9 +45,6 @@
 				</table>
 				<br/><input type="submit" value="Upload" />
 			</form:form>
-				<!-- <a href="#">Change Password</a><br /><br />
-				<a href="#">Change Contact</a><br /><br />
-				<a href="#">Overdraft Protection</a>-->
 			</div>			
 		</div>
 	</div>

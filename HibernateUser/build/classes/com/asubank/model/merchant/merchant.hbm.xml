@@ -8,6 +8,9 @@
 			<id name="Id" column="id">
 			<generator class="increment" />
 		</id>
+		<property name="checkingID">
+		    <column name="checkingid" length="12" not-null="true" />
+		</property>
 		<property name="customerid">
 		    <column name="customerid" length="12" not-null="true" />
 		</property>

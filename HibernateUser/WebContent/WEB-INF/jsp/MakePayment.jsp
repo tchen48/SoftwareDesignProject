@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Transfer</title>
+<title>Payment</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
@@ -37,23 +37,23 @@
 	  <div id="content">
 		  <div class="box">
 			<h2>&nbsp;</h2>
-			<form:form id="form1" method="post" action="MakeTransfer.html" commandName="transferinput" style="border: none">
+			<form:form id="form1" method="post" action="MakePayment.html" commandName="merchantinput" style="border: none">
 			<p style="float:left;display:inline;margin-top:0px;height:20px;line-height:20px;">${message}</p>
 			<table width="680" height="313" border="0" align="center">
 			  <tr>
-			    <td width="150" style="text-align: left"><a href="Transfer.html">Make Transfer</a></td>
+			    <td width="150" style="text-align: left"><a href="MakePayment.html">Make Payment</a></td>
 			    <td width="142" style="text-align: right">From</td>
 			    <td width="302"><label for="textfield">:</label>
                 <form:input type="text" name="textfield" id="textfield" required="true" autocomplete="off" path="fromIDInput" style="height: 20px;" /></td>
 		      </tr>
 			  <tr>
-			    <td style="text-align: left"><a href="RecipientInfo.html">Add Recipients</a></td>
+			    <td style="text-align: left"><a href="ViewMerchants.html">View Merchants</a></td>
 			    <td style="text-align: right">To</td>
 			    <td><label for="textfield2">:</label>
                 <form:input type="text" name="textfield2" id="textfield2"  required="true" autocomplete="off" path="toIDInput" style="height: 20px;" /></td>
 		      </tr>
 			  <tr>
-			    <td style="text-align: left"><a href="ViewRecipient.html">View Recipients</a></td>
+			    <td style="text-align: left"><a href="ViewRecipient.html"></a></td>
 			    <td style="text-align: right">Amount $</td>
 			    <td><label for="textfield3">:</label>
                 <form:input type="text" name="textfield3" id="textfield3"  required="true" autocomplete="off" path="amountInput" style="height: 20px;" /></td>

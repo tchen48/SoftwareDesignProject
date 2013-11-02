@@ -7,7 +7,10 @@
 	<class name="Account" table="account">
 		<id name="strID" column="strid">
 			<generator class="assigned" />
-		</id>		
+		</id>	
+		<property name="firstname">
+			<column name="firstname" length="20" not-null="true" />
+		</property>	
 		<property name="checkingID">
 		    <column name="checkingid" length="12" not-null="true" />
 		</property>

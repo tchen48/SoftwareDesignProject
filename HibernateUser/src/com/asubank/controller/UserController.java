@@ -364,6 +364,94 @@ public class UserController {
 		return "MerchantTrans";
 	}	
 	
+	@RequestMapping("/ReceivedPayments")
+	public String RecievedPayments(Model model,HttpSession session,Map<String, Object> map){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		String strID=(String)session.getAttribute("strID");
+		User user = UserManager.queryUser(strID);
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
+	Account account=AccountManager.queryAccount(strID);
+	@SuppressWarnings("unchecked")
+	List<Merchant> payments=MerchantManager.queryPayments(account.getCheckingID());
+		model.addAttribute("strID",strID);
+		map.put("payments", payments);
+			return "ReceivedPayments";
+		}
+	
+	@RequestMapping("/Payment")
+	public String MakePayment(Model model,HttpSession session){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		String strID=(String)session.getAttribute("strID");
+		User user = UserManager.queryUser(strID);
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
+	MerchantInput merchantinput = new MerchantInput();
+		model.addAttribute("strID",strID);
+		model.addAttribute("merchantinput", merchantinput);
+			return "MakePayment";
+		}
+	
+	@RequestMapping("/MakePayment")
+	public String Payment(String action,Model model,@ModelAttribute("merchantinput")MerchantInput merchantinput,HttpSession session){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		String message = null;
+		String strID=(String)session.getAttribute("strID");
+		User user = UserManager.queryUser(strID);
+		String transactionpassword=user.getTransactionpassword();
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
+			
+		model.addAttribute("strID",strID);
+		Merchant merchant = new Merchant();
+		if(action.equals("Continue"))
+		{
+			if(merchantinput.getTransactionpasswordInput().equals(transactionpassword))
+			{
+		message=MerchantManager.createpayment(merchantinput.getToIDInput(),merchantinput.getFromIDInput(),merchantinput.getAmountInput());
+			}
+			else
+			{
+				message="Incorrect Transaction Password";
+			}
+		}
+		model.addAttribute("message",message);
+			return "MakePayment";
+		}
+	@SuppressWarnings("null")
+	@RequestMapping("/ViewMerchants")
+	public String ViewMerchants(Model model,HttpSession session,Map<String, Object> map){
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+		String strID=(String)session.getAttribute("strID");
+		User user = UserManager.queryUser(strID);
+		if(user.getRoletype() == 0)
+			model.addAttribute("employee", "Employee");
+		
+		List<User> merchants = UserManager.queryAllUsers(2);
+		List<Account> accounts = new ArrayList<Account>();
+		
+		Account account=null;
+		User user1=null;
+		java.util.Iterator<User> iter = merchants.iterator();
+		while (iter.hasNext()) {
+			user1 = iter.next();
+			account=AccountManager.queryAccount(user1.getStrID());
+			accounts.add(account);
+		}					
+		map.put("merchants",accounts);
+		
+		model.addAttribute("strID",strID);
+
+		return "ViewMerchants";
+	}
 	
 	@RequestMapping("/Transfer")
 	public String MakeTransfer(Model model,HttpSession session){
@@ -385,7 +473,6 @@ public class UserController {
 		}
 	
 	@RequestMapping("/MakeTransfer")
-//	public String Transfer(@RequestParam String action,Model model,@ModelAttribute("transfer")Transaction transfer,HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException, ParseException{
 	public String Transfer(@RequestParam String action,Model model,@ModelAttribute("transferinput")TransactionInput transferInput,HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException, ParseException{
 		if((String)session.getAttribute("strID") == null){
 			return "sessionTimeOut";
@@ -394,6 +481,7 @@ public class UserController {
 		String message=null;
 		model.addAttribute("strID",strID);
 		User user = UserManager.queryUser(strID);
+		String transactionpassword=user.getTransactionpassword();
 		if(user.getRoletype() == 0)
 			model.addAttribute("employee", "Employee");
 		//Validate Transfer input start
@@ -409,6 +497,8 @@ public class UserController {
 		//Validate Transfer input end
 		TransactionManager transfermanager = new TransactionManager();
 		if(action.equals("Continue")){
+			if(transferInput.getTransactionpasswordInput().equals(transactionpassword))
+			{
 			Account account = AccountManager.queryAccount(strID);
 			if(transfer.getFromID() != account.getCheckingID() && transfer.getFromID() != account.getSavingID()){
 				model.addAttribute("message", TransactionErrorCode.NOTYOURACCOUNT);
@@ -431,8 +521,13 @@ public class UserController {
 			}
 			
 			message = transfermanager.transferMoney(strID, transfer.getFromID(), transfer.getToID(), transfer.getAmount());
-		}
+			}
+		else
+			{
+				message="Incorrect Transaction Password";
+			}
 		
+		}
 		model.addAttribute("message", message);
 		return "MakeTransfer";
 	}
@@ -643,7 +738,7 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 //		String strID=(String)session.getAttribute("strID");
 //		model.addAttribute("strID",strID);
 		String message = null;
-		if(action.equals("Verify"))
+		if(action.equals("Add Recipient"))
 			{	
 			RecipientManager rm=new RecipientManager();
 			String result=	rm.verifyRecipient(strID, recipient.getRecipient_accountnumber());
@@ -683,10 +778,7 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 		return "employeeaccount";
 	}
 	
-//	@RequestMapping("/applynewaccount/{machineid}")
-//    public String userInfo(@PathVariable(value="machineid") String machineID, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException {
-//		User user = new User();
-//        model.addAttribute("user", user);
+
 	@RequestMapping("/applynewaccount")
 	public String userInfo(Model model, HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException{
 //		Visitor visitor = (Visitor) session.getAttribute("visitor");
@@ -1006,70 +1098,7 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 		return "profilesetting";
 	}
 		
-//	@RequestMapping("/profilesetting/email")
-//	public @ResponseBody String getEmail(HttpSession session, Model model){
-//		String str = "";
-//		User user = UserManager.queryUser(strID);
-//		str = "{\"email\":\"" + user.getEmail() + "\"}";		
-//		return str;
-//	}
-//	
-//	@RequestMapping("/profilesetting/acctno")
-//	public @ResponseBody String getAcctno(@RequestParam(value = "strID") String strID){
-//		String str = "";
-//		Account account = AccountManager.queryAccount(strID);
-//		str = "{\"acctno\":\"" + account.getSavingID() + "\"}";		
-//		return str;
-//	}
-//	
-//	@RequestMapping("/profilesetting/address")
-//	public @ResponseBody String getAddress(@RequestParam(value = "strID") String strID){
-//		String str = "";
-//		User user = UserManager.queryUser(strID);
-//		str = "{\"address\":\"" + user.getAddress() + "\"}";
-//		return str;
-//	}
-//	
-//	@RequestMapping("/profilesetting/phone")
-//	public @ResponseBody String getProfile(@RequestParam(value = "strID") String strID){
-//		String str = "";
-//		User user = UserManager.queryUser(strID);
-//		str = "{\"phone\":\"" + user.getTelephone() + "\"}";
-//		return str;
-//	}
-	
-//	@RequestMapping("/profilesetting/{item}")
-//	public @ResponseBody String getProfile(@RequestParam(value = "strID") String strID,
-//										   @RequestParam(value = "item") String item){
-//		String str = "";
-//		System.out.println("a");
-//		if(item.equals("acctno")){
-//			Account account = AccountManager.queryAccount(strID);
-//			str =  "{\"result\":\"" + account.getSavingID() + "\"}";
-//		}
-//		else{
-//			User user = UserManager.queryUser(strID);
-//			if(item.equals("email")){
-//				str = "{\"result\":\"" + user.getEmail() + "\"}";
-//			}
-//			else if(item.equals("address")){
-//				str = "{\"result\":\"" + user.getAddress() + "\"}";
-//			}
-//			else{
-//				str = "{\"result\":\"" + user.getTelephone() + "\"}";
-//			}
-//			
-//		}
-//		System.out.println("STR: " + str);
-//		return str;
-//}
-	
-//	@RequestMapping("/userlist")
-//    public ModelAndView userList(Model model) {
-//		List<User> list = UserManager.queryAllUsers();
-//        model.addAttribute("message", list);
-//        return new ModelAndView("userlist", "list", list);
-//    }
+
 	
 	@RequestMapping("/createotp")
 	public String createOTP(HttpSession session, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException{
@@ -1156,9 +1185,10 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 		user.setTelephone(userInformation.getTelephone());
 		user.setRoletype(userInformation.getRoletype());
 		user.setPassword(userInformation.getPassword());
+		user.setTransactionpassword(userInformation.getTransPwd());
 		String message = "";    	
 	    message = UserManager.createUser(user.getFirstname(), user.getLastname(), user.getAddress(), user.getEmail(), user.getTelephone(), user.getRoletype(),
-	    			user.getPassword());
+	    			user.getPassword(), user.getTransactionpassword());
 	    Security security = new Security(message);
 		security.setTransPwd(userInformation.getTransPwd());
 		

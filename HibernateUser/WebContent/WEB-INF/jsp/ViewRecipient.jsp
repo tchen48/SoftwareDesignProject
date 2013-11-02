@@ -9,7 +9,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
-<title>Checking Balance</title>
+<title>View Recipients</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
@@ -30,6 +30,7 @@
 		<ul>
 				<li class="account"><a href="account.html">Accounts</a></li>
 				<li><a href="Transfer.html">Transfers</a></li>
+				<li><a href="Payment.html">Make Payment</a></li>
 				<li><a href="Merchant.html">Merchants Click Here!</a>
 				<li><a href="profilesetting.html">Profile &amp; Settings</a></li>				
 				<li><a href="HelpAndSupport.html">Help &amp; Support</a></li>
@@ -40,12 +41,14 @@
 	  <div id="content">
 		  <div class="box">
 				<h2>Recipient List</h2>
-			<p>
-			  <label for="textfield">${user.checking}</label>
-              <input type="text" name="textfield" id="textfield">
-			</p>
+			
 				
 				<table width="892" height="159" border="1" align="center">
+				<tr>
+				<td> <b><u> NickName </u></b></td>
+				<td> <b><u> LastName </u></b></td>
+				<td> <b><u> AccountNumber</u></b></td>
+				</tr>
 				<c:forEach items="${recipients}" var="recipients">
 				  <tr>
 	
@@ -85,7 +88,7 @@
 	</div>
 </div>
 <div id="footer">
-	Copyright (c) 2012 Sitename.com. All rights reserved. 
+	Copyright (c) 2013 ASUBank.com. All rights reserved. 
 </div>
 </body>
 </html>

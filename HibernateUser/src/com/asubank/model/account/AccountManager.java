@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import com.asubank.model.security.Security;
 import com.asubank.model.security.SessionFactoryUtil;
 import com.asubank.model.user.User;
+import com.asubank.model.user.UserManager;
 
 public class AccountManager {
 	private static Session session;
@@ -18,6 +19,8 @@ public class AccountManager {
 	}
 	public static void createAccount(String strID){
 		Account account = new Account(strID);
+		User user=UserManager.queryUser(strID);
+		account.setFirstname(user.getFirstname());
 		createAccountID(account);		
 		createSession();		
 		session.save(account);

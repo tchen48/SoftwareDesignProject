@@ -8,8 +8,15 @@ public class User {
 	private String telephone;
 	private int roletype;
 	private String password;
+	private String transactionpassword;
 	private String shortname;
 	private String strID;
+	public String getTransactionpassword() {
+		return transactionpassword;
+	}
+	public void setTransactionpassword(String transactionpassword) {
+		this.transactionpassword = transactionpassword;
+	}
 	public String getFirstname() {
 		return firstname;
 	}
@@ -64,8 +71,4 @@ public class User {
 	public void setStrID(String strID) {
 		this.strID = strID;
 	}
-	
-	
-	
-	
 }

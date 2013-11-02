@@ -39,14 +39,13 @@ public class TransactionManager {
 		Account account = AccountManager.queryAccount(strID);
 		
 		createSession();
-		
-		String hql="select count(strID) from Recipient as a where a.recipient_accountnumber=:toID";
+		String hql="select strID from Recipient as a where a.recipient_accountnumber=:toID";
 		Query query = session.createQuery(hql);
 		query.setDouble("toID",toID);
-		String check1=query.uniqueResult().toString();
+		List check1=query.list();
 		String message = null;
 		
-		if(check1.equals("1")){
+		if(check1.contains(strID)){
 			String touser=AccountManager.queryAccountOwnerID(toID);
 			Account toaccount=AccountManager.queryAccount(touser);
 			double toBalance;

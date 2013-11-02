@@ -1,5 +1,7 @@
 package com.asubank.model.merchant;
 
+import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -19,28 +21,43 @@ public class MerchantManager {
         session.beginTransaction(); 
 	}
 
-public String merchant_payment(String strID,long custID){
-		
+public String merchant_payment(String strID,long custID){		
 		createSession();
 		String message;
-		String hql="select count(customerid) from Merchant as a where a.customerid=:custID";
+		Account account=AccountManager.queryAccount(strID);
+		String hql="select customerid from Merchant as a where a.checkingID=:checkingID";
 		Query query = session.createQuery(hql);
-		query.setDouble("custID",custID);
-		String check1=query.uniqueResult().toString();
-		
-		
-		if(check1.equals("1")){
-			Account account = AccountManager.queryAccount(strID);
+		query.setDouble("checkingID",account.getCheckingID());
+		List check1=query.list();
+				
+		if(check1.contains(custID)){
+			String verifyid=AccountManager.queryAccountOwnerID(custID);
 			
+			Account toaccount=AccountManager.queryAccount(verifyid);
+			String cust_bal1;
+			double cust_bal;
+			if(toaccount.getCheckingID()==custID)
+			{
+				String sql="select checkingbalance from account as a where a.checkingid=:toID";
+				Query query1 = session.createSQLQuery(sql);
+				query1.setDouble("toID", custID);
+				cust_bal1=query1.uniqueResult().toString();
+				cust_bal=Double.parseDouble(cust_bal1);
+			}
+			else
+			{
+				{
+					String sql="select savingbalance from account as a where a.savingid=:toID";
+					Query query1 = session.createSQLQuery(sql);
+					query1.setDouble("toID",custID);
+					 cust_bal1=query1.uniqueResult().toString();
+					cust_bal=Double.parseDouble(cust_bal1);
+				}
+				
+			}
+						
 			long merchantID = account.getCheckingID();
 			double merchant_balance = account.getCheckingBalance();
-			
-			String sql1="select checkingbalance from account as a where a.checkingid=:custID";
-			Query query1 = session.createSQLQuery(sql1);
-			query1.setDouble("custID", custID);
-			String cust_bal1=query1.uniqueResult().toString();
-			double cust_bal=Double.parseDouble(cust_bal1);
-			 
 			
 			String sql2="select pay_amount from Merchant as a where a.customerid=:custID";
 			Query query2 = session.createSQLQuery(sql2);
@@ -57,11 +74,22 @@ public String merchant_payment(String strID,long custID){
 			query3.setDouble("merchant_balance",merchant_balance);
 			query3.executeUpdate();
 			
+			if(toaccount.getCheckingID()==custID)
+			{
 			String sql4="update account as a set a.checkingbalance=:cust_bal where a.checkingid=:custID";
 			Query query4 = session.createSQLQuery(sql4);
 			query4.setDouble("custID", custID);
 			query4.setDouble("cust_bal",cust_bal);
 			query4.executeUpdate();
+			}
+			else
+			{
+				String sql5="update account as a set a.savingbalance=:cust_bal where a.savingid=:custID";
+				Query query5 = session.createSQLQuery(sql5);
+				query5.setDouble("custID", custID);
+				query5.setDouble("cust_bal",cust_bal);
+				query5.executeUpdate();
+			}
 			
 			session.getTransaction().commit();
 			session.close();
@@ -75,5 +103,32 @@ public String merchant_payment(String strID,long custID){
 		}
 		return message;
 	}
+
+	public static String createpayment(long checkingID,long customerid,double pay_amount)
+	{
+	createSession();
+	Merchant merchant=new Merchant();
+	merchant.setCheckingID(checkingID);
+	merchant.setcustomerid(customerid);
+	merchant.setPay_amount(pay_amount);
 	
+	
+	session.save(merchant);
+	session.getTransaction().commit();
+	
+	session.close();
+	return "Payment Succesfull!!";
+	}
+	
+	public static List queryPayments(long checkingID){
+		createSession();
+		String hql = "from Merchant as m where m.checkingID=:checkingID";
+		Query query = session.createQuery(hql);
+		query.setLong("checkingID",checkingID);
+		
+		List <Merchant>list = query.list();					
+		session.getTransaction().commit();
+		session.close();
+		return list;
+	}
 }

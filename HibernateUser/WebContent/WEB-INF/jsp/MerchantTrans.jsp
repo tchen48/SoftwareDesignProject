@@ -38,21 +38,27 @@
 	  <div id="content">
 		  <div class="box">
 				<h2>Merchants please make your payments here.</h2>
-				<form:form id="form1" method="post" action="MerchantTrans.html" commandName="merchantinput">
+				<form:form id="form1" method="post" action="MerchantTrans.html" commandName="merchantinput" style="border: none">
 				<p style="float:center;display:inline;margin-top:10px;height:30px;line-height:30px;">${message}</p>
-				<table width="500" height="100" border="0" align="left">
-			 <tr> 
-			    <td style="text-align: Left">Enter CustomerID</td>
-			    <td><label for="textfield2">:</label>
-                <form:input type="text" name="textfield2" id="textfield2" required="true" pattern=".{12}" autocomplete="off" path="customerid" style="height: 20px;" /></td>
+				
+				<table width="680" height="313" border="0" align="center">
+			  <tr>
+			    <td width="150" style="text-align: left"><a href="Merchant.html">Make Payment</a></td>
+			    <td width="142" style="text-align: right">CustomerID</td>
+			    <td><label for="textfield">:</label>
+                <form:input type="text" name="textfield" id="textfield" required="true" pattern=".{12}" autocomplete="off" path="customerid" style="height: 20px;" /></td>
 		      </tr>
-			  
+			  <tr>
+			    <td style="text-align: left"><a href="ReceivedPayments.html">See Received Payments</a></td>
+			    <td><label for="textfield2">:</label>
+		      </tr>
 			   <tr>
 			    <td><a href="#"></a></td>
 			    <td style="text-align: center"><input type="submit" name="action" id="button" value="Submit" align="left"></td>
-			 
 		      </tr>
 		    </table>
+				
+				
 		    </form:form>
 				<p>&nbsp;</p>
 				<p>&nbsp;</p>

@@ -9,11 +9,12 @@ public class Account{
 	private long creditID;
 	private double creditBalance;
 	private double maxOverdraft;
-	
+	private String firstname;
 	public Account(){}
 	
 	public Account(String strID){
 		this.strID = new String(strID);
+		firstname=getFirstname();
 		checkingID = 0;
 		checkingBalance = 0;
 		savingID = 0;
@@ -21,6 +22,14 @@ public class Account{
 		creditID = 0;
 		creditBalance = 0;
 		maxOverdraft = 0;
+	}
+	
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
 	public String getStrID() {
 		return strID;
@@ -72,34 +81,3 @@ public class Account{
 	}	
 	
 }
-
-//public class Account {
-//	String accountNo;
-//	double balance;
-//	
-//	public void setAccountNo(String accountNo){
-//		this.accountNo = new String(accountNo);
-//	}
-//	public void setBalance(double balance){
-//		this.balance = balance;
-//	}
-//	public String getAccountNo(){
-//		return accountNo;
-//	}
-//	public double getBalance(){
-//		return balance;
-//	}
-//	public double deposit(double amount){
-//		balance += amount;
-//		return balance;
-//	}
-//	public double withdraw(double amount){
-//		if(balance >= amount){
-//			balance -= amount;
-//			return balance;
-//		}
-//		else{
-//			return -1;
-//		}
-//	}
-//}

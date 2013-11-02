@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Add Recepient</title>
+<title>Add Recipient</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
@@ -25,6 +25,7 @@
 		<ul>
 				<li class="account"><a href="account.html">Accounts</a></li>
 				<li><a href="Transfer.html">Transfers</a></li>
+				<li><a href="MakePayment.html">Make Payment</a></li>
 				<li><a href="Merchant.html">Merchants Click Here!</a>
 				<li><a href="profilesetting.html">Profile &amp; Settings</a></li>				
 				<li><a href="HelpAndSupport.html">Help &amp; Support</a></li>
@@ -35,7 +36,7 @@
 	  <div id="content">
 		  <div class="box">
 			<h2>&nbsp;</h2>
-			<form:form id="form1" method="post" action="AddRecipient.html" commandName="recipientInput">
+			<form:form id="form1" method="post" action="AddRecipient.html" commandName="recipientInput" style="border: none">
 			 <p style="float:left;display:inline;margin-top:0px;height:20px;line-height:20px;">${message}</p>
 			<table width="680" height="313" border="0" align="center">
 			  <tr>
@@ -65,8 +66,8 @@
 			  <tr>
 			    <td><a href="#"></a></td>
 			  
-		      	<td style="text-align: right"><input type="submit" name="action" id="button" value="Verify"  align="middle"/></td>
-			    <td style="text-align: center"><input type="button" name="action" id="button2"  value="Add" /></td>
+		      	<td></td>
+			    <td style="text-align: center"><input type="submit" name="action" id="button2"  value="Add Recipient" style="padding: 5px 10px; margin-right: 50px;display:inline;" /></td>
 		      
 		      </tr>
 		    </table>
@@ -99,7 +100,7 @@
 	</div>
 </div>
 <div id="footer">
-	Copyright (c) 2012 Sitename.com. All rights reserved. >FreeCSSTemplates.org</a>.
+	Copyright (c) 2013 ASUBank.com. All rights reserved.
 </div>
 </body>
 </html>

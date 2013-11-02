@@ -27,6 +27,7 @@
 	<div id="menu">
 		<ul><li class="account"><a href="account.html">Accounts</a></li>
 				<li><a href="Transfer.html">Transfers</a></li>
+				<li><a href="Payment.html">Make Payment</a></li>
 				<li><a href="Merchant.html">Merchants Click Here!</a>
 				<li><a href="profilesetting.html">Profile &amp; Settings</a></li>				
 				<li><a href="HelpAndSupport.html">Help &amp; Support</a></li></ul>
