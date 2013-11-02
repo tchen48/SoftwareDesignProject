@@ -29,7 +29,7 @@ public String merchant_payment(String strID,long custID){
 		Query query = session.createQuery(hql);
 		query.setDouble("checkingID",account.getCheckingID());
 		List check1=query.list();
-				
+		
 		if(check1.contains(custID)){
 			String verifyid=AccountManager.queryAccountOwnerID(custID);
 			
@@ -55,16 +55,19 @@ public String merchant_payment(String strID,long custID){
 				}
 				
 			}
-						
+			
 			long merchantID = account.getCheckingID();
 			double merchant_balance = account.getCheckingBalance();
-			
+		
+			double amount = 0;
 			String sql2="select pay_amount from Merchant as a where a.customerid=:custID";
 			Query query2 = session.createSQLQuery(sql2);
 			query2.setDouble("custID", custID);
-			String amount1=query2.uniqueResult().toString();
-			double amount=Double.parseDouble(amount1);
-			
+			List<Double> amount1=query2.list();
+			java.util.Iterator<Double> iter =amount1.iterator();
+			while (iter.hasNext()) {
+				amount += iter.next();
+			}	
 			merchant_balance+=amount;
 			cust_bal-=amount;
 			
@@ -89,6 +92,15 @@ public String merchant_payment(String strID,long custID){
 				query5.setDouble("custID", custID);
 				query5.setDouble("cust_bal",cust_bal);
 				query5.executeUpdate();
+			}
+			
+			Query query6 = session.createQuery("delete Merchant where customerid=:custID");	
+			query6.setDouble("custID",custID);
+			int result = query6.executeUpdate();
+			if (result!=1)
+			{
+				
+				throw new IllegalArgumentException();
 			}
 			
 			session.getTransaction().commit();
