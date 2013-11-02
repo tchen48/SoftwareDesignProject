@@ -1,8 +1,10 @@
 package com.asubank.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+
 
 
 
@@ -50,6 +52,14 @@ public class AcctMgmtController {
 			return "sessionTimeOut";
 		}
         return "SystemAdmin";
+    }
+	
+	@RequestMapping("/EmployeeNotReady")
+    public String EmployeeNotReady(HttpSession session) { 
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}
+        return "EmployeeNotReady";
     }
 		
 	@RequestMapping("/NoServicePage")
@@ -277,6 +287,12 @@ public class AcctMgmtController {
     	  System.out.println(auth.getuser_id()+"\n"+auth.getdepartment()+"\n"+auth.getdescription()+"\n"+auth.getisAuthorized()+"\n"+auth.getemployee_to_transfer());
     	  
     	  DBManager.updateRow(employee,auth);
+    	  
+    	  String content="Employee Transfer Request from " + userid + "To " +department;
+    	  log lg=new log();
+    	  lg.settime(new Date());
+    	  lg.setcontent(content);
+    	  DBManager.addlog(lg);
     	  }
     	  catch(Exception e)
     	  {
@@ -314,6 +330,12 @@ public class AcctMgmtController {
     	  System.out.println(auth.getuser_id()+"\n"+auth.getdepartment()+"\n"+auth.getdescription()+"\n"+auth.getisAuthorized()+"\n"+auth.getemployee_to_transfer());
     	  
     	  DBManager.updateRow(employee,auth);
+    	  
+    	  String content="Employee Transfer Request from " + userid + "To " +department;
+    	  log lg=new log();
+    	  lg.settime(new Date());
+    	  lg.setcontent(content);
+    	  DBManager.addlog(lg);
     	  }
     	  catch(Exception e)
     	  {

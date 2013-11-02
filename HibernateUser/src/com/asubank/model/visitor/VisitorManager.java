@@ -22,6 +22,7 @@ import com.asubank.model.security.Security;
 import com.asubank.model.security.SessionFactoryUtil;
 import com.asubank.model.security.StatusCode;
 import com.asubank.model.security.SecurityManager;
+import com.asubank.model.user.Roletype;
 import com.asubank.model.user.User;
 import com.asubank.model.user.UserManager;
 
@@ -232,15 +233,15 @@ public class VisitorManager {
 	public static void sendOTP(String otp, String recipient){
 		String subject = "One Time Password from ASUBank";
 		String content = "Dear user, \n This is your One Time Password: " + otp + ". Please validate it within one minute.";
-		PublicMethod.sendEmail(recipient, subject, content);
+		PublicMethod.sendEmail(recipient, subject, content, Roletype.NONMERCHANTUSER);
 	}
 	
-	public static void sendNewAccountInfo(String userID, String password, String transPW, String recipient){
+	public static void sendNewAccountInfo(String userID, String password, String transPW, String recipient, int roletype){
 		String subject = "One Time Password from ASUBank";
 		String content = "Dear user, \nYou just create a new account in ASUBank."
 					   + "\nThe userID is " + userID 
 					   + "\nThe account password is " + password
 					   + "\nThe transaction password is " + transPW;
-		PublicMethod.sendEmail(recipient, subject, content);
+		PublicMethod.sendEmail(recipient, subject, content, roletype);
 	}
 }

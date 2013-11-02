@@ -27,6 +27,7 @@ import org.hibernate.Session;
 
 import com.asubank.controller.InputValidation;
 import com.asubank.model.publicmethod.PublicMethod;
+import com.asubank.model.user.Roletype;
 import com.asubank.model.user.User;
 import com.asubank.model.user.UserManager;
 //import com.asubank.model.security.SessionFactoryUtil;
@@ -328,14 +329,14 @@ public class SecurityManager {
 		//"shaosh0913@gmail.com";
 		String subject = "One Time Password from ASUBank";
 		String content = "Dear user, \n This is your One Time Password: " + otp + ". Please validate it within one minute.";
-		PublicMethod.sendEmail(recipient, subject, content);
+		PublicMethod.sendEmail(recipient, subject, content, Roletype.NONMERCHANTUSER);
 	}
 	
 	public static void updatePassword(String strID, String newPW){
 		createSession();
 		String hql = "update User as u set u.password=:password where strID=:strID";
 		Query query = session.createQuery(hql);
-		query.setString("password", newPW);
+		query.setString("password", EncryptBase64.encodeString(newPW));
 		query.setString("strID", strID);
 		query.executeUpdate(); 
 		session.getTransaction().commit();
@@ -357,7 +358,7 @@ public class SecurityManager {
 	public static void sendTempPw(String tempPW, String recipient){
 		String subject = "Temporary Password from ASUBank";
 		String content = "Dear ASUBank Customer, \nThis is your Temporary Password:\n" + tempPW + "\nPlease access your account and change your password as soon as possible.\nYours,\nASUBank";
-		PublicMethod.sendEmail(recipient, subject, content);
+		PublicMethod.sendEmail(recipient, subject, content, Roletype.NONMERCHANTUSER);
 	}
 	
 	public static String createRandomPW(){

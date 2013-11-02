@@ -12,6 +12,7 @@ import com.asubank.model.transfer.TransactionManager;
 import com.asubank.model.user.ContactSet;
 import com.asubank.model.user.LoginResult;
 import com.asubank.model.user.PasswordSet;
+import com.asubank.model.user.Roletype;
 import com.asubank.model.user.SettingResultCode;
 import com.asubank.model.user.UserManager;
 import com.asubank.model.user.User;
@@ -31,6 +32,7 @@ import com.asubank.model.pii.PiiManager;
 import com.asubank.model.recipient.Recipient;
 import com.asubank.model.recipient.RecipientInput;
 import com.asubank.model.recipient.RecipientManager;
+import com.asubank.model.security.EncryptBase64;
 import com.asubank.model.security.ImagePath;
 import com.asubank.model.security.Security;
 import com.asubank.model.security.SecurityManager;
@@ -44,17 +46,25 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -156,7 +166,7 @@ public class UserController {
 			User user = loginResult.getUser();
 			int roletype = user.getRoletype();
 			
-			if(roletype != 0){
+			if(roletype != Roletype.INTERNALUSER){
 				Account account = AccountManager.queryAccount(strID);
 				String checkingID = String.valueOf(account.getCheckingID());
 				String savingID = String.valueOf(account.getSavingID());
@@ -177,20 +187,39 @@ public class UserController {
 			else{
 				session.setMaxInactiveInterval(1200);
 				Employee employee = EmployeeManager.queryEmployee(strID);
+				if(employee == null){
+					Account account = AccountManager.queryAccount(strID);
+					String checkingID = String.valueOf(account.getCheckingID());
+					String savingID = String.valueOf(account.getSavingID());
+					String creditID = String.valueOf(account.getCreditID());			
+					model.addAttribute("checkingLastFour", checkingID.substring(checkingID.length() - 4, checkingID.length()));
+					model.addAttribute("savingLastFour", savingID.substring(savingID.length() - 4, savingID.length()));
+					model.addAttribute("creditLastFour", creditID.substring(creditID.length() - 4, creditID.length()));
+					model.addAttribute("checkingBalance", account.getCheckingBalance());
+					model.addAttribute("savingBalance", account.getSavingBalance());
+					model.addAttribute("creditBalance", account.getCreditBalance());
+					model.addAttribute("employee", "Employee");
+					session.setAttribute("employeepage", "EmployeeNotReady.html");
+					return "account";
+				}
 				if(user.getStrID().equals("admin1")){
 					session.setAttribute("employeepage", "SystemAdmin.html");
+					VisitorManager.deleteVisitor(machineID);
 					return "SystemAdmin";
 				}
 				else if(((String)employee.getdepartment()).equalsIgnoreCase("Corporate Management") && ((String)employee.getrole()).equalsIgnoreCase("Manager")){
 					session.setAttribute("employeepage", "CorporateHomePage.html");
+					VisitorManager.deleteVisitor(machineID);
 					return "CorporateHomePage";
 				}
 				else if(((String)employee.getrole()).equalsIgnoreCase("Manager")){
 					session.setAttribute("employeepage", "DepartmentManager.html");
+					VisitorManager.deleteVisitor(machineID);
 					return "DepartmentManager";
 				}
 				else{
 					session.setAttribute("employeepage", "RegularEmployee.html");
+					VisitorManager.deleteVisitor(machineID);
 					return "RegularEmployee";
 				}
 					
@@ -254,11 +283,11 @@ public class UserController {
 	
 	User user= UserManager.queryUser(strID);
 	int roletype = user.getRoletype();
-	if(roletype==2){
+	if(roletype==Roletype.MERCHANTUSER){
 		MerchantInput merchantInput = new MerchantInput();
 		
 		model.addAttribute("merchantinput", merchantInput);
-		return "MerchantTrans";
+		return "FileUploadForm";
 	}
 	else{
 		return "MerchantError";
@@ -293,6 +322,47 @@ public class UserController {
 		model.addAttribute("message", message);
 			return "MerchantTrans";
 		}
+	
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
+	public String save(
+			@ModelAttribute("uploadForm") FileUploadForm uploadForm,
+					Model map, HttpSession session, Model model) throws CertificateException, IOException {
+		if((String)session.getAttribute("strID") == null){
+			return "sessionTimeOut";
+		}		
+		List<MultipartFile> files = uploadForm.getFiles();
+		System.out.println(files);
+		CertificateFactory cf = CertificateFactory.getInstance("X509");
+		InputStream in = null;
+		List<String> fileNames = new ArrayList<String>();
+		
+		if(null != files && files.size() > 0) {
+			for (MultipartFile multipartFile : files) {
+
+				String fileName = multipartFile.getOriginalFilename();
+				fileNames.add(fileName);
+				in = multipartFile.getInputStream();
+				//Handle file content - multipartFile.getInputStream()
+
+			}
+		}
+		X509Certificate rc = (X509Certificate)cf.generateCertificate(in);
+		InputStream in1 = new FileInputStream(ImagePath.SERVERCERT);
+		X509Certificate tc = (X509Certificate)cf.generateCertificate(in1);
+		try {
+			rc.verify(tc.getPublicKey());
+			System.out.println("Verification Successful");
+		} catch (Exception e) {
+			//TODO Auto-generated catch block
+			return "MerchantError";
+//			e.printStackTrace();
+			//return "MerchantError";
+		}
+		//map.addAttribute("files", fileNames);
+		MerchantInput merchantInput = new MerchantInput();			
+		model.addAttribute("merchantinput", merchantInput);
+		return "MerchantTrans";
+	}	
 	
 	
 	@RequestMapping("/Transfer")
@@ -1026,7 +1096,7 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 		if(statusCode == StatusCode.OTP_VALIDATED){
 			String userID = createUserAccount(userinformation);		
 			String resultMessage = UserResultMessage.NEW_ACCOUNT_CREATED;
-			VisitorManager.sendNewAccountInfo(userID, userinformation.getPassword(), userinformation.getTransPwd(), userinformation.getEmail());
+			VisitorManager.sendNewAccountInfo(userID, userinformation.getPassword(), userinformation.getTransPwd(), userinformation.getEmail(), userinformation.getRoletype());
 	    	model.addAttribute("resultMessage", resultMessage);
 	    	VisitorManager.deleteVisitor(machineID);
 	    	session.removeAttribute("machineID");
@@ -1092,7 +1162,7 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 	    Security security = new Security(message);
 		security.setTransPwd(userInformation.getTransPwd());
 		
-		pii.setSsn(userInformation.getSsn());
+		pii.setSsn(EncryptBase64.encodeString(userInformation.getSsn()));
 		pii.setDobYear(Integer.valueOf(userInformation.getDobYear()));
 		pii.setDobMonth(Integer.valueOf(userInformation.getDobMonth()));
 		pii.setDobDay(Integer.valueOf(userInformation.getDobDay()));
@@ -1317,6 +1387,7 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 //		model.addAttribute("user",user);
 		return "transfer";
 	}
+		
 	
 	@RequestMapping("/logout")
 	public String logout(HttpSession session, HttpServletRequest request, Model model){
@@ -1411,23 +1482,5 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 //		}
 //	 
 //	   }
-	@RequestMapping("/hello")
-	 public @ResponseBody
-	 String hello(@RequestParam(value = "name") String name,
-	   @RequestParam(value = "gender") String gender,
-	   @RequestParam(value = "email") String email,
-	   @RequestParam(value = "phone") String phone,
-	   @RequestParam(value = "city") String city) {
-	  System.out.println(name);
-	  System.out.println(gender);
-	  System.out.println(email);
-	  System.out.println(phone);
-	  System.out.println(city);
-
-	  String str = "{\"user\": { \"name\": \"" + name + "\",\"gender\": \""
-	    + gender + "\",\"email\": \"" + email + "\",\"phone\": \""
-	    + phone + "\",\"city\": \"" + city + "\"}}";
-	  return str;
-
-	 }
+	
 }

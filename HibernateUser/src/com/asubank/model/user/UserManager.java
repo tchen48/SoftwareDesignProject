@@ -1,5 +1,5 @@
 package com.asubank.model.user;
- 
+import com.asubank.model.security.EncryptBase64;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -79,7 +79,10 @@ public class UserManager {
 		user.setEmail(email);
 		user.setTelephone(telephone);
 		user.setRoletype(roletype);
-		user.setPassword(password);
+		//encryption - Bhumik
+		
+		user.setPassword(EncryptBase64.encodeString(password));
+		//user.setPassword(password);
 		
 		String shortname = firstname.substring(0, 1).toLowerCase() + lastname.toLowerCase();
 		session.close();
@@ -139,7 +142,7 @@ public class UserManager {
 		String hql1 = "update User as u set u.password=:password where strID=:strID";
 		Query query1 = session.createQuery(hql1);
 		query1.setString("strID", strID);
-		query1.setString("password", password);
+		query1.setString("password", EncryptBase64.encodeString(password)); // Encrypt - Bhumik
 		query1.executeUpdate(); 
 		
 		String hql2 = "update Security as s set s.lastPasswordUpdate=:lastPasswordUpdate where strID=:strID";
@@ -219,7 +222,7 @@ public class UserManager {
 			return StatusCode.USERID_NOT_EXIST;
 		}
 		String correctPassword = user.getPassword();
-		if(password.equals(correctPassword)){
+		if(EncryptBase64.encodeString(password).equals(correctPassword)){//Encrypt - Bhumik
 			return StatusCode.LOGIN_SUCCESS;
 		}
 		else{
@@ -250,13 +253,13 @@ public class UserManager {
 		}
 		String correctPassword = user.getPassword();
 		boolean isBlocked =  SecurityManager.checkBlock(strID);
-		if(password.equals(correctPassword) == true && isBlocked == false){
+		if(EncryptBase64.encodeString(password).equals(correctPassword) == true && isBlocked == false){//Encrypt - Bhumik
 			SecurityManager.resetFail(strID);
 			loginResult.setUser(user);
 			loginResult.setStatusCode(StatusCode.LOGIN_SUCCESS);
 			return loginResult;
 		}
-		else if(password.equals(correctPassword) == true && isBlocked == true){
+		else if(EncryptBase64.encodeString(password).equals(correctPassword) == true && isBlocked == true){// Encrypt - Bhumik
 			loginResult.setUser(null);
 			loginResult.setStatusCode(StatusCode.ACCOUNT_BLOCK);
 			return loginResult;

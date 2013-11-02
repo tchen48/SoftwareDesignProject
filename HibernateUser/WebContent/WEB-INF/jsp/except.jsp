@@ -25,7 +25,7 @@
 	<div id="page">
 	  <div id="content">
 		  <div class="box">
-				<h4>java.lang.exception</h4>
+				<h4>500 Error</h4>
                 
                 <form:form method="post" action="errorhandling.html" style="border:0; text-align:center; margin:auto auto">                	                	
                 	<input type="submit" value="Log In" style="padding: 5px 10px;float:center; margin-right: 50px;display:inline;" /><br /><br />
