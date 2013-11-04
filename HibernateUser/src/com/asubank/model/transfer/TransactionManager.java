@@ -2,13 +2,16 @@ package com.asubank.model.transfer;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.asubank.departmentAndcorporate.DBManager;
+import com.asubank.departmentAndcorporate.Transactions;
 import com.asubank.departmentAndcorporate.log;
 import com.asubank.model.account.Account;
 import com.asubank.model.account.AccountManager;
@@ -155,7 +158,7 @@ public class TransactionManager {
 		lg.settime(new Date());
 		DBManager.addlog(lg);
 		}
-		else if(AccountManager.queryAccountOwnerID(toID).equals(AccountManager.queryAccountOwnerID(fromID))){
+		else if(AccountManager.queryAccountOwnerID(toID)!= null&&AccountManager.queryAccountOwnerID(toID).equals(AccountManager.queryAccountOwnerID(fromID))){
 			createSession();
 			if(account.getCheckingID()==fromID)
 			{
@@ -245,6 +248,16 @@ public class TransactionManager {
 		Date d = new Date();
 //		String strDate = df.format(d);		
 		Transaction transaction=new Transaction();
+		Transactions tr=new Transactions();
+		
+		tr.setfrom_user(strID);
+		tr.setstatus("Complete");
+		tr.setto_user(Long.toString(to_accountnumber));
+		tr.settransaction_amount(Double.toString(amount));
+		tr.settransaction_time(d);
+		tr.settransaction_type(type);
+		session.save(tr);
+		
 		transaction.setStrID(strID);
 		transaction.setFromID(from_accountnumber);
 		transaction.setToID(to_accountnumber);
@@ -252,22 +265,33 @@ public class TransactionManager {
 		transaction.setTime(d);
 		transaction.setType(type);
 		session.save(transaction);
+		
 		session.getTransaction().commit();
 		session.close();
 	
 	}
 //	public static List<Transaction> getTransactionsById(String strID){
-	public static List<Transaction> getTransactionsById(Long accountID){
+	public static List<Transaction> getTransactionsById(String strID,Long accountID){
 		createSession();
 		String hql = "from Transaction as t where t.fromID=:accountID or toID=:accountID";
 		Query query = session.createQuery(hql);
 		query.setLong("accountID", accountID);
 //		query.setString("strID", strID);
 //		query.setString("strID", strID);
-		List <Transaction>list = query.list();					
+		Transaction transaction=new Transaction();
+		List <Transaction>list = query.list();
+		List<Transaction> list1=new ArrayList<Transaction>();
+		Iterator<Transaction> iter = list.iterator();
+		while (iter.hasNext()) {
+			transaction = iter.next();
+			if(transaction.getStrID().equals(strID))
+			{
+				list1.add(transaction);
+			}
+		}
 		session.getTransaction().commit();
 		session.close();
-		return list;		
+		return list1;		
 	}
 	
 	public static List<Transaction> getTransactionsById(String strID){

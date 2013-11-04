@@ -136,4 +136,20 @@ public class InputValidation {
 		}
 		return null;
 	}
+	public static String validateMerchantInput(MerchantInput merchantInput){
+        if(RegExPattern.validateAccountID(merchantInput.getFromIDInput()) == false){
+                return InputErrorCode.ACCOUNTID_ERROR;                        
+        }
+        if(RegExPattern.validateAccountID(merchantInput.getToIDInput()) == false){
+                return InputErrorCode.ACCOUNTID_ERROR;                        
+        }
+        if(RegExPattern.validatePassword(merchantInput.getTransactionpasswordInput()) == false){
+                return InputErrorCode.PASSWORD_ERROR;                        
+        }
+        if(RegExPattern.validateAmount(merchantInput.getAmountInput()) == false){
+                return InputErrorCode.AMOUNT_ERROR;                        
+        }
+        return null;
+}
+
 }

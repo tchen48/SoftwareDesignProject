@@ -116,20 +116,37 @@ public String merchant_payment(String strID,long custID){
 		return message;
 	}
 
-	public static String createpayment(long checkingID,long customerid,double pay_amount)
+	public static String createpayment(String checkingID,String customerid,String pay_amount)
 	{
 	createSession();
-	Merchant merchant=new Merchant();
-	merchant.setCheckingID(checkingID);
-	merchant.setcustomerid(customerid);
-	merchant.setPay_amount(pay_amount);
 	
+    String message=null;
+	String hql = "select count(strID)from Account as a where a.checkingID=:accountID or a.savingID=:accountID ";
+	String hql1 = "select count(strID)from Account as a where a.checkingID=:accountID or a.savingID=:accountID ";
+	Query query = session.createQuery(hql);
+	Query query1= session.createQuery(hql1);
+	query.setLong("accountID", Long.valueOf(checkingID));
+	query1.setLong("accountID",Long.valueOf(customerid));
+	String check=query.uniqueResult().toString();
+	String check1=query.uniqueResult().toString();
+	Merchant merchant=new Merchant();
+	if(check.equals("1")&&check1.equals("1"))
+	{
+	
+	merchant.setCheckingID(Long.valueOf(checkingID));
+    merchant.setcustomerid(Long.valueOf(customerid));
+    merchant.setPay_amount(Double.valueOf(pay_amount));
+    message="Payment Suceesfull";
+	}
+	else
+	{
+		message="Incorrect Account Number";
+	}
 	
 	session.save(merchant);
 	session.getTransaction().commit();
-	
 	session.close();
-	return "Payment Succesfull!!";
+	return message;
 	}
 	
 	public static List queryPayments(long checkingID){

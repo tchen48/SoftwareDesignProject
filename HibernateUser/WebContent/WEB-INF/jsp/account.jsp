@@ -7,6 +7,12 @@
 <title>ASU Bank Profile and Settings</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
+<%
+  response.setHeader("Cache-Control","no-cache");
+  response.setHeader("Cache-Control","no-store");
+  response.setHeader("Pragma","no-cache");
+  response.setDateHeader ("Expires", 0);
+  %>
 <body>
 <div id="wrapper">
   <div id="header">
@@ -62,7 +68,7 @@
 	<div id="page-bottom">
 		<div id="page-bottom-content">
 			<h3>ASU Bank Policy</h3>
-		  <p>Banking products are provided by Bank of America, N.A. and affiliated banks, Members FDIC and wholly owned subsidiaries of Bank of America Corporation.<br>
+		  <p>Banking products are provided by ASUBank, N.A. and affiliated banks, Members FDIC and wholly owned subsidiaries of Bank of America Corporation.<br>
 			  Investing in securities involves risks, and there is always the potential of losing money when you invest in securities. You should review any planned financial transactions that may have tax or legal implications with your personal tax or legal advisor.<br>
 		  </p>
 		</div>

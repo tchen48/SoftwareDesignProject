@@ -10,12 +10,12 @@
 
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost/asubankuser</property>
-        <property name="hibernate.connection.username">admin</property>
-        <property name="hibernate.connection.password">admin</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">root</property>
         <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 
         <!-- Automatic schema creation (begin) === -->
-        <!--<property name="hibernate.hbm2ddl.auto">create</property>-->
+        <property name="hibernate.hbm2ddl.auto">update</property>
 
         <!-- Simple memory-only cache -->
         <property name="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>

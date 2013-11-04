@@ -79,8 +79,9 @@ public class UserManager {
 		user.setEmail(email);
 		user.setTelephone(telephone);
 		user.setRoletype(roletype);
-		user.setTransactionpassword(transactionPassword);
+		//user.setTransactionpassword(transactionPassword);
 		//encryption - Bhumik
+		user.setTransactionpassword(EncryptBase64.encodeString(transactionPassword));
 		
 		user.setPassword(EncryptBase64.encodeString(password));
 		//user.setPassword(password);

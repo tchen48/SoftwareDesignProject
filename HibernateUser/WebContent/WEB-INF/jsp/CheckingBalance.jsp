@@ -41,12 +41,16 @@
 	  <div id="content">
 		  <div class="box">
 				<h2>Checking Account</h2>
-			<p>
-			  <label for="textfield">${user.checking}</label>
-              <input type="text" name="textfield" id="textfield">
-			</p>
-				
+			
 				<table width="892" height="159" border="1" align="center">
+				<tr>
+				<td> <b><u> ID</u></b></td>
+				<td> <b><u> From </u></b></td>
+				<td> <b><u> To </u></b></td>
+				<td> <b><u> Amount</u></b></td>
+				<td> <b><u> Type</u></b></td>
+				<td> <b><u> Time</u></b></td>
+				</tr>
 				<c:forEach items="${transactions}" var="transactions">
 				  <tr>
 	

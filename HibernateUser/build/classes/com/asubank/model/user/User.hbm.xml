@@ -33,10 +33,10 @@
 		</property>
 		
 		<property name="password">
-			<column name="password" length="20" not-null="true"/>
+			<column name="password" length="50" not-null="true"/>
 		</property>
 		<property name="transactionpassword">
-			<column name="transactionpassword" length="20" not-null="true"/>
+			<column name="transactionpassword" length="50" not-null="true"/>
 		</property>
 		
 		<property name="shortname">

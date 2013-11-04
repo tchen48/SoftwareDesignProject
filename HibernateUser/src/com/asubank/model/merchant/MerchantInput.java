@@ -10,9 +10,9 @@ public class MerchantInput {
 	public void setCustomerid(String customerid) {
 		this.customerid = customerid;
 	}
-	private long fromIDInput;
-	private long toIDInput;
-	private double amountInput;
+	private String fromIDInput;
+	private String toIDInput;
+	private String amountInput;
 	private String transactionpasswordInput;
 	public String getTransactionpasswordInput() {
 		return transactionpasswordInput;
@@ -20,22 +20,22 @@ public class MerchantInput {
 	public void setTransactionpasswordInput(String transactionpasswordInput) {
 		this.transactionpasswordInput = transactionpasswordInput;
 	}
-	public long getFromIDInput() {
+	public String getFromIDInput() {
 		return fromIDInput;
 	}
-	public void setFromIDInput(long fromIDInput) {
+	public void setFromIDInput(String fromIDInput) {
 		this.fromIDInput = fromIDInput;
 	}
-	public long getToIDInput() {
+	public String getToIDInput() {
 		return toIDInput;
 	}
-	public void setToIDInput(long toIDInput) {
+	public void setToIDInput(String toIDInput) {
 		this.toIDInput = toIDInput;
 	}
-	public double getAmountInput() {
+	public String getAmountInput() {
 		return amountInput;
 	}
-	public void setAmountInput(double amountInput) {
+	public void setAmountInput(String amountInput) {
 		this.amountInput = amountInput;
 	}
 	

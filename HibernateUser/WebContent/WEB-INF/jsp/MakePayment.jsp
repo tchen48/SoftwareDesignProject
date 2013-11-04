@@ -41,7 +41,7 @@
 			<p style="float:left;display:inline;margin-top:0px;height:20px;line-height:20px;">${message}</p>
 			<table width="680" height="313" border="0" align="center">
 			  <tr>
-			    <td width="150" style="text-align: left"><a href="MakePayment.html">Make Payment</a></td>
+			    <td width="150" style="text-align: left"><a href="Payment.html">Make Payment</a></td>
 			    <td width="142" style="text-align: right">From</td>
 			    <td width="302"><label for="textfield">:</label>
                 <form:input type="text" name="textfield" id="textfield" required="true" autocomplete="off" path="fromIDInput" style="height: 20px;" /></td>
@@ -82,7 +82,7 @@
 	<div id="page-bottom">
 	  <div id="page-bottom-content">
 		<h3>ASU Bank Policy</h3>
-	    <p>Banking products are provided by Bank of America, N.A. and affiliated banks, Members FDIC and wholly owned subsidiaries of Bank of America Corporation.<br>
+	    <p>Banking products are provided by ASUBank, N.A. and affiliated banks, Members FDIC and wholly owned subsidiaries of Bank of America Corporation.<br>
 			  Investing in securities involves risks, and there is always the potential of losing money when you invest in securities. You should review any planned financial transactions that may have tax or legal implications with your personal tax or legal advisor.<br>
 	    </p>
 	  </div>
@@ -98,7 +98,7 @@
 	</div>
 </div>
 <div id="footer">
-	Copyright (c) 2012 Sitename.com. All rights reserved. 
+	Copyright (c) 2012 ASUBank.com. All rights reserved. 
 </div>
 </body>
 </html>

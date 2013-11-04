@@ -82,14 +82,14 @@ public class DBManager {
 		
 			if(auth.getisAuthorized()=="No")
 			{
-				System.out.println("AAAAA");
+				//System.out.println("AAAAA");
 				session.flush();
 				session.save(auth);				
 			
 			}
 			else
 			{
-				System.out.println("BBBBB");
+				//System.out.println("BBBBB");
 				String userid=obj.getuser_id();	
 				String department=obj.getdepartment();
 			
@@ -177,7 +177,7 @@ public class DBManager {
 		{
 		createSession();		
 		session.save(obj);
-		System.out.println("Inside DMManager");
+		//System.out.println("Inside DMManager");
 		}
 		catch(Exception e)
 		{	

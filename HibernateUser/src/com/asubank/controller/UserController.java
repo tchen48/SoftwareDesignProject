@@ -87,11 +87,6 @@ public class UserController {
 	@RequestMapping("/login")
     public String login(@ModelAttribute("uservisitor") UserVisitor userVisitor, Model model, HttpSession session) throws IOException, InvalidKeyException, NoSuchAlgorithmException, ParseException {	
 		userVisitor.setVisitor(VisitorManager.createVisitor());
-//		String machineID = combinedCommand.getVisitor().getMachineID();
-//		VisitorManager.createCaptcha(machineID);
-//		String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
-//	    model.addAttribute("encodedImage",encodedImage); 
-		
 		session.setAttribute("machineID", userVisitor.getVisitor().getMachineID());
 	    model.addAttribute("visitor", userVisitor.getVisitor());
         return "login";
@@ -177,9 +172,6 @@ public class UserController {
 				model.addAttribute("checkingBalance", account.getCheckingBalance());
 				model.addAttribute("savingBalance", account.getSavingBalance());
 				model.addAttribute("creditBalance", account.getCreditBalance());
-	//			Security security = SecurityManager.querySecurity(loginResult.getUser().getStrID());
-	//			model.addAttribute("user",loginResult.getUser());
-	//			model.addAttribute("security",security);
 				VisitorManager.deleteVisitor(machineID);
 				session.setMaxInactiveInterval(1200);
 				return "account";
@@ -256,23 +248,7 @@ public class UserController {
 		model.addAttribute("creditBalance", account.getCreditBalance());
 		return "account";
 	}
-	
-//	@RequestMapping("/customeraccount")
-//	public String customerAccount(HttpSession session, Model model){
-//		Account account = AccountManager.queryAccount((String)session.getAttribute("strID"));
-//		String checkingID = String.valueOf(account.getCheckingID());
-//		String savingID = String.valueOf(account.getSavingID());
-//		String creditID = String.valueOf(account.getCreditID());	
-//		model.addAttribute("employee", "Employee");
-//		model.addAttribute("checkingLastFour", checkingID.substring(checkingID.length() - 4, checkingID.length()));
-//		model.addAttribute("savingLastFour", savingID.substring(savingID.length() - 4, savingID.length()));
-//		model.addAttribute("creditLastFour", creditID.substring(creditID.length() - 4, creditID.length()));
-//		model.addAttribute("checkingBalance", account.getCheckingBalance());
-//		model.addAttribute("savingBalance", account.getSavingBalance());
-//		model.addAttribute("creditBalance", account.getCreditBalance());
-//		return "account";
-//	}
-//	
+		
 	@RequestMapping("/Merchant")
     public String MerchantTrans(Model model,HttpSession session){
 	String strID=(String)session.getAttribute("strID");
@@ -318,10 +294,23 @@ public class UserController {
 		if(action.equals("Submit")){
 			message = merchantmgr.merchant_payment(strID, mer.getcustomerid());
 		}
-		System.out.println("message: " + message);
+		//System.out.println("message: " + message);
 		model.addAttribute("message", message);
 			return "MerchantTrans";
 		}
+	  @RequestMapping("/GoBackMerchantTrans")
+	       public String GoBackMerchantTrans(Model model,HttpSession session){
+	               String strID=(String)session.getAttribute("strID");
+	               if(strID == null){
+	                       return "sessionTimeOut";
+	               }
+	               String message=null;
+	               MerchantInput merchantinput=new MerchantInput();
+	               model.addAttribute("merchantinput",merchantinput);
+	               model.addAttribute("strID",strID);
+	       
+	                       return "MerchantTrans";
+	               }
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String save(
@@ -331,7 +320,7 @@ public class UserController {
 			return "sessionTimeOut";
 		}		
 		List<MultipartFile> files = uploadForm.getFiles();
-		System.out.println(files);
+		//System.out.println(files);
 		CertificateFactory cf = CertificateFactory.getInstance("X509");
 		InputStream in = null;
 		List<String> fileNames = new ArrayList<String>();
@@ -351,7 +340,7 @@ public class UserController {
 		X509Certificate tc = (X509Certificate)cf.generateCertificate(in1);
 		try {
 			rc.verify(tc.getPublicKey());
-			System.out.println("Verification Successful");
+			//System.out.println("Verification Successful");
 		} catch (Exception e) {
 			//TODO Auto-generated catch block
 			return "MerchantError";
@@ -386,6 +375,7 @@ public class UserController {
 		if((String)session.getAttribute("strID") == null){
 			return "sessionTimeOut";
 		}
+		
 		String strID=(String)session.getAttribute("strID");
 		User user = UserManager.queryUser(strID);
 		if(user.getRoletype() == 0)
@@ -401,7 +391,17 @@ public class UserController {
 		if((String)session.getAttribute("strID") == null){
 			return "sessionTimeOut";
 		}
+		 //Validate tranfer input
+        String transferValidate = InputValidation.validateMerchantInput(merchantinput);
+        if(transferValidate != null){
+                model.addAttribute("message", transferValidate);
+                model.addAttribute("strID",(String)session.getAttribute("strID"));
+                model.addAttribute("merchantinput", merchantinput);
+                return "MakePayment";
+        }
+        //Validate tranfer input
 		String message = null;
+		Account account=AccountManager.queryAccount((String)session.getAttribute("strID"));
 		String strID=(String)session.getAttribute("strID");
 		User user = UserManager.queryUser(strID);
 		String transactionpassword=user.getTransactionpassword();
@@ -411,9 +411,15 @@ public class UserController {
 		model.addAttribute("strID",strID);
 		Merchant merchant = new Merchant();
 		if(action.equals("Continue"))
-		{
-			if(merchantinput.getTransactionpasswordInput().equals(transactionpassword))
+		{			
+			if(EncryptBase64.encodeString(merchantinput.getTransactionpasswordInput()).equals(transactionpassword))
 			{
+				double balance = getBalance(account,Long.parseLong(merchantinput.getFromIDInput()));
+				if(balance < Double.parseDouble(merchantinput.getAmountInput())){
+					message = TransactionErrorCode.OVERDRAFT;
+					model.addAttribute("message", message);
+					return "MakePayment";
+				}
 		message=MerchantManager.createpayment(merchantinput.getToIDInput(),merchantinput.getFromIDInput(),merchantinput.getAmountInput());
 			}
 			else
@@ -464,9 +470,6 @@ public class UserController {
 			model.addAttribute("employee", "Employee");
 			
 		model.addAttribute("strID",strID);
-//		Transaction transfer = new Transaction();
-		
-//		model.addAttribute("transfer", transfer);
 		TransactionInput transactionInput = new TransactionInput();
 		model.addAttribute("transferinput", transactionInput);
 			return "MakeTransfer";
@@ -497,7 +500,7 @@ public class UserController {
 		//Validate Transfer input end
 		TransactionManager transfermanager = new TransactionManager();
 		if(action.equals("Continue")){
-			if(transferInput.getTransactionpasswordInput().equals(transactionpassword))
+			if(EncryptBase64.encodeString(transferInput.getTransactionpasswordInput()).equals(transactionpassword))
 			{
 			Account account = AccountManager.queryAccount(strID);
 			if(transfer.getFromID() != account.getCheckingID() && transfer.getFromID() != account.getSavingID()){
@@ -541,7 +544,7 @@ public class UserController {
 		Account account = AccountManager.queryAccount(strID);
 		model.addAttribute("strID",strID);
 //		List transactions = TransactionManager.getTransactionsById(strID);
-		List transactions = TransactionManager.getTransactionsById(account.getCheckingID());
+		List transactions = TransactionManager.getTransactionsById(strID,account.getCheckingID());
 
 		map.put("transactions", transactions);
 		User user = UserManager.queryUser(strID);
@@ -558,7 +561,7 @@ public class UserController {
 		String strID = (String)session.getAttribute("strID");
 		model.addAttribute("strID",strID);
 		Account account = AccountManager.queryAccount(strID);
-		List transactions = TransactionManager.getTransactionsById(account.getSavingID());
+		List transactions = TransactionManager.getTransactionsById(strID,account.getSavingID());
 //		List transactions = TransactionManager.getTransactionsById(strID);
 
 		map.put("transactions", transactions);
@@ -576,7 +579,7 @@ public class UserController {
 		String strID = (String)session.getAttribute("strID");
 		model.addAttribute("strID",strID);
 		Account account = AccountManager.queryAccount(strID);
-		List transactions = TransactionManager.getTransactionsById(account.getCreditID());
+		List transactions = TransactionManager.getTransactionsById(strID,account.getCreditID());
 //		List transactions = TransactionManager.getTransactionsById(strID);
 
 		map.put("transactions", transactions);
@@ -657,7 +660,7 @@ public String viewTransaction(@RequestParam String action,Model model,@ModelAttr
     	}
     	//Validate strID
 		if(action.equals("view")){
-			List transactions = TransactionManager.getTransactionsById(strID);
+			List transactions = TransactionManager.getTransactionsById(user.getStrID());
 			map.put("transaction", transactions);		
 			
 			return "ViewTransaction";
@@ -731,12 +734,6 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 		recipient.setRecipient_lastname(recipientInput.getRecipient_lastnameInput());
 		recipient.setRecipient_nickname(recipientInput.getRecipient_nicknameInput());
 		recipient.setRecipient_accountnumber(Long.valueOf(recipientInput.getRecipient_accountnumberInput()));
-		//Validate Recipient input end
-		//filter xss recipientinput
-//		XSSProtection.filterRecipientInput(recipientInput);
-		//filter xss recipientinput
-//		String strID=(String)session.getAttribute("strID");
-//		model.addAttribute("strID",strID);
 		String message = null;
 		if(action.equals("Add Recipient"))
 			{	
@@ -746,8 +743,12 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 				rm.addRecipient(strID, recipient.getRecipient_accountnumber(), recipient.getRecipient_lastname(),recipient.getRecipient_nickname());
 			 message="Valid Recipient..Recipient Added to your list!!!";
 			 }
-			else{
-			message="NO Account with such account number Exists in this BANK";
+			else if(result.equals("Recipient Already exists!!")){
+			message="Recipient Already exists";
+				}
+			else
+				{
+				message="NO Account with such account number Exists in this BANK";
 				}
 			}
 		
@@ -781,8 +782,6 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 
 	@RequestMapping("/applynewaccount")
 	public String userInfo(Model model, HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException{
-//		Visitor visitor = (Visitor) session.getAttribute("visitor");
-//		String machineID = visitor.getMachineID();
 		if((String)session.getAttribute("machineID") == null){
 			return "sessionTimeOut";
 		}
@@ -790,7 +789,6 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 		VisitorManager.deleteVisitor(machineID);
 		Visitor visitor = VisitorManager.createVisitor();	
 		session.setAttribute("machineID", visitor.getMachineID());
-//		Visitor visitor = VisitorManager.createVisitor();		
 		machineID = visitor.getMachineID();
 		VisitorManager.createCaptcha(machineID);
 		String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
@@ -838,13 +836,6 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 		model.addAttribute("resultMessage", resultMessage);
 		return "visitorresult";
 	}		
-//		String machineID = combinedCommand.getVisitor().getMachineID();
-//		VisitorManager.createCaptcha(machineID);
-//		String encodedImage = imageToByteArray(machineID, VISITORCAPTCHA);
-//	    model.addAttribute("encodedImage",encodedImage); 
-//	    model.addAttribute("visitor", combinedCommand.getVisitor());
-		
-//	}
 	
 	@RequestMapping("/createuser")
     public String createUser(@RequestParam String action, @ModelAttribute("userinformation") UserInformation userInformation, Model model, HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException {
@@ -890,10 +881,6 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 //	        model.addAttribute("userinformation", userInformation);
 	        model.addAttribute("visitor", userInformation.getVisitor());
 	        return "otpvalidation";
-//	        String resultMessage = UserResultMessage.NEW_ACCOUNT_APPLICATION_ACCEPTED;
-//	    	model.addAttribute("resultMessage", resultMessage);
-////	    	VisitorManager.deleteVisitor(machineID);
-//	        return "visitorresult";
 		}
 		else{
 			String machineID = userInformation.getVisitor().getMachineID();
@@ -909,9 +896,6 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 		int year = Integer.valueOf(userInfo.getDobYear());
 		int month = Integer.valueOf(userInfo.getDobMonth());
 		int day = Integer.valueOf(userInfo.getDobDay());
-//		int year = userInfo.getDobYear();
-//		int month = userInfo.getDobMonth();
-//		int day = userInfo.getDobDay();
 		String pwd1 = userInfo.getPassword();
 		String pwd2 = userInfo.getPwdConfirm();
 		String transpwd1 = userInfo.getTransPwd();
@@ -934,39 +918,7 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 		if(checkPassword(transpwd1) == false){
 			return UserInfoErrorCode.SIMPLE_TRANSACTION_PASSWORD;
 		}
-		
-//		char c;
-//		for(int i = 0; i < pwd1.length(); i++){
-//			c = pwd1.charAt(i);
-//			if (c >= 'a' && c <= 'z'){
-//				lowercaseAcct = true;
-//			}
-//			else if (c >= 'A' && c <= 'Z'){
-//				uppercaseAcct = true;
-//			}
-//			else if (c >= '0' && c <= '9'){
-//				numberAcct = true;
-//			}			
-//		}
-//		if(lowercaseAcct == false || uppercaseAcct == false || numberAcct == false){
-//			return UserInfoErrorCode.SIMPLE_ACCOUNT_PASSWORD;
-//		}
-//		for(int i = 0; i < transpwd1.length(); i++){
-//			c = transpwd1.charAt(i);
-//			if (c >= 'a' && c <= 'z'){
-//				lowercaseTrans = true;
-//			}
-//			else if (c >= 'A' && c <= 'Z'){
-//				uppercaseTrans = true;
-//			}
-//			else if (c >= '0' && c <= '9'){
-//				numberTrans = true;
-//			}			
-//		}
-//		if(lowercaseTrans == false || uppercaseTrans == false || numberTrans == false){
-//			return UserInfoErrorCode.SIMPLE_TRANSACTION_PASSWORD;
-//		}
-		return UserInfoErrorCode.NO_ERROR;
+	return UserInfoErrorCode.NO_ERROR;
 	}
 	
 	private static boolean checkPassword(String password){
@@ -1190,7 +1142,7 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 	    message = UserManager.createUser(user.getFirstname(), user.getLastname(), user.getAddress(), user.getEmail(), user.getTelephone(), user.getRoletype(),
 	    			user.getPassword(), user.getTransactionpassword());
 	    Security security = new Security(message);
-		security.setTransPwd(userInformation.getTransPwd());
+		security.setTransPwd(EncryptBase64.encodeString(userInformation.getTransPwd()));
 		
 		pii.setSsn(EncryptBase64.encodeString(userInformation.getSsn()));
 		pii.setDobYear(Integer.valueOf(userInformation.getDobYear()));
@@ -1213,25 +1165,6 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
         return message;
 	}
 	
-/*otp related functions for user, not visitor
-	@RequestMapping("/createotp")
-	public String createOTP(@ModelAttribute("user") User user, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException{
-		Security security = SecurityManager.createOtp(user.getStrID());
-		model.addAttribute("user",user);
-		model.addAttribute("security", security);
-		return "home";		
-	}
-	
-	@RequestMapping("/validateotp")
-	public String validateOTP(@ModelAttribute("security") Security security, Model model){
-		int statusCode = SecurityManager.validateOtp(security.getStrID(), security.getOtpInput());
-		String status = StatusCode.STATUS[statusCode];
-		model.addAttribute("status", status);
-		User user = UserManager.queryUser(security.getStrID());
-		model.addAttribute("user",user);
-		return "home";
-	}
-*/	
 	@RequestMapping("/createcaptcha")
 	public String createCaptcha(@ModelAttribute("user") User user, Model model) throws InvalidKeyException, NoSuchAlgorithmException, ParseException, IOException{
 		Security security = SecurityManager.createCaptcha(user.getStrID());
@@ -1333,7 +1266,7 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 		else{
 			User user = UserManager.queryUser(passwordSet.getStrID());
 			String originalPassword = user.getPassword();
-			if(originalPassword.equals(passwordSet.getOldPassword()) != true){
+			if(originalPassword.equals(EncryptBase64.encodeString(passwordSet.getOldPassword())) != true){
 				user = new User();
 				user.setStrID(passwordSet.getStrID());
 				passwordSet = new PasswordSet();
@@ -1361,13 +1294,6 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 				return "userresult";
 			}
 		}
-//		}
-//		else{
-//			User user = new User();
-//			user.setStrID(passwordSet.getStrID());
-//			model.addAttribute("user",user);
-//			return "profilesetting";
-//		}
 	}
 	
 	@RequestMapping("/updatecontact")
@@ -1480,37 +1406,5 @@ public String viewAccount(@RequestParam String action,Model model,@ModelAttribut
 		return true;
 	}
 	
-	
-//	private static void main(String[] args){
-//		 
-//		InetAddress ip;
-//		try {
-//	 
-//			ip = InetAddress.getLocalHost();
-//			System.out.println("Current IP address : " + ip.getHostAddress());
-//	 
-//			NetworkInterface network = NetworkInterface.getByInetAddress(ip);
-//	 
-//			byte[] mac = network.getHardwareAddress();
-//	 
-//			System.out.print("Current MAC address : ");
-//	 
-//			StringBuilder sb = new StringBuilder();
-//			for (int i = 0; i < mac.length; i++) {
-//				sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));		
-//			}
-//			System.out.println(sb.toString());
-//	 
-//		} catch (UnknownHostException e) {
-//	 
-//			e.printStackTrace();
-//	 
-//		} catch (SocketException e){
-//	 
-//			e.printStackTrace();
-//	 
-//		}
-//	 
-//	   }
-	
+
 }

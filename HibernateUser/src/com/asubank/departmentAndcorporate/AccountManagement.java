@@ -28,13 +28,13 @@ public class AccountManagement {
 
         	Transactions transaction = iter.next();
             
-            System.out.println("From_user:" +transaction.getfrom_user()+"\n"+
-            "Transaction_id :"+transaction.gettransaction_id()+"\n"+
-            "Transaction_type :"+transaction.gettransaction_type()+"\n"+
-            "Transaction_amount :"+transaction.gettransaction_amount()+"\n"+
-            "To_user :"+transaction.getto_user()+"\n"+
-            "Transaction_time :"+transaction.gettransaction_time()+"\n"+
-            "Status :"+transaction.getstatus()+"\n");    
+            //System.out.println("From_user:" +transaction.getfrom_user()+"\n"+
+//            "Transaction_id :"+transaction.gettransaction_id()+"\n"+
+//            "Transaction_type :"+transaction.gettransaction_type()+"\n"+
+//            "Transaction_amount :"+transaction.gettransaction_amount()+"\n"+
+//            "To_user :"+transaction.getto_user()+"\n"+
+//            "Transaction_time :"+transaction.gettransaction_time()+"\n"+
+//            "Status :"+transaction.getstatus()+"\n");    
     	   
            
         }
@@ -89,9 +89,9 @@ public class AccountManagement {
         		String user2=employee_temp.getuser_id();
         		if (user2.equals(user1))
         		{
-        			System.out.println("User id of employee:" +employee_temp.getuser_id()+"\n"+
-                    		"Department of employee:" +employee_temp.getdepartment()+"\n"+"Role of employee:"+employee_temp.getrole()
-                    +"\n");
+        			//System.out.println("User id of employee:" +employee_temp.getuser_id()+"\n"+
+                    //		"Department of employee:" +employee_temp.getdepartment()+"\n"+"Role of employee:"+employee_temp.getrole()
+                   // +"\n");
         			list_dept_transactions.add(transaction);
         		}
         	}
@@ -130,9 +130,9 @@ public class AccountManagement {
 
 			Employee employee_temp = iter1.next();
             
-            System.out.println("User id of employee:" +employee_temp.getuser_id()+"\n"+
-            		"Department of employee:" +employee_temp.getdepartment()+"\n"+"Role of employee:"+employee_temp.getrole()
-            +"\n");       	   
+           // System.out.println("User id of employee:" +employee_temp.getuser_id()+"\n"+
+           // 		"Department of employee:" +employee_temp.getdepartment()+"\n"+"Role of employee:"+employee_temp.getrole()
+          //  +"\n");       	   
            
         }
 
@@ -167,7 +167,7 @@ public class AccountManagement {
         	{
         		Authorizations auth = iter1.next();
         		
-        			System.out.println(auth.getuser_id()+"\n"+auth.getdescription()+"\n"+auth.getdepartment());
+        			//System.out.println(auth.getuser_id()+"\n"+auth.getdescription()+"\n"+auth.getdepartment());
         			
         		
         	}            

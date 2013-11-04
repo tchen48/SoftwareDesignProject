@@ -42,7 +42,7 @@
 		  <div class="box">
 				<h2>Received Payments</h2>
 			
-				
+				<p><a href="GoBackMerchantTrans.html">Go Back</a></p>
 				<table width="892" height="159" border="1" align="center">
 				<tr>
 				<td> <b><u> Customer Account Id</u></b></td>
@@ -69,7 +69,7 @@
 	<div id="page-bottom">
 	  <div id="page-bottom-content">
 		<h3>ASU Bank Policy</h3>
-		  <p>Banking products are provided by Bank of America, N.A. and affiliated banks, Members FDIC and wholly owned subsidiaries of Bank of America Corporation.<br>
+		  <p>Banking products are provided by ASUBank, N.A. and affiliated banks, Members FDIC and wholly owned subsidiaries of Bank of America Corporation.<br>
 			  Investing in securities involves risks, and there is always the potential of losing money when you invest in securities. You should review any planned financial transactions that may have tax or legal implications with your personal tax or legal advisor.<br>
 		  </p>
 		</div>
@@ -85,7 +85,7 @@
 	</div>
 </div>
 <div id="footer">
-	Copyright (c) 2012 Sitename.com. All rights reserved. 
+	Copyright (c) 2012 ASUBank.com. All rights reserved. 
 </div>
 </body>
 </html>

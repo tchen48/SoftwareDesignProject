@@ -20,14 +20,25 @@ public class RecipientManager {
 	}
 	public String verifyRecipient(String strID,long recipient_accountnumber ){
 		String result = null;
+		String hql0="select recipient_accountnumber from Recipient as r where r.strID=:strID";
 		String hql="select count(strID) from Account as a where a.checkingID=:recipient_accountnumber";
 		String hql1="select count(strID) from Account as a where a.savingID=:recipient_accountnumber";
 		createSession();
+		Query query0=session.createQuery(hql0);
 		Query query = session.createQuery(hql);
 		Query query1 = session.createQuery(hql1);
 		
+		query0.setString("strID", strID);
 		query.setDouble("recipient_accountnumber",recipient_accountnumber);
 		query1.setDouble("recipient_accountnumber",recipient_accountnumber);
+		List list=query0.list();
+		if(list.contains(recipient_accountnumber))
+		{
+			result="Recipient Already exists!!";
+			
+		}
+		else{
+		
 		String check=query.uniqueResult().toString();
 				int one=Integer.parseInt(check);
 		String check1=query1.uniqueResult().toString();
@@ -36,9 +47,10 @@ public class RecipientManager {
 		{
 			result="1";
 		}
-		else
-		{
-			result="0";
+			else
+			{
+				result="0";
+			}
 		}
 		session.getTransaction().commit();
 		session.close();

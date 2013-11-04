@@ -284,7 +284,7 @@ public class AcctMgmtController {
     	  auth.setisAuthorized(isAuthorized);
     	  auth.setemployee_to_transfer(employee_to_transfer);
     	  
-    	  System.out.println(auth.getuser_id()+"\n"+auth.getdepartment()+"\n"+auth.getdescription()+"\n"+auth.getisAuthorized()+"\n"+auth.getemployee_to_transfer());
+    	  //System.out.println(auth.getuser_id()+"\n"+auth.getdepartment()+"\n"+auth.getdescription()+"\n"+auth.getisAuthorized()+"\n"+auth.getemployee_to_transfer());
     	  
     	  DBManager.updateRow(employee,auth);
     	  
@@ -327,7 +327,7 @@ public class AcctMgmtController {
     	  auth.setisAuthorized(isAuthorized);
     	  auth.setemployee_to_transfer(employee_to_transfer);
     	  
-    	  System.out.println(auth.getuser_id()+"\n"+auth.getdepartment()+"\n"+auth.getdescription()+"\n"+auth.getisAuthorized()+"\n"+auth.getemployee_to_transfer());
+    	  //System.out.println(auth.getuser_id()+"\n"+auth.getdepartment()+"\n"+auth.getdescription()+"\n"+auth.getisAuthorized()+"\n"+auth.getemployee_to_transfer());
     	  
     	  DBManager.updateRow(employee,auth);
     	  
@@ -392,7 +392,7 @@ public class AcctMgmtController {
     	try
     	{
     	   String userid=(String) session.getAttribute("strID");
-    	   System.out.println("Department in ViewEmployees is : "+userid);
+    	   //System.out.println("Department in ViewEmployees is : "+userid);
     	   List<Employee> list = AccountManagement.ViewEmployees( userid);
     	   model.addAttribute("list", list);    
            
@@ -465,7 +465,7 @@ public class AcctMgmtController {
     	 
     	  Authorizations auth=new Authorizations();
     	  
-    	  System.out.println(emp.getdepartment()+"\n"+emp.getuser_id()+"\n"+emp.getrole());
+    	  //System.out.println(emp.getdepartment()+"\n"+emp.getuser_id()+"\n"+emp.getrole());
     	  auth.setisAuthorized("Yes");
     	  
 	      DBManager.updateRow(emp,auth);

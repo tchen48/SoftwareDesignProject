@@ -30,7 +30,7 @@
 				<li><a href="Transfer.html">Transfers</a></li>
 				<li><a href="Merchant.html">Merchants Click Here!</a>
 				<li><a href="profilesetting.html">Profile &amp; Settings</a></li>				
-				<li><a href="HelpAndSupport.html">Help &amp; Support</a></li>
+				<li><a href="HelpAndSupport.html">Help</a></li>
 			</ul>
 	</div>
 	
@@ -43,19 +43,17 @@
 				
 				<table width="680" height="313" border="0" align="center">
 			  <tr>
-			    <td width="150" style="text-align: left"><a href="Merchant.html">Make Payment</a></td>
+			    <td width="150" style="text-align: left"><a href="GoBackMerchantTrans.html">Make Payment</a></td>
 			    <td width="142" style="text-align: right">CustomerID</td>
 			    <td><label for="textfield">:</label>
                 <form:input type="text" name="textfield" id="textfield" required="true" pattern=".{12}" autocomplete="off" path="customerid" style="height: 20px;" /></td>
 		      </tr>
 			  <tr>
 			    <td style="text-align: left"><a href="ReceivedPayments.html">See Received Payments</a></td>
-			    <td><label for="textfield2">:</label>
+			    <td><label for="textfield2"></label>
+			    <td style="text-align: center"><input type="submit" name="action" id="button" value="Submit" align="left" style="padding: 5px 10px; margin-right: 50px;display:inline;"s></td>
 		      </tr>
-			   <tr>
-			    <td><a href="#"></a></td>
-			    <td style="text-align: center"><input type="submit" name="action" id="button" value="Submit" align="left"></td>
-		      </tr>
+			   
 		    </table>
 				
 				
@@ -72,7 +70,7 @@
 	<div id="page-bottom">
 	  <div id="page-bottom-content">
 		<h3>ASU Bank Policy</h3>
-		  <p>Banking products are provided by Bank of America, N.A. and affiliated banks, Members FDIC and wholly owned subsidiaries of Bank of America Corporation.<br>
+		  <p>Banking products are provided by ASUBank, N.A. and affiliated banks, Members FDIC and wholly owned subsidiaries of Bank of America Corporation.<br>
 			  Investing in securities involves risks, and there is always the potential of losing money when you invest in securities. You should review any planned financial transactions that may have tax or legal implications with your personal tax or legal advisor.<br>
 		  </p>
 		</div>
@@ -88,7 +86,7 @@
 	</div>
 </div>
 <div id="footer">
-	Copyright (c) 2012 Sitename.com. All rights reserved.
+	Copyright (c) 2012 ASUBank.com. All rights reserved.
 </div>
 </body>
 </html>
