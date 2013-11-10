@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="wormbox.server">
+	<class name="UploadedFile" table="uploadedfile">
+		<id name="fileId" column="FileID">
+			<generator class="native" />
+		</id>		
+		<property name="fileName">
+			<column name="FileName" length="20" not-null="true" />
+		</property>
+		
+		<property name="fileSize">
+			<column name="FileSize" not-null="true" />
+		</property>
+		
+		<property name="ownerId">
+			<column name="OwnerID" length="20" not-null="true"/>
+		</property>
+		
+		<property name="uploadedDate">
+			<column name="UploadedDate" not-null="true"/>
+		</property>
+		
+		<property name="shared">
+			<column name="Shared" not-null="true"/>
+		</property>
+		
+		<property name="devicePath">
+			<column name="DevicePath" length="200" not-null="true"/>
+		</property>
+		
+		<property name="cloudIp">
+			<column name="CloudIP" length="15" not-null="false"/>
+		</property>
+	</class>
+</hibernate-mapping>
