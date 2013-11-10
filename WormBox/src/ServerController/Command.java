@@ -6,4 +6,5 @@ public class Command {
 	public static final String PATH = "path";
 	public static final String FILE = "file";
 	public static final String UPLOAD_SUCCESSFUL = "upload successful";
+	public static final String DELIMITER = "$$$$$";
 }

@@ -51,31 +51,38 @@ public class Server {
                 String clientInputStr = input.readUTF();//Corresponds to the write method in client side, otherwise it will EOFException
                 // Process data from client  
                 System.out.println("Content sent by client:" + clientInputStr);  
-                String type = parse(clientInputStr);
+//                String type = parse(clientInputStr);
+                String[] parsedCommand = parse(clientInputStr);
+                String type = parsedCommand[0];
                 String s;
                 if(type.equals(Command.DOWNLOAD)){
                 	s = Command.DOWNLOAD;
                 }
                 else if(type.equals(Command.UPLOAD)){
-                	s = Command.UPLOAD;
-                }
-                else if(type.equals(Command.FILE)){
-                	s = new BufferedReader(new FileReader("C:\\testing.txt")).readLine();  
-                }
-                else{
-                	String data = getFileData(clientInputStr);
-                	String filename = getFileName(clientInputStr);
+//                	s = Command.UPLOAD;
+//                }
+//                else if(type.equals(Command.FILE)){
+//                	s = new BufferedReader(new FileReader("C:\\testing.txt")).readLine();  
+//                }
+//                else{
+//                	String data = getFileData(clientInputStr);
+//                	String filename = getFileName(clientInputStr);
+                	String data = parsedCommand[1];
+                	String filename = getFileName(parsedCommand[2]);
                 	File f = new File("d:/" + filename);	            
      	            FileWriter fw = new FileWriter(f);
      	            fw.write(data); 
      	            fw.flush();
      	            fw.close(); //Otherwise the file can't be opened properly
      	            
-     	            UploadedFileManager.addFile(0, filename, getFileSize(f), "shao", new Date(),  
-     	            		false, getDevicePath(clientInputStr), "0.0.0.0");
+     	            long fileID = UploadedFileManager.addFile(filename, getFileSize(f), parsedCommand[3], new Date(),  
+     	            		 parsedCommand[2], parsedCommand[4]);
      	            
-                	s = Command.UPLOAD_SUCCESSFUL;
-                }                
+                	s = Command.UPLOAD_SUCCESSFUL + "\nThe file ID is " + fileID;
+                } 
+                else{
+                	s = "something";
+                }
                 
                 // Respond to client
                 DataOutputStream out = new DataOutputStream(socket.getOutputStream());  
@@ -103,19 +110,21 @@ public class Server {
             } 
         } 
         
-        private String parse(String command){
-        	if(command.equals(Command.UPLOAD)){
-        		return Command.UPLOAD;
-        	}
-        	else if(command.equals(Command.DOWNLOAD)){
-        		return Command.DOWNLOAD;
-        	}
-        	else if(command.contains("/") || command.contains("\\")){
-        		return Command.PATH;
-        	}
-        	else{
-        		return Command.FILE;
-        	}        		
+        private String[] parse(String command){
+        	String[] dataArray = command.split("\\${5}"); 
+        	return dataArray;
+//        	if(dataArray[0].equals(Command.UPLOAD)){
+//        		return Command.UPLOAD;
+//        	}
+//        	else if(command.equals(Command.DOWNLOAD)){
+//        		return Command.DOWNLOAD;
+//        	}
+//        	else if(command.contains("/") || command.contains("\\")){
+//        		return Command.PATH;
+//        	}
+//        	else{
+//        		return Command.FILE;
+//        	}        		
         }
         
         private String getFileData(String data){
@@ -162,5 +171,7 @@ public class Server {
     			return "File not exist";
     		}		
     	}
+        
+        
     }  
 }  

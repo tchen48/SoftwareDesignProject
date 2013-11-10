@@ -24,10 +24,6 @@
 			<column name="UploadedDate" not-null="true"/>
 		</property>
 		
-		<property name="shared">
-			<column name="Shared" not-null="true"/>
-		</property>
-		
 		<property name="devicePath">
 			<column name="DevicePath" length="200" not-null="true"/>
 		</property>

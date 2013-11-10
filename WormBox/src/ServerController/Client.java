@@ -15,18 +15,18 @@ public class Client {
 	public static final int PORT = 12345;//Server end port number
 	
     public static void main(String[] args) {  
-//        System.out.println("客户端启�?..");  
-//        System.out.println("当接收到服务器端字符�?\"OK\" 的时�? 客户端将终止\n"); 
+//        System.out.println("客户端启�?..");  
+//        System.out.println("当接收到服务器端字符�?\"OK\" 的时�? 客户端将终止\n"); 
 //        while (true) {  
 //        	Socket socket = null;
 //        	try {
-//        		//创建�?��流套接字并将其连接到指定主机上的指定端口�?//	        	socket = new Socket(IP_ADDR, PORT);  
+//        		//创建�?��流套接字并将其连接到指定主机上的指定端口�?//	        	socket = new Socket(IP_ADDR, PORT);  
 //	              
 //	            //读取服务器端数据  
 //	            DataInputStream input = new DataInputStream(socket.getInputStream());  
-//	            //向服务器端发送数�? 
+//	            //向服务器端发送数�? 
 //	            DataOutputStream out = new DataOutputStream(socket.getOutputStream());  
-//	            System.out.print("请输�? \t");  
+//	            System.out.print("请输�? \t");  
 //	            String str = new BufferedReader(new InputStreamReader(System.in)).readLine();  
 ////	            String str = new BufferedReader(new FileReader("C:\\upload.txt")).readLine();  
 //	            out.writeUTF(str);  
@@ -38,7 +38,7 @@ public class Client {
 //	            fw.write(ret); 
 //	            fw.flush();
 //	            
-//	            // 如接收到 "OK" 则断�?���? 
+//	            // 如接收到 "OK" 则断�?���? 
 //	            if ("OK".equals(ret)) {  
 //	                System.out.println("客户端将关闭连接");  
 //	                Thread.sleep(500);  
@@ -48,22 +48,22 @@ public class Client {
 //	            out.close();
 //	            input.close();
 //        	} catch (Exception e) {
-//        		System.out.println("客户端异�?" + e.getMessage()); 
+//        		System.out.println("客户端异�?" + e.getMessage()); 
 //        	} finally {
 //        		if (socket != null) {
 //        			try {
 //						socket.close();
 //					} catch (IOException e) {
 //						socket = null; 
-//						System.out.println("客户�?finally 异常:" + e.getMessage()); 
+//						System.out.println("客户�?finally 异常:" + e.getMessage()); 
 //					}
 //        		}
 //        	}
 //        }  
-    	uploadFile("C:/upload.txt");
+    	uploadFile("C:/upload.txt", "sshao", "1.1.1.1");
     }  
     
-    private static boolean uploadFile(String path){
+    private static boolean uploadFile(String path, String ownerId, String cloudIp){
     	System.out.println("Starting Client...");  
         System.out.println("When receiving \"upload successful\" from server, client will be terminated\n"); 
         while (true) {  
@@ -76,26 +76,32 @@ public class Client {
 	            DataInputStream input = new DataInputStream(socket.getInputStream());  
 	            //Send data to server
 	            DataOutputStream out = new DataOutputStream(socket.getOutputStream());  
-	            System.out.print("Uploading file... \t");  
-	            String str = Command.UPLOAD;
-	            out.writeUTF(str);  
-	              
+	            System.out.println("Uploading file... \t");  
+	            
+	            FileReader fr = new FileReader(path);
+	            String str = new BufferedReader(fr).readLine();
+	            System.out.println(str);
+	            out.writeUTF(Command.UPLOAD + Command.DELIMITER + str + Command.DELIMITER + path + Command.DELIMITER + ownerId + Command.DELIMITER + cloudIp);  
 	            String ret = input.readUTF();   
-	            System.out.println("\nReturned by server: " + ret); 
-	            if (ret.equals(Command.UPLOAD)){
-	            	socket = new Socket(IP_ADDR, PORT);  
-		            input = new DataInputStream(socket.getInputStream());  
-		            out = new DataOutputStream(socket.getOutputStream());  
-	            	
-	            	FileReader fr = new FileReader(path);
-		            str = new BufferedReader(fr).readLine();
-		            System.out.println(str);
-		            out.writeUTF(str + "$$$$$" + path);  
-		            ret = input.readUTF();   
-	            }
-	            else{
-	            	return false;
-	            }
+//	            String str = Command.UPLOAD;
+//	            out.writeUTF(str);  
+//	              
+//	            String ret = input.readUTF();   
+//	            System.out.println("\nReturned by server: " + ret); 
+//	            if (ret.equals(Command.UPLOAD)){
+//	            	socket = new Socket(IP_ADDR, PORT);  
+//		            input = new DataInputStream(socket.getInputStream());  
+//		            out = new DataOutputStream(socket.getOutputStream());  
+//	            	
+//	            	FileReader fr = new FileReader(path);
+//		            str = new BufferedReader(fr).readLine();
+//		            System.out.println(str);
+//		            out.writeUTF(str + "$$$$$" + path);  
+//		            ret = input.readUTF();   
+//	            }
+//	            else{
+//	            	return false;
+//	            }
 	            
 	            // If receive "upload successful" from server, disconnect
 	            if (Command.UPLOAD_SUCCESSFUL.equals(ret)) {  

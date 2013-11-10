@@ -8,7 +8,7 @@ public class UploadedFile {
 	private String fileSize;
 	private String ownerId;
 	private Date uploadedDate;
-	private boolean shared;
+//	private boolean shared;
 	private String devicePath;
 	private String cloudIp;
 
@@ -16,13 +16,13 @@ public class UploadedFile {
 	}
 
 	public UploadedFile(long fileId, String fileName, String fileSize,
-			String ownerId, String devicePath, Date uploadedDate, boolean shared, String cloudIp) {
+			String ownerId, String devicePath, Date uploadedDate, String cloudIp) {
 		this.fileId = fileId;
 		this.fileName = new String(fileName);
 		this.fileSize = fileSize;
 		this.ownerId = new String(ownerId);
 		this.devicePath = new String(devicePath);
-		this.shared = shared;
+//		this.shared = shared;
 		this.uploadedDate = uploadedDate;
 		this.cloudIp = new String(cloudIp);
 	}
@@ -75,13 +75,13 @@ public class UploadedFile {
 		this.devicePath = devicePath;
 	}
 	
-	public boolean getShared() {
-		return shared;
-	}
-
-	public void setShared(boolean shared) {
-		this.shared = shared;
-	}
+//	public boolean getShared() {
+//		return shared;
+//	}
+//
+//	public void setShared(boolean shared) {
+//		this.shared = shared;
+//	}
 
 	public Date getUploadedDate() {
 		return uploadedDate;
