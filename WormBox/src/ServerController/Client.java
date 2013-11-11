@@ -2,16 +2,12 @@ package ServerController;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class Client {
@@ -27,6 +23,7 @@ public class Client {
     }  
     
     private static boolean uploadFile(String path, String ownerId, String cloudIp){
+    	boolean tag = true;
     	System.out.println("Starting Client...");  
         System.out.println("When receiving \"upload successful\" from server, client will be terminated\n"); 
         while (true) {  
@@ -69,13 +66,26 @@ public class Client {
 	            fis.close();
 	            // If receive "upload successful" from server, disconnect
 	            if (Command.UPLOAD_SUCCESSFUL.equals(ret)) {  
+	            	tag = true;
+	            	System.out.println(Command.UPLOAD_SUCCESSFUL);
 	                System.out.println("Client will be closed");  
 	                Thread.sleep(500);  
+	                out.close();
+		            input.close();
 	                break;  
-	            }  
+	            }
+	            else{
+	            	tag = false;
+	            	System.out.println(Command.UPLOAD_FAILED);
+	                System.out.println("Client will be closed");  
+	                Thread.sleep(500);  
+	                out.close();
+		            input.close();
+	                break;  
+	            }
 	            
-	            out.close();
-	            input.close();
+//	            out.close();
+//	            input.close();
         	} 
         	catch (Exception e) {
         		System.out.println("Client exception: " + e.getMessage()); 
@@ -84,7 +94,7 @@ public class Client {
         		if (socket != null) {
         			try {
 						socket.close();
-						return true;
+						return tag;
 					} 
         			catch (IOException e) {
 						socket = null; 
@@ -98,6 +108,7 @@ public class Client {
     }
     
     private static boolean downloadFile(String fileName, String ownerId){
+    	boolean tag = true;
     	System.out.println("Starting Client...");  
         System.out.println("When receiving \"download successful\" from server, client will be terminated\n"); 
         while (true) {  
@@ -140,20 +151,32 @@ public class Client {
                 	count += (long)read;
                 }
                 fileOut.flush();
-                System.out.println("Downloading completed!");
+//                System.out.println("Downloading completed!");
                 fileOut.close();
 	            
 	            String ret = input.readUTF();
 
 	            // If receive "upload successful" from server, disconnect
 	            if (Command.DOWNLOAD_SUCCESSFUL.equals(ret)) {  
+	            	System.out.println(Command.DOWNLOAD_SUCCESSFUL);
 	                System.out.println("Client will be closed");  
 	                Thread.sleep(500);  
+	                out.close();
+		            input.close();
 	                break;  
 	            }  
+	            else{
+	            	tag = false;
+	            	System.out.println(Command.DOWNLOAD_FAILED);
+	            	System.out.println("Client will be closed");  
+	                Thread.sleep(500);
+	            	out.close();
+		            input.close();
+		            break;
+	            }
 	            
-	            out.close();
-	            input.close();
+//	            out.close();
+//	            input.close();
         	} 
         	catch (Exception e) {
         		System.out.println("Client exception: " + e.getMessage()); 
@@ -162,7 +185,7 @@ public class Client {
         		if (socket != null) {
         			try {
 						socket.close();
-						return true;
+						return tag;
 					} 
         			catch (IOException e) {
 						socket = null; 
@@ -176,6 +199,7 @@ public class Client {
     }
     
     private static boolean login(String userId, String password){
+    	boolean tag = true;
     	System.out.println("Starting Client...");  
         System.out.println("When receiving \"login successful\" from server, client will be terminated\n"); 
         while (true) {  
@@ -197,13 +221,25 @@ public class Client {
 
 	            // If receive "login successful" from server, disconnect
 	            if (Command.LOGIN_SUCCESSFUL.equals(ret)) {  
+	            	System.out.println(Command.LOGIN_SUCCESSFUL);
 	                System.out.println("Client will be closed");  
 	                Thread.sleep(500);  
+	                out.close();
+		            input.close();
 	                break;  
-	            }  
+	            }
+	            else{
+	            	tag = false;
+	            	System.out.println(Command.LOGIN_FAIL);
+	                System.out.println("Client will be closed");  
+	                Thread.sleep(500);  
+	                out.close();
+		            input.close();
+	                break;  
+	            }
 	            
-	            out.close();
-	            input.close();
+//	            out.close();
+//	            input.close();
         	} 
         	catch (Exception e) {
         		System.out.println("Client exception: " + e.getMessage()); 
@@ -212,7 +248,7 @@ public class Client {
         		if (socket != null) {
         			try {
 						socket.close();
-						return true;
+						return tag;
 					} 
         			catch (IOException e) {
 						socket = null; 
@@ -226,6 +262,7 @@ public class Client {
     }
     
     private static boolean updateInfo(String userId, String deviceGPSLati, String deviceGPSLongi, String deviceIp){
+    	boolean tag = true;
     	System.out.println("Starting Client...");  
         System.out.println("When receiving \"update userinfo successful\" from server, client will be terminated\n"); 
         while (true) {  
@@ -247,13 +284,24 @@ public class Client {
 
 	            // If receive "login successful" from server, disconnect
 	            if (Command.UPDATE_USERINFO_SUCCESSFUL.equals(ret)) {  
+	            	System.out.println(Command.UPDATE_USERINFO_SUCCESSFUL);
 	                System.out.println("Client will be closed");  
 	                Thread.sleep(500);  
+	                out.close();
+		            input.close();
 	                break;  
 	            }  
-	            
-	            out.close();
-	            input.close();
+	            else{
+	            	tag = false;
+	            	System.out.println(Command.UPDATE_USERINFO_FAIL);
+	                System.out.println("Client will be closed");  
+	                Thread.sleep(500);  
+	                out.close();
+		            input.close();
+	                break;  
+	            }
+//	            out.close();
+//	            input.close();
         	} 
         	catch (Exception e) {
         		System.out.println("Client exception: " + e.getMessage()); 
@@ -262,7 +310,7 @@ public class Client {
         		if (socket != null) {
         			try {
 						socket.close();
-						return true;
+						return tag;
 					} 
         			catch (IOException e) {
 						socket = null; 
