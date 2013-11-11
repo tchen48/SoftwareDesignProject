@@ -18,6 +18,7 @@ import java.util.Date;
 
 import wormbox.server.UploadedFile;
 import wormbox.server.UploadedFileManager;
+import wormbox.server.UserInfoManager;
 
 public class Server {
 	public static final int PORT = 12345;//Listening port number   
@@ -54,16 +55,47 @@ public class Server {
                 // Read data from client
 //                DataInputStream input = new DataInputStream(socket.getInputStream());
             	DataInputStream input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-                String clientInputStr = input.readUTF();//Corresponds to the write method in client side, otherwise it will EOFException
+            	DataOutputStream out = new DataOutputStream(socket.getOutputStream());  
+            	String clientInputStr = input.readUTF();//Corresponds to the write method in client side, otherwise it will EOFException
                 // Process data from client  
                 System.out.println("Content sent by client:" + clientInputStr);  
 //                String type = parse(clientInputStr);
                 String[] parsedCommand = parse(clientInputStr);
                 String type = parsedCommand[0];
-                String s;
+                String s=null;
                 System.out.println(type);
-                if(type.equals(Command.DOWNLOAD)){
-                	DataOutputStream out = new DataOutputStream(socket.getOutputStream());  
+//login userid[1], password[2]
+                if(type.equals(Command.LOGIN)){
+                	boolean b = UserInfoManager.validateUser(parsedCommand[1], parsedCommand[2]);
+                	if(b==true){
+                		out.writeUTF(Command.LOGIN_SUCCESSFUL);
+                		out.flush();
+                	}
+                	else {
+                		out.writeUTF(Command.LOGIN_FAIL);
+                		out.flush();
+                	} 
+                }
+                
+                
+//updateinfo userid, userip, long, latitude    
+                else if(type.equals(Command.UPDATE_USERINFO)){
+                	boolean b = UserInfoManager.updateUserInfo(parsedCommand[1], parsedCommand[4], Double.valueOf(parsedCommand[2]), Double.valueOf(parsedCommand[3]));
+                	if(b){
+                		out.writeUTF(Command.UPDATE_USERINFO_SUCCESSFUL);
+                		out.flush();
+                	}
+                	else{
+                		out.writeUTF(Command.UPDATE_USERINFO_FAIL);
+                		out.flush();
+                	}
+                
+                }
+                
+                
+                
+
+                else if(type.equals(Command.DOWNLOAD)){
                 	String fileName = parsedCommand[1];
                 	String ownerId = parsedCommand[2];
                 	UploadedFile uploadedFile = UploadedFileManager.fetchFile(fileName, ownerId);
@@ -90,8 +122,7 @@ public class Server {
         	            }
         	            System.out.println("Send file length: " + count);
         	            fis.close();
-        	            out.close();
-        	            input.close();    
+        	            out.close();  
         	            s = Command.DOWNLOAD_SUCCESSFUL;
                 	}
                 	else{
@@ -140,7 +171,6 @@ public class Server {
                 }
                 
                 // Respond to client
-                DataOutputStream out = new DataOutputStream(socket.getOutputStream());  
                 System.out.println("Server: " + s);
 //                System.out.print("请输�?\t");  
                 // 发�?键盘输入的一�? 
