@@ -1,9 +1,12 @@
 package ServerController;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
@@ -45,9 +48,10 @@ public class Server {
         }  
   
         public void run() {  
-            try {  
+            try {     
                 // Read data from client
-                DataInputStream input = new DataInputStream(socket.getInputStream());
+//                DataInputStream input = new DataInputStream(socket.getInputStream());
+            	DataInputStream input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
                 String clientInputStr = input.readUTF();//Corresponds to the write method in client side, otherwise it will EOFException
                 // Process data from client  
                 System.out.println("Content sent by client:" + clientInputStr);  
@@ -55,28 +59,41 @@ public class Server {
                 String[] parsedCommand = parse(clientInputStr);
                 String type = parsedCommand[0];
                 String s;
+                System.out.println(type);
                 if(type.equals(Command.DOWNLOAD)){
                 	s = Command.DOWNLOAD;
                 }
                 else if(type.equals(Command.UPLOAD)){
-//                	s = Command.UPLOAD;
-//                }
-//                else if(type.equals(Command.FILE)){
-//                	s = new BufferedReader(new FileReader("C:\\testing.txt")).readLine();  
-//                }
-//                else{
-//                	String data = getFileData(clientInputStr);
-//                	String filename = getFileName(clientInputStr);
-                	String data = parsedCommand[1];
-                	String filename = getFileName(parsedCommand[2]);
-                	File f = new File("d:/" + filename);	            
-     	            FileWriter fw = new FileWriter(f);
-     	            fw.write(data); 
-     	            fw.flush();
-     	            fw.close(); //Otherwise the file can't be opened properly
-     	            
-     	            long fileID = UploadedFileManager.addFile(filename, getFileSize(f), parsedCommand[3], new Date(),  
-     	            		 parsedCommand[2], parsedCommand[4]);
+                	int bufferSize = 8192;
+                	byte[] buf = new byte[bufferSize];
+                	int passedlen = 0;
+                	long len = 0;
+                	len = input.readLong();
+                	String filename = getFileName(parsedCommand[1]);
+                	String savePath = "d:/" + filename;
+                	DataOutputStream fileOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(savePath)));
+                	System.out.println("Receive file length " + len);
+                    System.out.println("Start to accept file!" + "\n");
+                    long count = 0;
+                    while(count < len){
+                    	int read = 0;
+                    	if(input != null){
+                    		read = input.read(buf);
+                    	}
+                    	passedlen += read;
+                    	if(read == -1){
+                    		break;
+                    	}
+                    	System.out.println("File received " +  (passedlen * 100/ len) + "%");
+                    	fileOut.write(buf, 0, read);
+                    	count += (long)read;
+                    }
+                	fileOut.flush();
+                    System.out.println("Acception completed!");
+                    fileOut.close();
+                    
+     	            long fileID = UploadedFileManager.addFile(filename, getFileSize(new File(savePath)), parsedCommand[2], new Date(),  
+     	            		 parsedCommand[1], parsedCommand[3]);
      	            
                 	s = Command.UPLOAD_SUCCESSFUL + "\nThe file ID is " + fileID;
                 } 
@@ -113,18 +130,6 @@ public class Server {
         private String[] parse(String command){
         	String[] dataArray = command.split("\\${5}"); 
         	return dataArray;
-//        	if(dataArray[0].equals(Command.UPLOAD)){
-//        		return Command.UPLOAD;
-//        	}
-//        	else if(command.equals(Command.DOWNLOAD)){
-//        		return Command.DOWNLOAD;
-//        	}
-//        	else if(command.contains("/") || command.contains("\\")){
-//        		return Command.PATH;
-//        	}
-//        	else{
-//        		return Command.FILE;
-//        	}        		
         }
         
         private String getFileData(String data){

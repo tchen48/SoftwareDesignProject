@@ -1,9 +1,11 @@
 package ServerController;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -60,7 +62,10 @@ public class Client {
 //        		}
 //        	}
 //        }  
-    	uploadFile("C:/upload.txt", "sshao", "1.1.1.1");
+//    	uploadFile("C:/profile.jpg", "sshao", "1.1.1.1");
+//    	uploadFile("C:/A3_ShihuanShao.zip", "sshao1", "2.2.2.2");
+//    	uploadFile("D:/Program Files/python.msi", "sshao1", "3.3.3.3");
+    	uploadFile("c:/K53E.BIN", "sshao1", "3.3.3.3");
     }  
     
     private static boolean uploadFile(String path, String ownerId, String cloudIp){
@@ -78,31 +83,34 @@ public class Client {
 	            DataOutputStream out = new DataOutputStream(socket.getOutputStream());  
 	            System.out.println("Uploading file... \t");  
 	            
-	            FileReader fr = new FileReader(path);
-	            String str = new BufferedReader(fr).readLine();
-	            System.out.println(str);
-	            out.writeUTF(Command.UPLOAD + Command.DELIMITER + str + Command.DELIMITER + path + Command.DELIMITER + ownerId + Command.DELIMITER + cloudIp);  
-	            String ret = input.readUTF();   
-//	            String str = Command.UPLOAD;
-//	            out.writeUTF(str);  
-//	              
-//	            String ret = input.readUTF();   
-//	            System.out.println("\nReturned by server: " + ret); 
-//	            if (ret.equals(Command.UPLOAD)){
-//	            	socket = new Socket(IP_ADDR, PORT);  
-//		            input = new DataInputStream(socket.getInputStream());  
-//		            out = new DataOutputStream(socket.getOutputStream());  
-//	            	
-//	            	FileReader fr = new FileReader(path);
-//		            str = new BufferedReader(fr).readLine();
-//		            System.out.println(str);
-//		            out.writeUTF(str + "$$$$$" + path);  
-//		            ret = input.readUTF();   
-//	            }
-//	            else{
-//	            	return false;
-//	            }
-	            
+	            DataInputStream fis = new DataInputStream(new BufferedInputStream(new FileInputStream(path)));
+	            File file = new File(path);
+	            long length = file.length();
+	            System.out.println("Here1");
+	            out.writeUTF(Command.UPLOAD + Command.DELIMITER + path + Command.DELIMITER + ownerId + Command.DELIMITER + cloudIp);
+	            System.out.println("Here2");
+	            out.flush();
+	            out.writeLong((long)file.length());
+	            out.flush();
+	            int bufferSize = 8192;
+	            byte[] buf = new byte[bufferSize];
+	            long count = 0;
+	            while(count < length){
+	            	int read = 0;
+	            	if(fis != null){
+	            		read = fis.read(buf);
+	            	}
+	            	if(read == -1){
+	            		break;
+	            	}
+	            	out.write(buf, 0 , read);
+	            	count += (long)read;
+	            }
+	            System.out.println("Send file length: " + count);
+	            String ret = input.readUTF();
+
+//	            out.flush();
+	            fis.close();
 	            // If receive "upload successful" from server, disconnect
 	            if (Command.UPLOAD_SUCCESSFUL.equals(ret)) {  
 	                System.out.println("Client will be closed");  
