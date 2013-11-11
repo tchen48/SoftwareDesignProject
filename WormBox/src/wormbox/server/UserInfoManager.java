@@ -72,4 +72,29 @@ public class UserInfoManager {
 			return true;
 		}
 	}
+	
+	
+	public static boolean updateUserInfo(String userId, String deviceIp, double deviceGPSLati, double deviceGPSLongi)
+	{
+		boolean b = true;
+		if(userId.isEmpty() || userId ==null){
+			
+			b=false;
+		}
+		if(deviceIp.isEmpty()||deviceIp==null){
+			b=false;
+			
+		}
+		createSession();
+		UserInfo user = (UserInfo) session.get(UserInfo.class, userId);
+		user.setDeviceIp(deviceIp);
+		user.setDeviceGPSLati(deviceGPSLati);
+		user.setDeviceGPSLongi(deviceGPSLongi);
+		session.getTransaction().commit();
+		session.close();
+		return b;
+		
+	}
+	
+
 }
