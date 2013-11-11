@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -15,6 +16,7 @@ import java.net.Socket;
 import java.text.DecimalFormat;
 import java.util.Date;
 
+import wormbox.server.UploadedFile;
 import wormbox.server.UploadedFileManager;
 
 public class Server {
@@ -61,7 +63,42 @@ public class Server {
                 String s;
                 System.out.println(type);
                 if(type.equals(Command.DOWNLOAD)){
-                	s = Command.DOWNLOAD;
+                	DataOutputStream out = new DataOutputStream(socket.getOutputStream());  
+                	String fileName = parsedCommand[1];
+                	String ownerId = parsedCommand[2];
+                	UploadedFile uploadedFile = UploadedFileManager.fetchFile(fileName, ownerId);
+                	if(uploadedFile != null){
+                		String path = "D:/" + fileName;
+                		File file = new File(path); 
+                		long length = file.length();
+                		out.writeLong(length);
+                		out.flush();
+                		int bufferSize = 8192;
+                		byte[] buf = new byte[bufferSize];
+        	            long count = 0;
+        	            DataInputStream fis = new DataInputStream(new BufferedInputStream(new FileInputStream(path)));
+        	            while(count < length){
+        	            	int read = 0;
+        	            	if(fis != null){
+        	            		read = fis.read(buf);
+        	            	}
+        	            	if(read == -1){
+        	            		break;
+        	            	}
+        	            	out.write(buf, 0 , read);
+        	            	count += (long)read;
+        	            }
+        	            System.out.println("Send file length: " + count);
+        	            fis.close();
+        	            out.close();
+        	            input.close();    
+        	            s = Command.DOWNLOAD_SUCCESSFUL;
+                	}
+                	else{
+                		out.writeLong(0);
+                		out.flush();
+                		s = Command.FILE_NOT_EXIST;
+                	}
                 }
                 else if(type.equals(Command.UPLOAD)){
                 	int bufferSize = 8192;
@@ -69,11 +106,11 @@ public class Server {
                 	int passedlen = 0;
                 	long len = 0;
                 	len = input.readLong();
-                	String filename = getFileName(parsedCommand[1]);
-                	String savePath = "d:/" + filename;
+                	String fileName = getFileName(parsedCommand[1]);
+                	String savePath = "d:/" + fileName;
                 	DataOutputStream fileOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(savePath)));
                 	System.out.println("Receive file length " + len);
-                    System.out.println("Start to accept file!" + "\n");
+                    System.out.println("Start to receive file!" + "\n");
                     long count = 0;
                     while(count < len){
                     	int read = 0;
@@ -84,15 +121,16 @@ public class Server {
                     	if(read == -1){
                     		break;
                     	}
-                    	System.out.println("File received " +  (passedlen * 100/ len) + "%");
+                    	if(passedlen * 100 / len > ((passedlen - read) * 100 / len))
+                    		System.out.println("File received " +  (passedlen * 100/ len) + "%");
                     	fileOut.write(buf, 0, read);
                     	count += (long)read;
                     }
                 	fileOut.flush();
-                    System.out.println("Acception completed!");
+                    System.out.println("Uploading completed!");
                     fileOut.close();
                     
-     	            long fileID = UploadedFileManager.addFile(filename, getFileSize(new File(savePath)), parsedCommand[2], new Date(),  
+     	            long fileID = UploadedFileManager.addFile(fileName, getFileSize(new File(savePath)), parsedCommand[2], new Date(),  
      	            		 parsedCommand[1], parsedCommand[3]);
      	            
                 	s = Command.UPLOAD_SUCCESSFUL + "\nThe file ID is " + fileID;

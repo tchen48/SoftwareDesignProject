@@ -27,7 +27,6 @@ public class UploadedFileManager {
 		file.setFileSize(fileSize);
 		file.setOwnerId(ownerId);
 		file.setUploadedDate(uploadedDate);
-//		file.setShared(shared);
 		file.setDevicePath(devicePath);
 		file.setCloudIp(cloudIp);
 		createSession();
@@ -39,7 +38,7 @@ public class UploadedFileManager {
 	
 	private static UploadedFile queryFile(String fileName, String ownerId){
 		createSession();
-		String hql = "from uploadedfile as u where u.fileName=:fileName and u.ownerId=:ownerId";
+		String hql = "from UploadedFile as u where u.fileName=:fileName and u.ownerId=:ownerId";
 		Query query = session.createQuery(hql);
 		query.setString("fileName", fileName);
 		query.setString("ownerId", ownerId);
@@ -56,7 +55,7 @@ public class UploadedFileManager {
 	
 	private static UploadedFile queryFile(long fileId){
 		createSession();
-		String hql = "from uploadedfile as u where u.fileId=:fileId";
+		String hql = "from UploadedFile as u where u.fileId=:fileId";
 		Query query = session.createQuery(hql);
 		query.setLong("fileId", fileId);
 		List <UploadedFile>list = query.list();
