@@ -12,4 +12,5 @@ public class Command {
 	public static final String FILE_NOT_EXIST = "file not exist";
 	public static final String DELIMITER = "$$$$$";
 	public static final String LOGIN = "login";
+	public static final String UPDATE_USERINFO = "update userinfo";
 }

@@ -195,9 +195,8 @@ public class Client {
 	           
 	            String ret = input.readUTF();
 
-//	            out.flush();
-	            // If receive "upload successful" from server, disconnect
-	            if (Command.UPLOAD_SUCCESSFUL.equals(ret)) {  
+	            // If receive "login successful" from server, disconnect
+	            if (Command.LOGIN_SUCCESSFUL.equals(ret)) {  
 	                System.out.println("Client will be closed");  
 	                Thread.sleep(500);  
 	                break;  
@@ -226,4 +225,53 @@ public class Client {
 		return false;  
     }
     
+    private static boolean updateInfo(String userId, String deviceGPSLati, String deviceGPSLongi, String deviceIp){
+    	System.out.println("Starting Client...");  
+        System.out.println("When receiving \"update userinfo successful\" from server, client will be terminated\n"); 
+        while (true) {  
+        	Socket socket = null;
+        	try {
+        		//Create a socket and connect to the specific port number in the address
+	        	socket = new Socket(IP_ADDR, PORT);  
+	              
+	            //Read data from the server
+	            DataInputStream input = new DataInputStream(socket.getInputStream());  
+	            //Send data to server
+	            DataOutputStream out = new DataOutputStream(socket.getOutputStream());  
+	            System.out.println("Updating userinfo... \t");  
+	            
+	            out.writeUTF(Command.UPDATE_USERINFO + Command.DELIMITER + userId + Command.DELIMITER + password);
+	            out.flush();
+	           
+	            String ret = input.readUTF();
+
+	            // If receive "login successful" from server, disconnect
+	            if (Command.LOGIN_SUCCESSFUL.equals(ret)) {  
+	                System.out.println("Client will be closed");  
+	                Thread.sleep(500);  
+	                break;  
+	            }  
+	            
+	            out.close();
+	            input.close();
+        	} 
+        	catch (Exception e) {
+        		System.out.println("Client exception: " + e.getMessage()); 
+        	} 
+        	finally {
+        		if (socket != null) {
+        			try {
+						socket.close();
+						return true;
+					} 
+        			catch (IOException e) {
+						socket = null; 
+						System.out.println("Client finally exception: " + e.getMessage()); 
+						return false;
+					}
+        		}
+        	}
+        }
+		return false;  
+    }
 }  
