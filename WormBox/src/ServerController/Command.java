@@ -8,6 +8,7 @@ public class Command {
 	public static final String UPLOAD_SUCCESSFUL = "upload successful";
 	public static final String DOWNLOAD_SUCCESSFUL = "download successful";
 	public static final String LOGIN_SUCCESSFUL = "login successful";
+	public static final String UPDATE_USERINFO_SUCCESSFUL = "update userinfo successful";
 	public static final String LOGIN_FAIL = "login failed";
 	public static final String FILE_NOT_EXIST = "file not exist";
 	public static final String DELIMITER = "$$$$$";

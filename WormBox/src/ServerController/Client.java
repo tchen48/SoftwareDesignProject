@@ -240,13 +240,13 @@ public class Client {
 	            DataOutputStream out = new DataOutputStream(socket.getOutputStream());  
 	            System.out.println("Updating userinfo... \t");  
 	            
-	            out.writeUTF(Command.UPDATE_USERINFO + Command.DELIMITER + userId + Command.DELIMITER + password);
+	            out.writeUTF(Command.UPDATE_USERINFO + Command.DELIMITER + userId + Command.DELIMITER + deviceGPSLati + Command.DELIMITER + deviceGPSLongi + Command.DELIMITER + deviceIp);
 	            out.flush();
 	           
 	            String ret = input.readUTF();
 
 	            // If receive "login successful" from server, disconnect
-	            if (Command.LOGIN_SUCCESSFUL.equals(ret)) {  
+	            if (Command.UPDATE_USERINFO_SUCCESSFUL.equals(ret)) {  
 	                System.out.println("Client will be closed");  
 	                Thread.sleep(500);  
 	                break;  
