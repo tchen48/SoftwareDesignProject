@@ -16,10 +16,10 @@ public class Client {
 	
     public static void main(String[] args) {  
 //    	uploadFile("C:/profile.jpg", "sshao", "1.1.1.1");
-//    	uploadFile("C:/A3_ShihuanShao.zip", "sshao1", "2.2.2.2");
+    	uploadFile("C:/A3_ShihuanShao.zip", "sshao1", "2.2.2.2");
 //    	uploadFile("D:/Program Files/python.msi", "sshao1", "3.3.3.3");
-    	uploadFile("c:/FoodItemData.xml", "sshao1", "3.3.3.3");
-    	downloadFile("python.msi", "sshao1");
+//    	uploadFile("c:/FoodItemData.xml", "sshao1", "3.3.3.3");
+//    	downloadFile("python.msi", "sshao1");
     }  
     
     private static boolean uploadFile(String path, String ownerId, String cloudIp){
@@ -43,38 +43,7 @@ public class Client {
 	            long length = file.length();
 	            out.writeUTF(Command.UPLOAD + Command.DELIMITER + path + Command.DELIMITER + ownerId + Command.DELIMITER + cloudIp);
 	            out.flush();
-	            out.writeLong((long)file.length());
-	            out.flush();
-	            int bufferSize = 8192;
-	            byte[] buf = new byte[bufferSize];
-	            long count = 0;
-	            while(count < length){
-	            	int read = 0;
-	            	if(fis != null){
-	            		read = fis.read(buf);
-	            	}
-	            	if(read == -1){
-	            		break;
-	            	}
-	            	out.write(buf, 0 , read);
-	            	count += (long)read;
-	            }
-	            System.out.println("Send file length: " + count);
-	            String ret = input.readUTF();
-
-//	            out.flush();
-	            fis.close();
-	            // If receive "upload successful" from server, disconnect
-	            if (Command.UPLOAD_SUCCESSFUL.equals(ret)) {  
-	            	tag = true;
-	            	System.out.println(Command.UPLOAD_SUCCESSFUL);
-	                System.out.println("Client will be closed");  
-	                Thread.sleep(500);  
-	                out.close();
-		            input.close();
-	                break;  
-	            }
-	            else{
+	            if(input.readUTF().equals(Command.FILE_EXIST)){
 	            	tag = false;
 	            	System.out.println(Command.UPLOAD_FAILED);
 	                System.out.println("Client will be closed");  
@@ -83,7 +52,48 @@ public class Client {
 		            input.close();
 	                break;  
 	            }
-	            
+	            else{
+		            out.writeLong((long)file.length());
+		            out.flush();
+		            int bufferSize = 8192;
+		            byte[] buf = new byte[bufferSize];
+		            long count = 0;
+		            while(count < length){
+		            	int read = 0;
+		            	if(fis != null){
+		            		read = fis.read(buf);
+		            	}
+		            	if(read == -1){
+		            		break;
+		            	}
+		            	out.write(buf, 0 , read);
+		            	count += (long)read;
+		            }
+		            System.out.println("Send file length: " + count);
+		            String ret = input.readUTF();
+	
+	//	            out.flush();
+		            fis.close();
+		            // If receive "upload successful" from server, disconnect
+		            if (Command.UPLOAD_SUCCESSFUL.equals(ret)) {  
+		            	tag = true;
+		            	System.out.println(Command.UPLOAD_SUCCESSFUL);
+		                System.out.println("Client will be closed");  
+		                Thread.sleep(500);  
+		                out.close();
+			            input.close();
+		                break;  
+		            }
+		            else{
+		            	tag = false;
+		            	System.out.println(Command.UPLOAD_FAILED);
+		                System.out.println("Client will be closed");  
+		                Thread.sleep(500);  
+		                out.close();
+			            input.close();
+		                break;  
+		            }
+        		}
 //	            out.close();
 //	            input.close();
         	} 

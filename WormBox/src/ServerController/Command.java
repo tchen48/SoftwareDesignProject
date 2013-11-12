@@ -14,7 +14,9 @@ public class Command {
 	public static final String UPDATE_USERINFO_SUCCESSFUL = "update userinfo successful";
 	public static final String UPDATE_USERINFO_FAIL = "update userinfo failed";	
 	public static final String FILE_NOT_EXIST = "file not exist";
+	public static final String FILE_EXIST = "file with the same name already existed";
 	public static final String DELIMITER = "$$$$$";
 	public static final String LOGIN = "login";
 	public static final String UPDATE_USERINFO = "update userinfo";
+	public static final String SERVER_RUN_EXCEPTION = "server run exception";
 }

@@ -58,7 +58,7 @@ public class Server {
                 String type = parsedCommand[0];
                 String s=null;
                 System.out.println(type);
-                 if(type.equals(Command.LOGIN)){
+                if(type.equals(Command.LOGIN)){
                 	boolean b = UserInfoManager.validateUser(parsedCommand[1], parsedCommand[2]);
                 	if(b==true){
                 		out.writeUTF(Command.LOGIN_SUCCESSFUL);
@@ -107,7 +107,6 @@ public class Server {
         	            }
         	            System.out.println("Send file length: " + count);
         	            fis.close();
-        	            out.close();  
         	            s = Command.DOWNLOAD_SUCCESSFUL;
                 	}
                 	else{
@@ -117,39 +116,44 @@ public class Server {
                 	}
                 }
                 else if(type.equals(Command.UPLOAD)){
-                	int bufferSize = 8192;
-                	byte[] buf = new byte[bufferSize];
-                	int passedlen = 0;
-                	long len = 0;
-                	len = input.readLong();
-                	String fileName = getFileName(parsedCommand[1]);
-                	String savePath = "d:/" + fileName;
-                	DataOutputStream fileOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(savePath)));
-                	System.out.println("Receive file length " + len);
-                    System.out.println("Start to receive file!" + "\n");
-                    long count = 0;
-                    while(count < len){
-                    	int read = 0;
-                    	if(input != null){
-                    		read = input.read(buf);
-                    	}
-                    	passedlen += read;
-                    	if(read == -1){
-                    		break;
-                    	}
-                    	if(passedlen * 100 / len > ((passedlen - read) * 100 / len))
-                    		System.out.println("File received " +  (passedlen * 100/ len) + "%");
-                    	fileOut.write(buf, 0, read);
-                    	count += (long)read;
-                    }
-                	fileOut.flush();
-                    System.out.println("Uploading completed!");
-                    fileOut.close();
-                    
-     	            long fileID = UploadedFileManager.addFile(fileName, getFileSize(new File(savePath)), parsedCommand[2], new Date(),  
-     	            		 parsedCommand[1], parsedCommand[3]);
-     	            
-                	s = Command.UPLOAD_SUCCESSFUL + "\nThe file ID is " + fileID;
+                	String fileName = getFileName(parsedCommand[1]);                	
+                	if(UploadedFileManager.fetchFile(fileName, parsedCommand[2]) != null){
+                		s = Command.FILE_EXIST;
+                	}    
+                	else{
+                		int bufferSize = 8192;
+                    	byte[] buf = new byte[bufferSize];
+                    	int passedlen = 0;
+                    	long len = 0;
+                    	len = input.readLong();
+	                	String savePath = "d:/" + fileName;
+	                	DataOutputStream fileOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(savePath)));
+	                	System.out.println("Receive file length " + len);
+	                    System.out.println("Start to receive file!" + "\n");
+	                    long count = 0;
+	                    while(count < len){
+	                    	int read = 0;
+	                    	if(input != null){
+	                    		read = input.read(buf);
+	                    	}
+	                    	passedlen += read;
+	                    	if(read == -1){
+	                    		break;
+	                    	}
+	                    	if(passedlen * 100 / len > ((passedlen - read) * 100 / len))
+	                    		System.out.println("File received " +  (passedlen * 100/ len) + "%");
+	                    	fileOut.write(buf, 0, read);
+	                    	count += (long)read;
+	                    }
+	                	fileOut.flush();
+	                    System.out.println("Uploading completed!");
+	                    fileOut.close();
+	                    
+	     	            long fileID = UploadedFileManager.addFile(fileName, getFileSize(new File(savePath)), parsedCommand[2], new Date(),  
+	     	            		 parsedCommand[1], parsedCommand[3]);
+	     	            
+	                	s = Command.UPLOAD_SUCCESSFUL + "\nThe file ID is " + fileID;
+                	}
                 } 
                 else{
                 	s = "something";
@@ -157,9 +161,6 @@ public class Server {
                 
                 // Respond to client
                 System.out.println("Server: " + s);
-//                System.out.print("请输�?\t");  
-                // 发�?键盘输入的一�? 
-//                String s = new BufferedReader(new FileReader("C:\\testing.txt")).readLine();  
                 out.writeUTF(s);  
                 out.close();  
                 input.close();  
