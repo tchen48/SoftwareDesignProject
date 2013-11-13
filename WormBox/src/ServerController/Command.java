@@ -19,4 +19,8 @@ public class Command {
 	public static final String LOGIN = "login";
 	public static final String UPDATE_USERINFO = "update userinfo";
 	public static final String SERVER_RUN_EXCEPTION = "server run exception";
+	public static final String GET_SOURCE_INFO = "get source info";
+	public static final String GET_SOURCE_INFO_SUCCESSFUL = "get source info successful";
+	public static final String GET_SOURCE_INFO_FAILED = "get source info failed";
+	public static final int CRITICAL_DISTANCE = 100;
 }

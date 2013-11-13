@@ -45,7 +45,7 @@ public class Client {
 	            out.flush();
 	            if(input.readUTF().equals(Command.FILE_EXIST)){
 	            	tag = false;
-	            	System.out.println(Command.UPLOAD_FAILED);
+	            	System.out.println(Command.FILE_EXIST);
 	                System.out.println("Client will be closed");  
 	                Thread.sleep(500);  
 	                out.close();
@@ -331,5 +331,85 @@ public class Client {
         	}
         }
 		return false;  
+    }
+    
+    //Fetch owner device location, device ip and cloud ip
+    private static String getSourceInfo(String ownerId){
+    	String ret = null;
+    	System.out.println("Starting Client...");  
+        System.out.println("When receiving \"get source info successful\" from server, client will be terminated\n"); 
+        while (true) {  
+        	Socket socket = null;
+        	try {
+        		//Create a socket and connect to the specific port number in the address
+	        	socket = new Socket(IP_ADDR, PORT);  
+	              
+	            //Read data from the server
+	            DataInputStream input = new DataInputStream(socket.getInputStream());  
+	            //Send data to server
+	            DataOutputStream out = new DataOutputStream(socket.getOutputStream());  
+	            System.out.println("Get file owner source info... \t");  
+	            
+	            out.writeUTF(Command.GET_SOURCE_INFO + Command.DELIMITER + ownerId);
+	            out.flush();
+	           
+	            ret = input.readUTF();
+	             
+	            // If receive "get source info failed" from server, disconnect
+	            if (Command.GET_SOURCE_INFO_FAILED.equals(ret)) {  
+	            	System.out.println(Command.GET_SOURCE_INFO_FAILED);
+	                System.out.println("Client will be closed");  
+	                Thread.sleep(500);  
+	                out.close();
+		            input.close();
+	                break;  
+	            }  
+	            else{
+	            	System.out.println(Command.GET_SOURCE_INFO_SUCCESSFUL);
+	                System.out.println("Client will be closed");  
+	                Thread.sleep(500);  
+	                out.close();
+		            input.close();
+	                break;  
+	            }
+        	} 
+        	catch (Exception e) {
+        		System.out.println("Client exception: " + e.getMessage()); 
+        	} 
+        	finally {
+        		if (socket != null) {
+        			try {
+						socket.close();
+						return ret;
+					} 
+        			catch (IOException e) {
+						socket = null; 
+						System.out.println("Client finally exception: " + e.getMessage()); 
+						return ret;
+					}
+        		}
+        	}
+        }
+		return ret;
+    }
+    
+    private static String selectSource(double selfLati, double selfLongi, String sourceInfo){
+    	String[] parsedSourceInfo = parse(sourceInfo);
+    	double sourceLati = Double.valueOf(parsedSourceInfo[0]);
+    	double sourceLongi = Double.valueOf(parsedSourceInfo[1]);
+    	String sourceCloudIp = parsedSourceInfo[2];
+    	String sourceDeviceIp = parsedSourceInfo[3];
+    	double distance = CalculateDistance.D_jw(selfLati, selfLongi, sourceLati, sourceLongi);
+    	if(distance > Command.CRITICAL_DISTANCE){
+    		return sourceCloudIp;
+    	}
+    	else{
+    		return sourceDeviceIp;
+    	}
+    }
+    
+    private static String[] parse(String command){
+    	String[] dataArray = command.split("\\${5}"); 
+    	return dataArray;
     }
 }  

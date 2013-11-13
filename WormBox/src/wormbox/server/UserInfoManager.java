@@ -13,12 +13,14 @@ public class UserInfoManager {
         session.beginTransaction();
 	}
 	
-	public static void addUser(String userId, String deviceIp, double deviceGPSLati, double deviceGPSLongi, String password){
+	public static void addUser(String userId, String deviceIp, String cloudIp, double deviceGPSLati, double deviceGPSLongi, String password){
 		UserInfo userInfo = new UserInfo();
 		userInfo.setUserId(userId);
 		userInfo.setPassword(password);
 		userInfo.setDeviceGPSLati(deviceGPSLati);
 		userInfo.setDeviceGPSLongi(deviceGPSLongi);
+		userInfo.setCloudIp(cloudIp);
+		userInfo.setDeviceIp(deviceIp);
 		createSession();
 		session.save(userInfo);
 		session.getTransaction().commit();
@@ -26,7 +28,7 @@ public class UserInfoManager {
 		return;
 	}
 	
-	private static UserInfo queryUser(String userId){
+	public static UserInfo queryUser(String userId){
 		createSession();
 		String hql = "from userinfo as u where u.userId=:userId";
 		Query query = session.createQuery(hql);

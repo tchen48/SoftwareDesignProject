@@ -14,6 +14,7 @@ import java.util.Date;
 
 import wormbox.server.UploadedFile;
 import wormbox.server.UploadedFileManager;
+import wormbox.server.UserInfo;
 import wormbox.server.UserInfoManager;
 
 public class Server {
@@ -63,10 +64,12 @@ public class Server {
                 	if(b==true){
                 		out.writeUTF(Command.LOGIN_SUCCESSFUL);
                 		out.flush();
+                		s = Command.LOGIN_SUCCESSFUL;
                 	}
                 	else {
                 		out.writeUTF(Command.LOGIN_FAIL);
                 		out.flush();
+                		s = Command.LOGIN_FAIL;
                 	} 
                 }                
                 else if(type.equals(Command.UPDATE_USERINFO)){
@@ -74,11 +77,30 @@ public class Server {
                 	if(b){
                 		out.writeUTF(Command.UPDATE_USERINFO_SUCCESSFUL);
                 		out.flush();
+                		s = Command.UPDATE_USERINFO_SUCCESSFUL;
                 	}
                 	else{
                 		out.writeUTF(Command.UPDATE_USERINFO_FAIL);
                 		out.flush();
+                		s = Command.UPDATE_USERINFO_FAIL;
                 	}                
+                }
+                else if(type.equals(Command.GET_SOURCE_INFO)){
+                	UserInfo user = UserInfoManager.queryUser(parsedCommand[1]);
+                	if(user != null){
+	                	double lati = user.getDeviceGPSLati();
+	                	double longi = user.getDeviceGPSLongi();
+	                	String cloudIp = user.getCloudIp();
+	                	String deviceIp = user.getDeviceIp();
+	                	out.writeUTF("" + lati + Command.DELIMITER + longi + Command.DELIMITER + cloudIp + Command.DELIMITER + deviceIp);
+	    	            out.flush();
+	    	            s = Command.GET_SOURCE_INFO_SUCCESSFUL;
+                	}
+                	else{
+                		out.writeUTF(Command.GET_SOURCE_INFO_FAILED);
+                		out.flush();
+                		s = Command.GET_SOURCE_INFO_FAILED;
+                	}
                 }
                 else if(type.equals(Command.DOWNLOAD)){
                 	String fileName = parsedCommand[1];

@@ -12,6 +12,10 @@
 			<column name="DeviceIP" length="15" not-null="false" />
 		</property>
 		
+		<property name="cloudIp">
+			<column name="CloudIp" length="15" not-null="false" />
+		</property>
+		
 		<property name="deviceGPSLati">
 			<column name="DeviceGPSLati" not-null="false" />
 		</property>
