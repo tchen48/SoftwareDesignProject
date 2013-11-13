@@ -44,7 +44,7 @@ public class UserInfo {
 		this.deviceGPSLati = deviceGPSLati;
 	}
 	
-	public void setDeviceGPSLongi(double devicGPSLongi){
+	public void setDeviceGPSLongi(double deviceGPSLongi){
 		this.deviceGPSLongi = deviceGPSLongi;
 	}
 	

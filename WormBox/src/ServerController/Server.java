@@ -85,28 +85,29 @@ public class Server {
                 		s = Command.UPDATE_USERINFO_FAIL;
                 	}                
                 }
-                else if(type.equals(Command.GET_SOURCE_INFO)){
-                	UserInfo user = UserInfoManager.queryUser(parsedCommand[1]);
-                	if(user != null){
-	                	double lati = user.getDeviceGPSLati();
-	                	double longi = user.getDeviceGPSLongi();
-	                	String cloudIp = user.getCloudIp();
-	                	String deviceIp = user.getDeviceIp();
-	                	out.writeUTF("" + lati + Command.DELIMITER + longi + Command.DELIMITER + cloudIp + Command.DELIMITER + deviceIp);
-	    	            out.flush();
-	    	            s = Command.GET_SOURCE_INFO_SUCCESSFUL;
-                	}
-                	else{
-                		out.writeUTF(Command.GET_SOURCE_INFO_FAILED);
-                		out.flush();
-                		s = Command.GET_SOURCE_INFO_FAILED;
-                	}
-                }
+//                else if(type.equals(Command.GET_SOURCE_INFO)){
+//                	UserInfo user = UserInfoManager.queryUser(parsedCommand[1]);
+//                	if(user != null){
+//	                	double lati = user.getDeviceGPSLati();
+//	                	double longi = user.getDeviceGPSLongi();
+//	                	String cloudIp = user.getCloudIp();
+//	                	String deviceIp = user.getDeviceIp();
+//	                	out.writeUTF("" + lati + Command.DELIMITER + longi + Command.DELIMITER + cloudIp + Command.DELIMITER + deviceIp);
+//	    	            out.flush();
+//	    	            s = Command.GET_SOURCE_INFO_SUCCESSFUL;
+//                	}
+//                	else{
+//                		out.writeUTF(Command.GET_SOURCE_INFO_FAILED);
+//                		out.flush();
+//                		s = Command.GET_SOURCE_INFO_FAILED;
+//                	}
+//                }
                 else if(type.equals(Command.DOWNLOAD)){
                 	String fileName = parsedCommand[1];
                 	String ownerId = parsedCommand[2];
                 	UploadedFile uploadedFile = UploadedFileManager.fetchFile(fileName, ownerId);
                 	if(uploadedFile != null){
+                	/*
                 		String path = "D:/" + fileName;
                 		File file = new File(path); 
                 		long length = file.length();
@@ -129,7 +130,14 @@ public class Server {
         	            }
         	            System.out.println("Send file length: " + count);
         	            fis.close();
-        	            s = Command.DOWNLOAD_SUCCESSFUL;
+        	            s = Command.DOWNLOAD_SUCCESSFUL;*/
+                		UserInfo user = UserInfoManager.queryUser(ownerId);
+	                	double lati = user.getDeviceGPSLati();
+	                	double longi = user.getDeviceGPSLongi();
+	                	String cloudIp = user.getCloudIp();
+	                	String deviceIp = user.getDeviceIp();
+//	                	out.writeUTF("" + lati + Command.DELIMITER + longi + Command.DELIMITER + cloudIp + Command.DELIMITER + deviceIp);
+                		s = "" + lati + Command.DELIMITER + longi + Command.DELIMITER + cloudIp + Command.DELIMITER + deviceIp;
                 	}
                 	else{
                 		out.writeLong(0);
@@ -143,6 +151,7 @@ public class Server {
                 		s = Command.FILE_EXIST;
                 	}    
                 	else{
+                		/* This code should be in client server
                 		int bufferSize = 8192;
                     	byte[] buf = new byte[bufferSize];
                     	int passedlen = 0;
@@ -169,12 +178,13 @@ public class Server {
 	                    }
 	                	fileOut.flush();
 	                    System.out.println("Uploading completed!");
-	                    fileOut.close();
-	                    
-	     	            long fileID = UploadedFileManager.addFile(fileName, getFileSize(new File(savePath)), parsedCommand[2], new Date(),  
-	     	            		 parsedCommand[1], parsedCommand[3]);
-	     	            
-	                	s = Command.UPLOAD_SUCCESSFUL + "\nThe file ID is " + fileID;
+	                    fileOut.close();*/
+                		long len = 0;
+                		len = input.readLong();
+//	     	            long fileID = UploadedFileManager.addFile(fileName, getFileSize(new File(savePath)), parsedCommand[2], new Date(), 
+                		long fileID = UploadedFileManager.addFile(fileName, getFileSize(len), parsedCommand[2], new Date(), 
+	     	            		 parsedCommand[1], parsedCommand[3]);	     	            
+	                	s = Command.UPLOAD_ALLOWED + "\nThe file ID is " + fileID;
                 	}
                 } 
                 else{
@@ -191,9 +201,6 @@ public class Server {
             } finally {  
                 if (socket != null) {  
                     try { 
-//                    	System.out.println("socket close");
-//                    	socket.
-//                        socket.close();  
                     } 
                     catch (Exception e) {  
                         socket = null;  
@@ -208,16 +215,6 @@ public class Server {
         	return dataArray;
         }
         
-        private String getFileData(String data){
-        	String[] dataArray = data.split("\\${5}");
-        	return dataArray[0];
-        }
-        
-        private String getDevicePath(String data){
-        	String[] dataArray = data.split("\\${5}");
-        	return dataArray[1];
-        }
-        
         private String getFileName(String data){
         	int length = data.length();
         	for(int i = length - 1; i > -1; i--){        		
@@ -228,29 +225,31 @@ public class Server {
         	return null;
         }
         
-        private String getFileSize(File file){
+//        private String getFileSize(File file){
+        private String getFileSize(long length){
     		DecimalFormat df = new DecimalFormat("#.00");
-    		if(file.exists()){
-    			double bytes = file.length();
-    			double kilobytes = (bytes / 1024);
-    			double megabytes = (kilobytes / 1024);
-    			double gigabytes = (megabytes / 1024);
-    			if(gigabytes >= 1){
-    				return (df.format(gigabytes) + " " + "GB");
-    			}
-    			else if(megabytes >= 1){
-    				return (df.format(megabytes) + " " + "MB");
-    			}
-    			else if(kilobytes >= 1){
-    				return (df.format(kilobytes) + " " + "KB");
-    			}
-    			else{
-    				return (df.format(bytes) + " " + "Bytes");
-    			}
-    		}
-    		else{
-    			return "File not exist";
-    		}		
+//    		if(file.exists()){
+//			double bytes = file.length();
+    		double bytes = length;
+			double kilobytes = (bytes / 1024);
+			double megabytes = (kilobytes / 1024);
+			double gigabytes = (megabytes / 1024);
+			if(gigabytes >= 1){
+				return (df.format(gigabytes) + " " + "GB");
+			}
+			else if(megabytes >= 1){
+				return (df.format(megabytes) + " " + "MB");
+			}
+			else if(kilobytes >= 1){
+				return (df.format(kilobytes) + " " + "KB");
+			}
+			else{
+				return (df.format(bytes) + " " + "Bytes");
+			}
+//    		}
+//    		else{
+//    			return "File not exist";
+//    		}		
     	}
         
         

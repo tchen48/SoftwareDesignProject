@@ -30,7 +30,7 @@ public class UserInfoManager {
 	
 	public static UserInfo queryUser(String userId){
 		createSession();
-		String hql = "from userinfo as u where u.userId=:userId";
+		String hql = "from UserInfo as u where u.userId=:userId";
 		Query query = session.createQuery(hql);
 		query.setString("userId", userId);
 		List <UserInfo>list = query.list();
@@ -55,7 +55,7 @@ public class UserInfoManager {
 	
 	public static boolean validateUser(String userId, String password){
 		createSession();
-		String hql = "from userinfo as u where u.userId=:userId and u.password=:password";
+		String hql = "from UserInfo as u where u.userId=:userId and u.password=:password";
 		Query query = session.createQuery(hql);
 		query.setString("userId", userId);
 		query.setString("password", password);
