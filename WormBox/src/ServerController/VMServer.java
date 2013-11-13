@@ -17,12 +17,12 @@ import wormbox.server.UploadedFileManager;
 import wormbox.server.UserInfo;
 import wormbox.server.UserInfoManager;
 
-public class DeviceServer {
+public class VMServer {
 	public static final int CLIENT_SERVER_PORT = 12346;//Listening port number   
 	
     public static void main(String[] args) {  
-        System.out.println("Starting device server...\n");  
-        DeviceServer server = new DeviceServer();  
+        System.out.println("Starting vm server...\n");  
+        VMServer server = new VMServer();  
         server.init();  
     }  
   
@@ -87,38 +87,38 @@ public class DeviceServer {
         	            s = Command.DOWNLOAD_SUCCESSFUL;
                 	}
                 }
-//                else if(type.equals(Command.UPLOAD)){
-//                	String fileName = parsedCommand[1];     
-//            		int bufferSize = 8192;
-//                	byte[] buf = new byte[bufferSize];
-//                	int passedlen = 0;
-//                	long len = 0;
-//                	len = input.readLong();
-//                	String savePath = "d:/" + fileName; //Path needs to be changed
-//                	DataOutputStream fileOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(savePath)));
-//                	System.out.println("Receive file length " + len);
-//                    System.out.println("Start to receive file!" + "\n");
-//                    long count = 0;
-//                    while(count < len){
-//                    	int read = 0;
-//                    	if(input != null){
-//                    		read = input.read(buf);
-//                    	}
-//                    	passedlen += read;
-//                    	if(read == -1){
-//                    		break;
-//                    	}
-//                    	if(passedlen * 100 / len > ((passedlen - read) * 100 / len))
-//                    		System.out.println("File received " +  (passedlen * 100/ len) + "%");
-//                    	fileOut.write(buf, 0, read);
-//                    	count += (long)read;
-//                    }
-//                	fileOut.flush();
-//                    System.out.println("Uploading completed!");
-//                    fileOut.close(); 	
-//                	s = Command.UPLOAD_SUCCESSFUL;
-//                	
-//                } 
+                else if(type.equals(Command.UPLOAD)){
+                	String fileName = parsedCommand[1];     
+            		int bufferSize = 8192;
+                	byte[] buf = new byte[bufferSize];
+                	int passedlen = 0;
+                	long len = 0;
+                	len = input.readLong();
+                	String savePath = "d:/" + fileName; //Path needs to be changed
+                	DataOutputStream fileOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(savePath)));
+                	System.out.println("Receive file length " + len);
+                    System.out.println("Start to receive file!" + "\n");
+                    long count = 0;
+                    while(count < len){
+                    	int read = 0;
+                    	if(input != null){
+                    		read = input.read(buf);
+                    	}
+                    	passedlen += read;
+                    	if(read == -1){
+                    		break;
+                    	}
+                    	if(passedlen * 100 / len > ((passedlen - read) * 100 / len))
+                    		System.out.println("File received " +  (passedlen * 100/ len) + "%");
+                    	fileOut.write(buf, 0, read);
+                    	count += (long)read;
+                    }
+                	fileOut.flush();
+                    System.out.println("Uploading completed!");
+                    fileOut.close(); 	
+                	s = Command.UPLOAD_SUCCESSFUL;
+                	
+                } 
                 else{
                 	s = "something";
                 }
