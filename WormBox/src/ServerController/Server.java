@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.text.DecimalFormat;
 import java.util.Date;
 
+import wormbox.server.RelationManager;
 import wormbox.server.UploadedFile;
 import wormbox.server.UploadedFileManager;
 import wormbox.server.UserInfo;
@@ -105,7 +106,7 @@ public class Server {
                 else if(type.equals(Command.DOWNLOAD)){
                 	String fileName = parsedCommand[1];
                 	String ownerId = parsedCommand[2];
-                	UploadedFile uploadedFile = UploadedFileManager.fetchFile(fileName, ownerId);
+                	UploadedFile uploadedFile = UploadedFileManager.fetchFile(0);
                 	if(uploadedFile != null){
                 	/*
                 		String path = "D:/" + fileName;
@@ -146,46 +147,15 @@ public class Server {
                 	}
                 }
                 else if(type.equals(Command.UPLOAD)){
-                	String fileName = getFileName(parsedCommand[1]);                	
-                	if(UploadedFileManager.fetchFile(fileName, parsedCommand[2]) != null){
-                		s = Command.FILE_EXIST;
-                	}    
-                	else{
-                		/* This code should be in client server
-                		int bufferSize = 8192;
-                    	byte[] buf = new byte[bufferSize];
-                    	int passedlen = 0;
-                    	long len = 0;
-                    	len = input.readLong();
-	                	String savePath = "d:/" + fileName;
-	                	DataOutputStream fileOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(savePath)));
-	                	System.out.println("Receive file length " + len);
-	                    System.out.println("Start to receive file!" + "\n");
-	                    long count = 0;
-	                    while(count < len){
-	                    	int read = 0;
-	                    	if(input != null){
-	                    		read = input.read(buf);
-	                    	}
-	                    	passedlen += read;
-	                    	if(read == -1){
-	                    		break;
-	                    	}
-	                    	if(passedlen * 100 / len > ((passedlen - read) * 100 / len))
-	                    		System.out.println("File received " +  (passedlen * 100/ len) + "%");
-	                    	fileOut.write(buf, 0, read);
-	                    	count += (long)read;
-	                    }
-	                	fileOut.flush();
-	                    System.out.println("Uploading completed!");
-	                    fileOut.close();*/
-                		long len = 0;
-                		len = input.readLong();
-//	     	            long fileID = UploadedFileManager.addFile(fileName, getFileSize(new File(savePath)), parsedCommand[2], new Date(), 
-                		long fileID = UploadedFileManager.addFile(fileName, getFileSize(len), parsedCommand[2], new Date(), 
-	     	            		 parsedCommand[1], parsedCommand[3]);	     	            
-	                	s = Command.UPLOAD_ALLOWED + "\nThe file ID is " + fileID;
-                	}
+                	String fileName = parsedCommand[1]; 
+                	System.out.println(fileName + 1);
+                	long len = 0;
+                	len = input.readLong();
+                	System.out.println(fileName + 2);
+                	long fileId = UploadedFileManager.addFile(fileName, getFileSize(len));	
+                	RelationManager.addRelation(parsedCommand[2], fileId, 1, parsedCommand[2]);
+	                RelationManager.addRelation(parsedCommand[3], fileId, 0, parsedCommand[2]);
+                	s = Command.DB_UPDATE_SUCCESSFUL + Command.DELIMITER + "The file ID is " + fileId;
                 } 
                 else{
                 	s = "something";

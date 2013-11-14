@@ -1,9 +1,6 @@
 package wormbox.server;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -12,7 +9,6 @@ import org.hibernate.Session;
 import wormbox.server.SessionFactoryUtil;
 
 public class UploadedFileManager {
-	private static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");;
 	private static Session session;
 	
 	private static void createSession(){
@@ -20,37 +16,15 @@ public class UploadedFileManager {
         session.beginTransaction();
 	}
 	
-	public static long addFile(String fileName, String fileSize, String ownerId,
-			            Date uploadedDate, String devicePath, String cloudIp){
+	public static long addFile(String fileName, String fileSize){
 		UploadedFile file = new UploadedFile();
 		file.setFileName(fileName);
 		file.setFileSize(fileSize);
-		file.setOwnerId(ownerId);
-		file.setUploadedDate(uploadedDate);
-		file.setDevicePath(devicePath);
-		file.setCloudIp(cloudIp);
 		createSession();
 		session.save(file);
 		session.getTransaction().commit();
 		session.close();
 		return file.getFileId();
-	}
-	
-	private static UploadedFile queryFile(String fileName, String ownerId){
-		createSession();
-		String hql = "from UploadedFile as u where u.fileName=:fileName and u.ownerId=:ownerId";
-		Query query = session.createQuery(hql);
-		query.setString("fileName", fileName);
-		query.setString("ownerId", ownerId);
-		List <UploadedFile>list = query.list();
-		UploadedFile file = null;
-		java.util.Iterator<UploadedFile> iter = list.iterator();
-		while (iter.hasNext()) {
-			file = iter.next();
-		}					
-		session.getTransaction().commit();
-		session.close();
-		return file;	
 	}
 	
 	private static UploadedFile queryFile(long fileId){
@@ -69,8 +43,8 @@ public class UploadedFileManager {
 		return file;	
 	}
 	
-	public static UploadedFile fetchFile(String fileName, String ownerId){
-		return queryFile(fileName, ownerId);
+	public static UploadedFile fetchFile(long fileId){
+		return queryFile(fileId);
 	}
 	
 	public static ArrayList<FilenameOwnerId> fetchFileList(List<Relation> list){
@@ -85,7 +59,8 @@ public class UploadedFileManager {
 			file = queryFile(fileId);
 			FilenameOwnerId item = new FilenameOwnerId();
 			item.setFileName(file.getFileName());
-			item.setOwnerId(file.getOwnerId());
+			item.setOwnerId(relation.getSource());
+			item.setFileId(fileId);
 			files.add(item);
 		}
 		return files;

@@ -8,28 +8,13 @@
 		<id name="fileId" column="FileID">
 			<generator class="native" />
 		</id>		
+		
 		<property name="fileName">
-			<column name="FileName" length="20" not-null="true" />
+			<column name="FileName" length="100" not-null="true" />
 		</property>
 		
 		<property name="fileSize">
 			<column name="FileSize" not-null="true" />
-		</property>
-		
-		<property name="ownerId">
-			<column name="OwnerID" length="20" not-null="true"/>
-		</property>
-		
-		<property name="uploadedDate">
-			<column name="UploadedDate" not-null="true"/>
-		</property>
-		
-		<property name="devicePath">
-			<column name="DevicePath" length="200" not-null="true"/>
-		</property>
-		
-		<property name="cloudIp">
-			<column name="CloudIP" length="15" not-null="false"/>
 		</property>
 	</class>
 </hibernate-mapping>

@@ -9,19 +9,19 @@
 			<generator class="assigned" />
 		</id>		
 		<property name="deviceIp">
-			<column name="DeviceIP" length="15" not-null="false" />
+			<column name="DeviceIP" length="15" not-null="true" />
 		</property>
 		
 		<property name="cloudIp">
-			<column name="CloudIp" length="15" not-null="false" />
+			<column name="CloudIp" length="15" not-null="true" />
 		</property>
 		
 		<property name="deviceGPSLati">
-			<column name="DeviceGPSLati" not-null="false" />
+			<column name="DeviceGPSLati" not-null="true" />
 		</property>
 		
 		<property name="deviceGPSLongi">
-			<column name="DeviceGPSLongi" not-null="false"/>
+			<column name="DeviceGPSLongi" not-null="true"/>
 		</property>
 		
 		<property name="password">

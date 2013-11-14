@@ -88,7 +88,7 @@ public class UserInfoManager {
 			
 		}
 		createSession();
-		UserInfo user = (UserInfo) session.get(UserInfo.class, userId);
+		UserInfo user = (UserInfo) session.get(UserInfo.class, userId); 
 		user.setDeviceIp(deviceIp);
 		user.setDeviceGPSLati(deviceGPSLati);
 		user.setDeviceGPSLongi(deviceGPSLongi);

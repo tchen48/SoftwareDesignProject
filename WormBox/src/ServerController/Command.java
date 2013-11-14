@@ -26,4 +26,6 @@ public class Command {
 	public static final String GET_SOURCE_INFO_SUCCESSFUL = "get source info successful";
 	public static final String GET_SOURCE_INFO_FAILED = "get source info failed";
 	public static final int CRITICAL_DISTANCE = 100;
+	public static final String DB_UPDATE_SUCCESSFUL = "DB update successful";
+	public static final String DB_UPDATE_FAILED = "DB update failed";
 }

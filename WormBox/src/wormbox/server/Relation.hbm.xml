@@ -13,8 +13,16 @@
 			<column name="FileId" not-null="true"/>
 		</property>
 		
-		<property name="recipientId">
-			<column name="RecipientId" not-null="true"/>
+		<property name="target">
+			<column name="Target" not-null="true"/>
+		</property>	
+		
+		<property name="source">
+			<column name="Source" not-null="true"/>
+		</property>	    
+		
+		<property name="isOwner">
+			<column name="IsOwner" not-null="true"/>
 		</property>		
 	</class>
 </hibernate-mapping>

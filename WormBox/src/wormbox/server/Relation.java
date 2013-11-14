@@ -4,32 +4,52 @@ import java.io.Serializable;
 
 public class Relation implements Serializable{
 	private static final long serialVersionUID = -288002855915204255L; 
-	private String recipientId;
+	private String target;
 	private long fileId;
 	private long relationId;
+	private int isOwner;
+	private String source;
 
 	public Relation(){}
 	
-	public Relation(String recipientId, long fileId, long relationId){
-		this.recipientId = recipientId;
+	public Relation(String target, long fileId, long relationId, int isOwner, String source){
+		this.target = target;
 		this.fileId = fileId;
 		this.relationId = relationId;
+		this.isOwner = isOwner;
+		this.source = source;
 	}	
-		
+	
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
 	public long getRelationId() {
 		return relationId;
+	}
+
+	public int getIsOwner() {
+		return isOwner;
+	}
+
+	public void setIsOwner(int isOwner) {
+		this.isOwner = isOwner;
 	}
 
 	public void setRelationId(long relationId) {
 		this.relationId = relationId;
 	}
 
-	public String getRecipientId() {
-		return recipientId;
+	public String getTarget() {
+		return target;
 	}
 
-	public void setRecipientId(String recipientId) {
-		this.recipientId = recipientId;
+	public void setTarget(String target) {
+		this.target = target;
 	}
 
 	public long getFileId() {

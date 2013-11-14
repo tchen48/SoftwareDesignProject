@@ -13,10 +13,12 @@ public class RelationManager {
         session.beginTransaction();
 	}
 	
-	public static void addRelation(String recipientId, long fileId){
+	public static void addRelation(String target, long fileId, int isOwner, String source){
 		Relation relation = new Relation();
 		relation.setFileId(fileId);
-		relation.setRecipientId(recipientId);
+		relation.setTarget(target);
+		relation.setIsOwner(isOwner);
+		relation.setSource(source);
 		createSession();
 		session.save(relation);
 		session.getTransaction().commit();
@@ -25,11 +27,12 @@ public class RelationManager {
 	}
 	
 //	private static String[] queryFileIdList(String recipientId){
-	public static List queryFileIdList(String recipientId){
+	public static List queryFileIdList(String target, boolean isOwner){
 		createSession();
-		String hql = "from relation as r where r.recipientId=:recipientId";
+		String hql = "from Relation as r where r.target=:target and r.isOwner=:isOwner";
 		Query query = session.createQuery(hql);
-		query.setString("recipientId", recipientId);
+		query.setString("target", target);
+		query.setBoolean("isOwner", isOwner);
 		List <Relation>list = query.list();
 //		Relation relation = null;
 //		java.util.Iterator<Relation> iter = list.iterator();
@@ -40,6 +43,18 @@ public class RelationManager {
 		session.close();
 		return list;
 //		return file;	
+	}
+	
+	public static void updateOwnership(String target, long fileId, boolean isOwner){
+		createSession();
+		String hql = "update Relation as r set r.isOwner=:isOwner where target=:target and fileId=:fileId";
+		Query query = session.createQuery(hql);
+		query.setBoolean("isOwner", isOwner);
+		query.setString("target", target);
+		query.setLong("fileId", fileId); 
+		query.executeUpdate(); 		
+		session.getTransaction().commit();
+		session.close();
 	}
 }
 
