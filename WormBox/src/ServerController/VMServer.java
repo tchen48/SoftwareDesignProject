@@ -93,8 +93,8 @@ public class VmServer {
                 	String deviceIp = parsedCommand[2];
                 	String fileName = parsedCommand[3];
                 	out.writeUTF(Command.COPYING);
-                	out.close();
-                	input.close();
+//                	out.close();
+//                	input.close();
 //                	socket.close();
                 	//Now the server execute a client's function to request the file from the source VM
                 	socket = new Socket(sourceIp, CLIENT_SERVER_PORT);
@@ -102,9 +102,11 @@ public class VmServer {
                 	out = new DataOutputStream(socket.getOutputStream());  
                 	out.writeUTF(Command.DOWNLOAD + Command.DELIMITER + fileName);
     	            out.flush();
-    	            boolean receiveTag = receiveFile(fileName, input);      
-    	            String ret = input.readUTF();
-    	            if(receiveTag == true && ret.equals(Command.DOWNLOAD_SUCCESSFUL)){
+    	            boolean receiveTag = receiveFile(fileName, input);     
+    	            System.out.println("receiveTag: " + receiveTag);
+//    	            String ret = input.readUTF();
+//    	            System.out.println("ret: " + ret);
+    	            if(receiveTag == true){ //&& ret.equals(Command.DOWNLOAD_SUCCESSFUL)){
                     	out.close();
                     	input.close();
                     	socket.close();
@@ -117,6 +119,8 @@ public class VmServer {
                     	String path = "D:/VmServer/" + fileName;
                 		File file = new File(path); 
                     	if(file.exists()){
+                    		out.writeUTF(Command.UPLOAD + Command.DELIMITER + fileName);
+            	            out.flush();
                     		long length = file.length();
                     		out.writeLong(length);
                     		out.flush();
@@ -134,12 +138,12 @@ public class VmServer {
                     		s = Command.DOWNLOAD_FAILED;
                     	}
                     	
-                    	out.close();
-                    	input.close();
-                    	socket.close();
-                    	socket = client;
-                    	input = new DataInputStream(socket.getInputStream());  
-                    	out = new DataOutputStream(socket.getOutputStream());  
+//                    	out.close();
+//                    	input.close();
+//                    	socket.close();
+//                    	socket = client;
+//                    	input = new DataInputStream(client.getInputStream());  
+//                    	out = new DataOutputStream(client.getOutputStream());  
     	            }
     	            else{
     	            	s = Command.DOWNLOAD_FAILED;
@@ -159,7 +163,8 @@ public class VmServer {
                 System.out.println("Server: " + s);
                 out.writeUTF(s);  
                 out.close();  
-                input.close();  
+                input.close(); 
+                socket.close();
             } catch (Exception e) {  
                 System.out.println("Server run exception: " + e.getMessage());  
             } finally {  

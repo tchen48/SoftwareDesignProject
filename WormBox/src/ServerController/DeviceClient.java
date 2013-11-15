@@ -13,7 +13,7 @@ import java.net.Socket;
 
 public class DeviceClient {
 	public static final String IP_ADDR = "localhost";//"localhost";//Server address
-	public static String VM_IP_ADDR = "10.144.30.125";
+	public static String VM_IP_ADDR = "10.143.204.241";
 	public static final int PORT = 12345;//Server end port number
 	public static final int CLIENT_SERVER_PORT = 12346; // port number for client server and device 
 	public static final int BUFFERSIZE = 8192;
@@ -25,6 +25,7 @@ public class DeviceClient {
 //    	uploadFile("c:/FoodItemData.xml", "sshao1", "3.3.3.3");
 //    	downloadFile("python.msi", "sshao1");
     	downloadFile("profile.jpg", "sshao", 31.192609, 121.431577, IP_ADDR);
+    	downloadFile("profile1.jpg", "sshao", 31.192609, 121.431577, IP_ADDR);
     }  
     
     private static boolean uploadFile(String path, String ownerId, String recipientId, String cloudIp){
@@ -155,7 +156,7 @@ public class DeviceClient {
 	            String cloudIp = ips[2];
 	            String deviceIp = ips[3];
             	//String ip = selectSource(selfLati, selfLongi, ret);
-	            String ip = "10.144.30.125";
+	            String ip = "10.144.100.114";
             	System.out.println(ip);
             	//*****close the connection to server, open a connection to client server
             	out.close();
@@ -192,7 +193,7 @@ public class DeviceClient {
             		socket = new Socket(IP_ADDR, CLIENT_SERVER_PORT);//IP_ADDR = selfCloudIp
             		input = new DataInputStream(socket.getInputStream());  
                 	out = new DataOutputStream(socket.getOutputStream());  
-                	String selfIp = ("10.144.23.122");
+                	String selfIp = getExterIP.getLocalIP();//("10.144.21.216");
                 	out.writeUTF(Command.COPY + Command.DELIMITER + ip + Command.DELIMITER + selfIp + Command.DELIMITER + fileName);
                 	ret = input.readUTF();
                 	if(Command.COPYING.equals(ret)){
