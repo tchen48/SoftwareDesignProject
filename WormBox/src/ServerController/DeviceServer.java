@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.DecimalFormat;
@@ -19,6 +20,7 @@ import wormbox.server.UserInfoManager;
 
 public class DeviceServer {
 	public static final int CLIENT_SERVER_PORT = 12346;//Listening port number   
+	public static final int BUFFERSIZE = 8192;
 	
     public static void main(String[] args) {  
         System.out.println("Starting device server...\n");  
@@ -67,58 +69,22 @@ public class DeviceServer {
                 		long length = file.length();
                 		out.writeLong(length);
                 		out.flush();
-                		int bufferSize = 8192;
-                		byte[] buf = new byte[bufferSize];
-        	            long count = 0;
-        	            DataInputStream fis = new DataInputStream(new BufferedInputStream(new FileInputStream(path)));
-        	            while(count < length){
-        	            	int read = 0;
-        	            	if(fis != null){
-        	            		read = fis.read(buf);
-        	            	}
-        	            	if(read == -1){
-        	            		break;
-        	            	}
-        	            	out.write(buf, 0 , read);
-        	            	count += (long)read;
-        	            }
-        	            System.out.println("Send file length: " + count);
-        	            fis.close();
-        	            s = Command.DOWNLOAD_SUCCESSFUL;
+                		DataInputStream fis = new DataInputStream(new BufferedInputStream(new FileInputStream(path)));
+                		boolean sendSuccess = sendFile(length, fis, out);
+                		fis.close();
+                		if(sendSuccess){                			
+            	            s = Command.DOWNLOAD_SUCCESSFUL;
+                		}
+                		else{
+                			s = Command.DOWNLOAD_FAILED;
+                		}
                 	}
                 }
-//                else if(type.equals(Command.UPLOAD)){
-//                	String fileName = parsedCommand[1];     
-//            		int bufferSize = 8192;
-//                	byte[] buf = new byte[bufferSize];
-//                	int passedlen = 0;
-//                	long len = 0;
-//                	len = input.readLong();
-//                	String savePath = "d:/" + fileName; //Path needs to be changed
-//                	DataOutputStream fileOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(savePath)));
-//                	System.out.println("Receive file length " + len);
-//                    System.out.println("Start to receive file!" + "\n");
-//                    long count = 0;
-//                    while(count < len){
-//                    	int read = 0;
-//                    	if(input != null){
-//                    		read = input.read(buf);
-//                    	}
-//                    	passedlen += read;
-//                    	if(read == -1){
-//                    		break;
-//                    	}
-//                    	if(passedlen * 100 / len > ((passedlen - read) * 100 / len))
-//                    		System.out.println("File received " +  (passedlen * 100/ len) + "%");
-//                    	fileOut.write(buf, 0, read);
-//                    	count += (long)read;
-//                    }
-//                	fileOut.flush();
-//                    System.out.println("Uploading completed!");
-//                    fileOut.close(); 	
-//                	s = Command.UPLOAD_SUCCESSFUL;
-//                	
-//                } 
+                else if(type.equals(Command.UPLOAD)){
+                	String fileName = parsedCommand[1];     
+                	receiveFile(fileName, input);
+                	s = Command.UPLOAD_SUCCESSFUL;                	
+                } 
                 else{
                 	s = "something";
                 }
@@ -141,6 +107,49 @@ public class DeviceServer {
                 }  
             } 
         } 
+        
+        private boolean sendFile(long length, DataInputStream fis, DataOutputStream out) throws IOException{
+        	int bufferSize = BUFFERSIZE;
+            byte[] buf = new byte[bufferSize];
+            long count = 0;
+            while(count < length){
+            	int read = 0;
+            	if(fis != null){
+            		read = fis.read(buf);
+            	}
+            	out.write(buf, 0 , read);
+            	count += (long)read;
+            }
+            System.out.println("Send file length: " + count);
+            return true;
+        }
+        
+        private boolean receiveFile(String fileName, DataInputStream input) throws IOException{
+        	int bufferSize = BUFFERSIZE;
+        	byte[] buf = new byte[bufferSize];
+        	int passedlen = 0;
+        	long len = 0;
+        	len = input.readLong();
+        	String savePath = "d:/DeviceServer/" + fileName; //Path needs to be changed
+        	DataOutputStream fileOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(savePath)));
+        	System.out.println("Receive file length " + len);
+            System.out.println("Start to receive file!" + "\n");
+            long count = 0;
+            while(count < len){
+            	int read = 0;
+            	if(input != null){
+            		read = input.read(buf);
+            	}
+            	passedlen += read;
+            	if(passedlen * 100 / len > ((passedlen - read) * 100 / len))
+            		System.out.println("File received " +  (passedlen * 100/ len) + "%");
+            	fileOut.write(buf, 0, read);
+            	count += (long)read;
+            }
+        	fileOut.flush();
+            fileOut.close(); 	
+            return true;
+        }
         
         private String[] parse(String command){
         	String[] dataArray = command.split("\\${5}"); 

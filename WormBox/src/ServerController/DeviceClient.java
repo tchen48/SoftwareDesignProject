@@ -12,7 +12,8 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class DeviceClient {
-	public static final String IP_ADDR = "localhost";//Server address
+	public static final String IP_ADDR = "localhost";//"localhost";//Server address
+	public static String VM_IP_ADDR = "10.144.30.125";
 	public static final int PORT = 12345;//Server end port number
 	public static final int CLIENT_SERVER_PORT = 12346; // port number for client server and device 
 	public static final int BUFFERSIZE = 8192;
@@ -35,7 +36,7 @@ public class DeviceClient {
         	Socket socket = null;
         	try {
         		//Create a socket and connect to the specific port number in the address
-	        	socket = new Socket(IP_ADDR, CLIENT_SERVER_PORT);  //IP_ADDR = selfVMIp
+	        	socket = new Socket(VM_IP_ADDR, CLIENT_SERVER_PORT);  //IP_ADDR = selfVMIp
 	              
 	            //Read data from the server
 	            DataInputStream input = new DataInputStream(socket.getInputStream());  
@@ -74,8 +75,10 @@ public class DeviceClient {
 			            out.writeLong(length);
 			            out.flush();
 			            ret = input.readUTF();
-			            if(Command.DB_UPDATE_SUCCESSFUL.equals(ret)){
+			            String[] parsedRet = parse(ret);
+			            if(Command.DB_UPDATE_SUCCESSFUL.equals(parsedRet[0])){
 			            	System.out.println(Command.DB_UPDATE_SUCCESSFUL);
+			            	System.out.println(parsedRet[1]);
 			            }
 			            else{
 			            	tag = false;
@@ -128,7 +131,7 @@ public class DeviceClient {
 		return false;  
     }
     
-    private static boolean downloadFile(String fileName, String ownerId, double selfLati, double selfLongi){
+    private static boolean downloadFile(String fileName, String ownerId, double selfLati, double selfLongi, String selfCloudIp){
     	boolean tag = true;
     	System.out.println("Starting Client...");  
         System.out.println("When receiving \"download successful\" from server, client will be terminated\n"); 
@@ -144,82 +147,97 @@ public class DeviceClient {
 	            DataOutputStream out = new DataOutputStream(socket.getOutputStream());  
 	            System.out.println("Downloading file... \t");  
 	            
-	            out.writeUTF(Command.DOWNLOAD + Command.DELIMITER + fileName + Command.DELIMITER + ownerId);
+//	            out.writeUTF(Command.DOWNLOAD + Command.DELIMITER + fileName + Command.DELIMITER + ownerId);
+	            out.writeUTF(Command.DOWNLOAD + Command.DELIMITER + ownerId);
 	            out.flush();
 	            String ret = input.readUTF();
-	            if(ret.equals(Command.FILE_NOT_EXIST)){
-	            	tag = false;
-	            	System.out.println(Command.FILE_NOT_EXIST);
-	                System.out.println("Client will be closed");  
-	                Thread.sleep(500);  
-	                out.close();
-		            input.close();
-	                break;  
-	            }
-	            else{
-	            	String sourceInfo = ret;
-	            	String ip = selectSource(selfLati, selfLongi, sourceInfo);
-	            	System.out.println(ip);
-	            	//*****close the connection to server, open a connection to client server
-	            	out.close();
-	            	input.close();
-	            	socket.close();
-	            	socket = new Socket(IP_ADDR, CLIENT_SERVER_PORT);//IP_ADDR = ip
-	            	input = new DataInputStream(socket.getInputStream());  
-	            	out = new DataOutputStream(socket.getOutputStream());  
-	            	//*****
-	            	out.writeUTF(Command.DOWNLOAD + Command.DELIMITER + fileName);
-		            out.flush();
+	            String[] ips = parse(ret);
+	            String cloudIp = ips[2];
+	            String deviceIp = ips[3];
+            	String ip = selectSource(selfLati, selfLongi, ret);
+            	System.out.println(ip);
+            	//*****close the connection to server, open a connection to client server
+            	out.close();
+            	input.close();
+            	socket.close();
+            	if(ip.equals(deviceIp)){
+            		socket = new Socket(IP_ADDR, CLIENT_SERVER_PORT);//IP_ADDR = deviceIp
+            		input = new DataInputStream(socket.getInputStream());  
+                	out = new DataOutputStream(socket.getOutputStream());  
+                	out.writeUTF(Command.DOWNLOAD + Command.DELIMITER + fileName);
+    	            out.flush();
+    	            receiveFile(fileName, input);      
+    	            ret = input.readUTF();
+    	         // If receive "download successful" from server, disconnect
+    	            if (Command.DOWNLOAD_SUCCESSFUL.equals(ret)) {  
+    	            	System.out.println(Command.DOWNLOAD_SUCCESSFUL);
+    	                System.out.println("Client will be closed");  
+    	                Thread.sleep(500);  
+    	                out.close();
+    		            input.close();
+    	                break;  
+    	            }  
+    	            else{
+    	            	tag = false;
+    	            	System.out.println(Command.DOWNLOAD_FAILED);
+    	            	System.out.println("Client will be closed");  
+    	                Thread.sleep(500);
+    	            	out.close();
+    		            input.close();
+    		            break;
+    	            }
+            	}
+            	else{
+            		socket = new Socket(IP_ADDR, CLIENT_SERVER_PORT);//IP_ADDR = selfCloudIp
+            		input = new DataInputStream(socket.getInputStream());  
+                	out = new DataOutputStream(socket.getOutputStream());  
+                	String selfIp = ("2.2.2.2");
+                	out.writeUTF(Command.COPY + Command.DELIMITER + ip + Command.DELIMITER + selfIp + Command.DELIMITER + fileName);
+                	ret = input.readUTF();
+                	if(Command.COPYING.equals(ret)){
+                		System.out.println(Command.DOWNLOADING);
+    	                System.out.println("Client will be closed");  
+    	                Thread.sleep(500);  
+    	                out.close();
+    		            input.close();
+    	                break;  
+                	}
+                	else{
+                		tag = false;
+    	            	System.out.println(Command.DOWNLOAD_FAILED);
+    	            	System.out.println("Client will be closed");  
+    	                Thread.sleep(500);
+    	            	out.close();
+    		            input.close();
+    		            break;
+                	}
+            	}            	
+            	
+            	//*****
+//            	out.writeUTF(Command.DOWNLOAD + Command.DELIMITER + fileName);
+//	            out.flush();
+//	            receiveFile(fileName, input);
 	            
-//		            int bufferSize = 8192;
-//	            	byte[] buf = new byte[bufferSize];
-//	            	int passedlen = 0;
-//	            	long len = 0;
-//	            	len = input.readLong();
-//	            	String savePath = "f:/" + fileName; //Path needs to be changed
-//	            	DataOutputStream fileOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(savePath)));
-//	            	System.out.println("Receive file length " + len);
-//	                System.out.println("Start to receive file!" + "\n");
-//	                long count = 0;
-//	                while(count < len){
-//	                	int read = 0;
-//	                	if(input != null){
-//	                		read = input.read(buf);
-//	                	}
-//	                	passedlen += read;
-//	                	if(read == -1){
-//	                		break;
-//	                	}
-//	                	if(passedlen * 100 / len > ((passedlen - read) * 100 / len))
-//	                		System.out.println("File received " +  (passedlen * 100/ len) + "%");
-//	                	fileOut.write(buf, 0, read);
-//	                	count += (long)read;
-//	                }
-//	                fileOut.flush();
-//	//                System.out.println("Downloading completed!");
-//	                fileOut.close();
-		            
-		            ret = input.readUTF();
-	
-		            // If receive "upload successful" from server, disconnect
-		            if (Command.DOWNLOAD_SUCCESSFUL.equals(ret)) {  
-		            	System.out.println(Command.DOWNLOAD_SUCCESSFUL);
-		                System.out.println("Client will be closed");  
-		                Thread.sleep(500);  
-		                out.close();
-			            input.close();
-		                break;  
-		            }  
-		            else{
-		            	tag = false;
-		            	System.out.println(Command.DOWNLOAD_FAILED);
-		            	System.out.println("Client will be closed");  
-		                Thread.sleep(500);
-		            	out.close();
-			            input.close();
-			            break;
-		            }
-        		}
+//	            ret = input.readUTF();
+
+//	            // If receive "download successful" from server, disconnect
+//	            if (Command.DOWNLOAD_SUCCESSFUL.equals(ret)) {  
+//	            	System.out.println(Command.DOWNLOAD_SUCCESSFUL);
+//	                System.out.println("Client will be closed");  
+//	                Thread.sleep(500);  
+//	                out.close();
+//		            input.close();
+//	                break;  
+//	            }  
+//	            else{
+//	            	tag = false;
+//	            	System.out.println(Command.DOWNLOAD_FAILED);
+//	            	System.out.println("Client will be closed");  
+//	                Thread.sleep(500);
+//	            	out.close();
+//		            input.close();
+//		            break;
+//	            }
         	} 
         	catch (Exception e) {
         		System.out.println("Client exception: " + e.getMessage()); 
@@ -250,9 +268,6 @@ public class DeviceClient {
         	if(fis != null){
         		read = fis.read(buf);
         	}
-//        	if(read == -1){
-//        		break;
-//        	}
         	out.write(buf, 0 , read);
         	count += (long)read;
         }
@@ -261,7 +276,7 @@ public class DeviceClient {
     }
     
     private static boolean receiveFile(String fileName, DataInputStream input) throws IOException{
-        int bufferSize = 8192;
+        int bufferSize = BUFFERSIZE;
     	byte[] buf = new byte[bufferSize];
     	int passedlen = 0;
     	long len = 0;
@@ -277,9 +292,6 @@ public class DeviceClient {
         		read = input.read(buf);
         	}
         	passedlen += read;
-        	if(read == -1){
-        		break;
-        	}
         	if(passedlen * 100 / len > ((passedlen - read) * 100 / len))
         		System.out.println("File received " +  (passedlen * 100/ len) + "%");
         	fileOut.write(buf, 0, read);

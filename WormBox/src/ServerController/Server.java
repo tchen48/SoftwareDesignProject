@@ -104,54 +104,20 @@ public class Server {
 //                	}
 //                }
                 else if(type.equals(Command.DOWNLOAD)){
-                	String fileName = parsedCommand[1];
-                	String ownerId = parsedCommand[2];
-                	UploadedFile uploadedFile = UploadedFileManager.fetchFile(0);
-                	if(uploadedFile != null){
-                	/*
-                		String path = "D:/" + fileName;
-                		File file = new File(path); 
-                		long length = file.length();
-                		out.writeLong(length);
-                		out.flush();
-                		int bufferSize = 8192;
-                		byte[] buf = new byte[bufferSize];
-        	            long count = 0;
-        	            DataInputStream fis = new DataInputStream(new BufferedInputStream(new FileInputStream(path)));
-        	            while(count < length){
-        	            	int read = 0;
-        	            	if(fis != null){
-        	            		read = fis.read(buf);
-        	            	}
-        	            	if(read == -1){
-        	            		break;
-        	            	}
-        	            	out.write(buf, 0 , read);
-        	            	count += (long)read;
-        	            }
-        	            System.out.println("Send file length: " + count);
-        	            fis.close();
-        	            s = Command.DOWNLOAD_SUCCESSFUL;*/
-                		UserInfo user = UserInfoManager.queryUser(ownerId);
-	                	double lati = user.getDeviceGPSLati();
-	                	double longi = user.getDeviceGPSLongi();
-	                	String cloudIp = user.getCloudIp();
-	                	String deviceIp = user.getDeviceIp();
-//	                	out.writeUTF("" + lati + Command.DELIMITER + longi + Command.DELIMITER + cloudIp + Command.DELIMITER + deviceIp);
-                		s = "" + lati + Command.DELIMITER + longi + Command.DELIMITER + cloudIp + Command.DELIMITER + deviceIp;
-                	}
-                	else{
-                		out.writeLong(0);
-                		out.flush();
-                		s = Command.FILE_NOT_EXIST;
-                	}
+//                	String fileName = parsedCommand[1];
+//                	String ownerId = parsedCommand[2];
+                	String ownerId = parsedCommand[1];
+            		UserInfo user = UserInfoManager.queryUser(ownerId);
+                	double lati = user.getDeviceGPSLati();
+                	double longi = user.getDeviceGPSLongi();
+                	String cloudIp = user.getCloudIp();
+                	String deviceIp = user.getDeviceIp();
+                	s = "" + lati + Command.DELIMITER + longi + Command.DELIMITER + cloudIp + Command.DELIMITER + deviceIp;
                 }
                 else if(type.equals(Command.UPLOAD)){
                 	String fileName = parsedCommand[1]; 
-                	System.out.println(fileName + 1);
                 	long len = 0;
                 	len = input.readLong();
-                	System.out.println(fileName + 2);
                 	long fileId = UploadedFileManager.addFile(fileName, getFileSize(len));	
                 	RelationManager.addRelation(parsedCommand[2], fileId, 1, parsedCommand[2]);
 	                RelationManager.addRelation(parsedCommand[3], fileId, 0, parsedCommand[2]);

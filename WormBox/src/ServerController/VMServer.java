@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.DecimalFormat;
@@ -17,12 +18,15 @@ import wormbox.server.UploadedFileManager;
 import wormbox.server.UserInfo;
 import wormbox.server.UserInfoManager;
 
-public class VMServer {
-	public static final int CLIENT_SERVER_PORT = 12346;//Listening port number   
+public class VmServer {
+	public static final int CLIENT_SERVER_PORT = 12346;//Listening device port number  
+//	public static final int LISTEN_VM_PORT = 12347;//Listening VM port number  
+	public static final int BUFFERSIZE = 8192;
+	public static Socket client;
 	
     public static void main(String[] args) {  
         System.out.println("Starting vm server...\n");  
-        VMServer server = new VMServer();  
+        VmServer server = new VmServer();  
         server.init();  
     }  
   
@@ -31,7 +35,8 @@ public class VMServer {
             ServerSocket serverSocket = new ServerSocket(CLIENT_SERVER_PORT);  
             while (true) {  
                 //Client and server are connected.
-                Socket client = serverSocket.accept();  
+//                Socket client = serverSocket.accept();  
+            	client = serverSocket.accept();
                 // Process this connection
                 new HandlerThread(client);  
             }  
@@ -67,58 +72,84 @@ public class VMServer {
                 		long length = file.length();
                 		out.writeLong(length);
                 		out.flush();
-                		int bufferSize = 8192;
-                		byte[] buf = new byte[bufferSize];
-        	            long count = 0;
-        	            DataInputStream fis = new DataInputStream(new BufferedInputStream(new FileInputStream(path)));
-        	            while(count < length){
-        	            	int read = 0;
-        	            	if(fis != null){
-        	            		read = fis.read(buf);
-        	            	}
-        	            	if(read == -1){
-        	            		break;
-        	            	}
-        	            	out.write(buf, 0 , read);
-        	            	count += (long)read;
-        	            }
-        	            System.out.println("Send file length: " + count);
-        	            fis.close();
-        	            s = Command.DOWNLOAD_SUCCESSFUL;
+                		DataInputStream fis = new DataInputStream(new BufferedInputStream(new FileInputStream(path)));
+                		boolean sendSuccess = sendFile(length, fis, out);
+                		fis.close();
+                		if(sendSuccess){                			
+            	            s = Command.DOWNLOAD_SUCCESSFUL;
+                		}
+                		else{
+                			s = Command.DOWNLOAD_FAILED;
+                		}
                 	}
                 }
                 else if(type.equals(Command.UPLOAD)){
                 	String fileName = parsedCommand[1];     
-            		int bufferSize = 8192;
-                	byte[] buf = new byte[bufferSize];
-                	int passedlen = 0;
-                	long len = 0;
-                	len = input.readLong();
-                	String savePath = "d:/" + fileName; //Path needs to be changed
-                	DataOutputStream fileOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(savePath)));
-                	System.out.println("Receive file length " + len);
-                    System.out.println("Start to receive file!" + "\n");
-                    long count = 0;
-                    while(count < len){
-                    	int read = 0;
-                    	if(input != null){
-                    		read = input.read(buf);
-                    	}
-                    	passedlen += read;
-                    	if(read == -1){
-                    		break;
-                    	}
-                    	if(passedlen * 100 / len > ((passedlen - read) * 100 / len))
-                    		System.out.println("File received " +  (passedlen * 100/ len) + "%");
-                    	fileOut.write(buf, 0, read);
-                    	count += (long)read;
-                    }
-                	fileOut.flush();
-                    System.out.println("Uploading completed!");
-                    fileOut.close(); 	
-                	s = Command.UPLOAD_SUCCESSFUL;
-                	
+                	receiveFile(fileName, input);
+                	s = Command.UPLOAD_SUCCESSFUL;                	
                 } 
+                else if(type.equals(Command.COPY)){
+                	String sourceIp = parsedCommand[1];
+                	String deviceIp = parsedCommand[2];
+                	String fileName = parsedCommand[3];
+                	out.writeUTF(Command.COPYING);
+                	out.close();
+                	input.close();
+//                	socket.close();
+                	//Now the server execute a client's function to request the file from the source VM
+                	socket = new Socket(sourceIp, CLIENT_SERVER_PORT);
+                	input = new DataInputStream(socket.getInputStream());  
+                	out = new DataOutputStream(socket.getOutputStream());  
+                	out.writeUTF(Command.DOWNLOAD + Command.DELIMITER + fileName);
+    	            out.flush();
+    	            boolean receiveTag = receiveFile(fileName, input);      
+    	            String ret = input.readUTF();
+    	            if(receiveTag == true && ret.equals(Command.DOWNLOAD_SUCCESSFUL)){
+                    	out.close();
+                    	input.close();
+                    	socket.close();
+                    	//Now the server execute a client's function to send the file to device
+                    	socket = new Socket(deviceIp, CLIENT_SERVER_PORT);
+                    	input = new DataInputStream(socket.getInputStream());  
+                    	out = new DataOutputStream(socket.getOutputStream());  
+                    	
+                    	String path = "D:/VmServer/" + fileName;
+                		File file = new File(path); 
+                    	if(file.exists()){
+                    		long length = file.length();
+                    		out.writeLong(length);
+                    		out.flush();
+                    		DataInputStream fis = new DataInputStream(new BufferedInputStream(new FileInputStream(path)));
+                    		boolean sendSuccess = sendFile(length, fis, out);
+                    		fis.close();
+                    		if(sendSuccess){                			
+                	            s = Command.DOWNLOAD_SUCCESSFUL;
+                    		}
+                    		else{
+                    			s = Command.DOWNLOAD_FAILED;
+                    		}
+                    	}
+                    	else{
+                    		s = Command.DOWNLOAD_FAILED;
+                    	}
+                    	
+                    	out.close();
+                    	input.close();
+                    	socket.close();
+                    	socket = client;
+                    	input = new DataInputStream(socket.getInputStream());  
+                    	out = new DataOutputStream(socket.getOutputStream());  
+    	            }
+    	            else{
+    	            	s = Command.DOWNLOAD_FAILED;
+    	            }
+//                	Socket nestedSocket = null;
+//                	try {
+                		//Create a socket and connect to the specific port number in the address
+//                		nestedSocket = new Socket(ip, CLIENT_SERVER_PORT); 
+                		
+//                	}
+                }
                 else{
                 	s = "something";
                 }
@@ -141,6 +172,49 @@ public class VMServer {
                 }  
             } 
         } 
+        
+        private boolean sendFile(long length, DataInputStream fis, DataOutputStream out) throws IOException{
+        	int bufferSize = BUFFERSIZE;
+            byte[] buf = new byte[bufferSize];
+            long count = 0;
+            while(count < length){
+            	int read = 0;
+            	if(fis != null){
+            		read = fis.read(buf);
+            	}
+            	out.write(buf, 0 , read);
+            	count += (long)read;
+            }
+            System.out.println("Send file length: " + count);
+            return true;
+        }
+        
+        private boolean receiveFile(String fileName, DataInputStream input) throws IOException{
+        	int bufferSize = BUFFERSIZE;
+        	byte[] buf = new byte[bufferSize];
+        	int passedlen = 0;
+        	long len = 0;
+        	len = input.readLong();
+        	String savePath = "d:/VmServer/" + fileName; //Path needs to be changed
+        	DataOutputStream fileOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(savePath)));
+        	System.out.println("Receive file length " + len);
+            System.out.println("Start to receive file!" + "\n");
+            long count = 0;
+            while(count < len){
+            	int read = 0;
+            	if(input != null){
+            		read = input.read(buf);
+            	}
+            	passedlen += read;
+            	if(passedlen * 100 / len > ((passedlen - read) * 100 / len))
+            		System.out.println("File received " +  (passedlen * 100/ len) + "%");
+            	fileOut.write(buf, 0, read);
+            	count += (long)read;
+            }
+        	fileOut.flush();
+            fileOut.close(); 	
+            return true;
+        }
         
         private String[] parse(String command){
         	String[] dataArray = command.split("\\${5}"); 

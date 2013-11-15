@@ -28,4 +28,9 @@ public class Command {
 	public static final int CRITICAL_DISTANCE = 100;
 	public static final String DB_UPDATE_SUCCESSFUL = "DB update successful";
 	public static final String DB_UPDATE_FAILED = "DB update failed";
+	public static final String COPY = "copy";
+	public static final String COPYING = "copying";
+	public static final String DOWNLOADING = "downloading";
+	public static final String COPY_SUCCESSFUL = "copy successful";
+	public static final String COPY_FAILED = "copy failed";
 }
