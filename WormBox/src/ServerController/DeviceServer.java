@@ -19,7 +19,7 @@ import wormbox.server.UserInfo;
 import wormbox.server.UserInfoManager;
 
 public class DeviceServer {
-	public static final int CLIENT_SERVER_PORT = 12346;//Listening port number   
+	public static final int CLIENT_SERVER_PORT = 12347;//Listening port number   
 	public static final int BUFFERSIZE = 8192;
 	
     public static void main(String[] args) {  
@@ -63,7 +63,7 @@ public class DeviceServer {
                 System.out.println(type);
                 if(type.equals(Command.DOWNLOAD)){
                 	String fileName = parsedCommand[1];
-                	String path = "D:/" + fileName;
+                	String path = "f:/" + fileName;
             		File file = new File(path); 
                 	if(file != null){
                 		long length = file.length();

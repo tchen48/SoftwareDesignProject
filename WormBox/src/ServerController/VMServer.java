@@ -109,7 +109,8 @@ public class VmServer {
                     	input.close();
                     	socket.close();
                     	//Now the server execute a client's function to send the file to device
-                    	socket = new Socket(deviceIp, CLIENT_SERVER_PORT);
+//                    	socket = new Socket(deviceIp, CLIENT_SERVER_PORT);
+                    	socket = new Socket(deviceIp, 12347);
                     	input = new DataInputStream(socket.getInputStream());  
                     	out = new DataOutputStream(socket.getOutputStream());  
                     	

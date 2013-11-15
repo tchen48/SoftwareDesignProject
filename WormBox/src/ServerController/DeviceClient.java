@@ -19,12 +19,12 @@ public class DeviceClient {
 	public static final int BUFFERSIZE = 8192;
 	
     public static void main(String[] args) {  
-    	uploadFile("C:/profile.jpg", "shihuan", "qingyun", "1.1.1.1");
+//    	uploadFile("C:/profile.jpg", "shihuan", "qingyun", "1.1.1.1");
 //    	uploadFile("C:/A3_ShihuanShao.zip", "sshao1", "2.2.2.2");
 //    	uploadFile("D:/Program Files/python.msi", "sshao1", "3.3.3.3");
 //    	uploadFile("c:/FoodItemData.xml", "sshao1", "3.3.3.3");
 //    	downloadFile("python.msi", "sshao1");
-//    	downloadFile("profile.jpg", "sshao", 31.192609, 121.431577);
+    	downloadFile("profile.jpg", "sshao", 31.192609, 121.431577, IP_ADDR);
     }  
     
     private static boolean uploadFile(String path, String ownerId, String recipientId, String cloudIp){
@@ -154,7 +154,8 @@ public class DeviceClient {
 	            String[] ips = parse(ret);
 	            String cloudIp = ips[2];
 	            String deviceIp = ips[3];
-            	String ip = selectSource(selfLati, selfLongi, ret);
+            	//String ip = selectSource(selfLati, selfLongi, ret);
+	            String ip = "10.144.30.125";
             	System.out.println(ip);
             	//*****close the connection to server, open a connection to client server
             	out.close();
@@ -191,7 +192,7 @@ public class DeviceClient {
             		socket = new Socket(IP_ADDR, CLIENT_SERVER_PORT);//IP_ADDR = selfCloudIp
             		input = new DataInputStream(socket.getInputStream());  
                 	out = new DataOutputStream(socket.getOutputStream());  
-                	String selfIp = ("2.2.2.2");
+                	String selfIp = ("10.144.23.122");
                 	out.writeUTF(Command.COPY + Command.DELIMITER + ip + Command.DELIMITER + selfIp + Command.DELIMITER + fileName);
                 	ret = input.readUTF();
                 	if(Command.COPYING.equals(ret)){
