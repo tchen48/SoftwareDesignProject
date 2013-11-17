@@ -9,7 +9,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class DeviceClient {
 	public static final String IP_ADDR = "localhost";//"localhost";//Server address
@@ -162,7 +164,8 @@ public class DeviceClient {
             	out.close();
             	input.close();
             	socket.close();
-            	if(ip.equals(deviceIp)){
+//            	boolean deviceIpValid = ping(deviceIp);
+            	if(ip.equals(deviceIp) && ping(deviceIp)){
             		socket = new Socket(IP_ADDR, CLIENT_SERVER_PORT);//IP_ADDR = deviceIp
             		input = new DataInputStream(socket.getInputStream());  
                 	out = new DataOutputStream(socket.getOutputStream());  
@@ -509,5 +512,12 @@ public class DeviceClient {
     private static String[] parse(String command){
     	String[] dataArray = command.split("\\${5}"); 
     	return dataArray;
+    }
+    
+    private static boolean ping(String host) throws UnknownHostException, IOException{
+		int timeOut = 3000;
+		boolean status = InetAddress.getByName(host).isReachable(timeOut);
+		System.out.println(status);
+		return status;
     }
 }  
