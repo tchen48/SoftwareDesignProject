@@ -72,14 +72,23 @@
 							    <option value="2">Market</option>
 							</select>
 						</div>
-						<div class="span3 offset1 labelcenter">
-							<label class="checkbox" style="margin:auto auto">
-								<input type="checkbox" value="">
-								Department Manager?
-							</label>
-						</div>
-						<div class="span3">
-							<input type="submit" class="btn btn-primary btn-block" value="Create Employee"/>
+						<div class="row">
+							<div class="span3 offset1">
+								<select id="depList" class="form-control span12">
+								    <option value="0">Human Resource</option>
+								    <option value="1">IT</option>
+								    <option value="2">Market</option>
+								</select>
+							</div>
+							<div class="span3 offset1 labelcenter">
+								<label class="checkbox" style="margin:auto auto">
+									<input type="checkbox" value="">
+									Department Manager?
+								</label>
+							</div>
+							<div class="span3">
+								<input type="submit" class="btn btn-primary btn-block" value="Create Employee"/>
+							</div>
 						</div>
 					</div>
 				</div>
