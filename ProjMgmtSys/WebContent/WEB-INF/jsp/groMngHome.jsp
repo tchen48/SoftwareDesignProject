@@ -13,9 +13,104 @@
 <body>
 	<div class="container">
 		<div class="row-fluid">
-			<div id="content">
-				<h1>Group Manager Home</h1>
-				<h3>Hello <%=session.getAttribute("userName")%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=session.getAttribute("depName")%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=session.getAttribute("depId")%></h3>
+			<h1>Group Manager Home</h1>
+			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <%=session.getAttribute("userId")%>)</h3>		
+			<h5><%=session.getAttribute("depName")%>&nbsp;(id: <%=session.getAttribute("depId")%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=session.getAttribute("groName")%>&nbsp;(id: <%=session.getAttribute("groId")%>)</h5>
+			
+			<div class="span12 alertdiv" style="margin-top:60px; height:50px">					
+			</div>
+			
+			<div class="subdiv span12">
+				<div class="row">
+					<div class="span4 offset1">
+						<input type="text"  class="span12" placeholder="Enter the name of the new field"  required="true" />
+					</div>
+					<div class="span3">
+						<select id="typeList" class="form-control span12">
+						    <option value="0">Integer</option>
+						    <option value="1">String</option>
+						    <option value="2">Date</option>
+						</select>
+					</div>
+					<div id="btndiv" class="span3">
+						<input type="submit" class="btn btn-primary btn-block" value="Add"/>
+					</div>
+				</div>
+			</div>
+			<div class="span12">
+				<div class="span3 offset8" style="margin-bottom:20px; margin-top:-40px;">
+					<!--  <input type="submit" class="btn btn-large btn-primary btn-block" value="New Project"/>-->
+					<a href="newProject.html" class="btn btn-large btn-primary btn-block">New Project</a>
+				</div>
+			</div>
+			<div class="span12">
+				<div class="row" style="margin-left: -100px; margin-right:-100px;">
+					<div class="span2 subdiv">
+						<div class="span12">
+							<table id="empTable" class="table table-striped">
+								<thead>
+								    <tr>
+								      <th>Group Members</th>
+								    </tr>
+							  	</thead>
+								<tbody>
+							    	<tr>
+								      <td>...</td>
+								    </tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="span10 subdiv">
+						<table id="projTable" class="table table-striped">
+							<thead>
+							    <tr>
+							      <th>Project ID</th>
+							      <th>Name</th>
+							      <th>Start</th>
+							      <th>End</th>
+							      <th>Status</th>
+							      <th>Description</th>
+							    </tr>
+						  	</thead>
+							<tbody>
+						    	<tr>
+							      <td>...</td>
+							      <td>...</td>
+							      <td>...</td>
+							      <td>...</td>
+							      <td>...</td>
+							      <td>...</td>
+							    </tr>
+							    <tr>
+							      <td>...</td>
+							      <td>...</td>
+							      <td>...</td>
+							      <td>...</td>
+							      <td>...</td>
+							      <td>...</td>
+							    </tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+		
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 				<!--<h3>Group 17 <br/>
 					Shihuan Shao&nbsp;&nbsp;&nbsp;&nbsp;Tuyue Chen&nbsp;&nbsp;&nbsp;&nbsp;Yongming Zhang</h3>
 				<form:form method="post" action="home.html" commandName="user">

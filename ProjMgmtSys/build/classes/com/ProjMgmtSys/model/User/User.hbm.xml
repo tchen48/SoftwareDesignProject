@@ -9,7 +9,7 @@
 			<generator class="increment" />
 		</id>	
 		<property name="userName">
-			<column name="username" length="50" not-null="true" />
+			<column name="userName" length="50" not-null="true" />
 		</property>
 		
 		<property name="password">
@@ -17,7 +17,7 @@
 		</property>
 		
 		<property name="userType">
-			<column name="usertpe"  not-null="true"/>
+			<column name="usertype"  not-null="true"/>
 		</property>
 		
 		<property name="groId">
@@ -26,6 +26,14 @@
 		
 		<property name="depId">
 			<column name="depId" not-null="true"/>
+		</property>
+		
+		<property name="depName">
+			<column name="depName" length="50" not-null="false" />
+		</property>
+		
+		<property name="groName">
+			<column name="groName" length="50" not-null="false" />
 		</property>
 		
 		<property name="fail">

@@ -8,6 +8,8 @@ public class User {
 	private int userType;
 	private int groId;
 	private int depId;
+	private String groName;
+	private String depName;
 	private int fail = 0;
 	private boolean block = false;
 //	public User(){
@@ -61,5 +63,17 @@ public class User {
 	}
 	public void setBlock(boolean block) {
 		this.block = block;
+	}
+	public String getGroName() {
+		return groName;
+	}
+	public void setGroName(String groName) {
+		this.groName = groName;
+	}
+	public String getDepName() {
+		return depName;
+	}
+	public void setDepName(String depName) {
+		this.depName = depName;
 	}
 }

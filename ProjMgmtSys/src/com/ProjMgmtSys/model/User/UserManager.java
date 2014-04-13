@@ -21,7 +21,9 @@ public class UserManager {
 		user.setUserType(userType);
 		user.setGroId(groId);
 		user.setDepId(depId);
-		
+		/*
+		 * Need to query group name and dept name via corresponding methods in deptManager and groManager		 * 
+		 * */
 		createSession();
 		session.save(user);
 		session.getTransaction().commit();
