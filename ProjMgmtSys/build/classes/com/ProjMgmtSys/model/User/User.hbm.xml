@@ -9,7 +9,11 @@
 			<generator class="increment" />
 		</id>	
 		<property name="userName">
+<<<<<<< HEAD
 			<column name="username" length="50" not-null="true" />
+=======
+			<column name="userName" length="50" not-null="true" />
+>>>>>>> upstream/master
 		</property>
 		
 		<property name="password">

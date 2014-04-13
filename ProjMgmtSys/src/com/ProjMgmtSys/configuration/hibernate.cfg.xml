@@ -12,6 +12,7 @@
         <property name="hibernate.connection.url">jdbc:mysql://localhost/projmgmtsys</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">root</property>
+
         <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 
         <!-- Automatic schema creation (begin) === -->
@@ -29,5 +30,10 @@
         <!-- ############################################ -->
 
         <mapping resource="com/ProjMgmtSys/model/User/User.hbm.xml" />
+        <mapping resource="com/ProjMgmtSys/model/Dept/Dept.hbm.xml" />
+        <mapping resource="com/ProjMgmtSys/model/Gro/Gro.hbm.xml" />
+        <mapping resource="com/ProjMgmtSys/model/Object/Object.hbm.xml" />
+        <mapping resource="com/ProjMgmtSys/model/Field/Field.hbm.xml" />
+        <mapping resource="com/ProjMgmtSys/model/Data/Data.hbm.xml" />
     </session-factory>
 </hibernate-configuration>
