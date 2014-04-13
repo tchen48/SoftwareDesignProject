@@ -5,17 +5,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>Group Manager Home Page</title>
-	<link rel="stylesheet" type="text/css" href="resources/css/bootstrap.css" />
-	<link rel="stylesheet" type="text/css" href="resources/css/mainstyle.css" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Group Manager Home Page</title>
+<link rel="stylesheet" type="text/css" href="resources/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="resources/css/mainstyle.css" />
+<link rel="stylesheet" type="text/css" href="resources/css/loginstyle.css" />
 </head>
 <body>
 	<div class="container">
 		<div class="row-fluid">
 			<div id="content">
 				<h1>Group Manager Home</h1>
-				<h3>Hello <%=session.getAttribute("userName")%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=session.getAttribute("depName")%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=session.getAttribute("depId")%></h3>
+				<h3>Hello ${userName}</h3>
 				<!--<h3>Group 17 <br/>
 					Shihuan Shao&nbsp;&nbsp;&nbsp;&nbsp;Tuyue Chen&nbsp;&nbsp;&nbsp;&nbsp;Yongming Zhang</h3>
 				<form:form method="post" action="home.html" commandName="user">

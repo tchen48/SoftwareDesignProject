@@ -9,14 +9,16 @@
 <title>Department Manager Home Page</title>
 <link rel="stylesheet" type="text/css" href="resources/css/bootstrap.css" />
 <link rel="stylesheet" type="text/css" href="resources/css/mainstyle.css" />
+<link rel="stylesheet" type="text/css" href="resources/css/loginstyle.css" />
 </head>
 <body>
 	<div class="container">
 		<div class="row-fluid">
 			<div id="content">
 				<h1>Department Manager Home</h1>
-				<h3>Hello <%=session.getAttribute("userName")%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=session.getAttribute("depName")%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=session.getAttribute("depId")%></h3>
-				<div class="span12 alertdiv" style="margin-top:60px; height:50px">					
+				<h3>Hello <%=session.getAttribute("userName") %></h3>
+				
+				<div class="span12" style="margin-top:60px; height:50px">					
 				</div>
 				
 				<div class="subdiv span12">
@@ -46,15 +48,8 @@
 				
 				<div class="subdiv span12">
 					<div class="row">
-						<div class="span4 offset1">
-							<input type="text"  class="span12" placeholder="Enter the name of the new field"  required="true" />
-						</div>
-						<div class="span3">
-							<select class="form-control span12">
-							    <option value="0">Integer</option>
-							    <option value="1">String</option>
-							    <option value="2">Date</option>
-							</select>
+						<div class="span7 offset1">
+							<input type="text"  class="span12" placeholder="Enter the user name/ID"  required="true" />
 						</div>
 						<div id="btndiv" class="span3">
 							<input type="submit" class="btn btn-primary btn-block" value="Unblock"/>
@@ -64,33 +59,31 @@
 				
 				<div class="subdiv span12">
 					<div class="row">
-						<div class="span2 offset1">
-							<select class="form-control span12">
-							    <option value="0">Mike</option>
-							    <option value="1">Jack</option>
-							    <option value="2">Bob</option>
-							</select>
-						</div>
-						<div class="span1 labelcenter">
-							<label>Assign to</label>
-						</div>
-					
-						<div class="span3">
+						<div class="span3 offset1">
 							<select class="form-control span12">
 							    <option value="0">Human Resource</option>
 							    <option value="1">IT</option>
 							    <option value="2">Market</option>
 							</select>
 						</div>
-						<div class="span2">
-							<div class="span10 offset2 labelcenter">
-								<label class="checkbox" style="margin:auto auto">
-									<input type="checkbox" value="">
-									Group Leader?
-								</label>
-							</div>
+						<div class="span4 labelcenter">
+							<label>Assign to</label>
 						</div>
-						<div class="span2">
+					
+						<div class="span3 offset1">
+							<select class="form-control span12">
+							    <option value="0">Human Resource</option>
+							    <option value="1">IT</option>
+							    <option value="2">Market</option>
+							</select>
+						</div>
+						<div class="span3 offset1 labelcenter">
+							<label class="checkbox" style="margin:auto auto">
+								<input type="checkbox" value="">
+								Group Leader?
+							</label>
+						</div>
+						<div class="span3">
 							<input type="submit" class="btn btn-primary btn-block" value="Assign Employee"/>
 						</div>
 					</div>

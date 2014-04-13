@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.ProjMgmtSys.model.Data">
+	<class name="Data" table="data">
+		<id name="dataId" column="dataId">
+			<generator class="increment" />
+		</id>
+		<property name="value">
+			<column name="value" length="50" not-null="true" />
+		</property>
+		<property name="fieldId">
+			<column name="fieldId" length="50" not-null="true" />
+		</property>					
+		<property name="objId">
+			<column name="objId" length="50" not-null="true" />
+		</property>
+		<property name="rowId">
+			<column name="rowId" length="50" not-null="true" />
+		</property>		
+		<property name="depId">
+			<column name="depId" length="50" not-null="true" />
+		</property>
+		<property name="groId">
+			<column name="groId" length="50" not-null="true" />
+		</property>				
+	</class>
+</hibernate-mapping>
