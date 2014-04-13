@@ -15,7 +15,8 @@
 		<div class="row-fluid">
 			<div id="content">
 				<h1>Department Manager Home</h1>
-				<h3>Hello <%=session.getAttribute("userName")%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=session.getAttribute("depName")%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=session.getAttribute("depId")%></h3>
+				<h3>Hello <%=session.getAttribute("userName")%>(<%=session.getAttribute("userId")%>)</h3>		
+				<h5><%=session.getAttribute("depName")%>(<%=session.getAttribute("depId")%>)</h5>
 				<div class="span12 alertdiv" style="margin-top:60px; height:50px">					
 				</div>
 				
@@ -50,14 +51,14 @@
 							<input type="text"  class="span12" placeholder="Enter the name of the new field"  required="true" />
 						</div>
 						<div class="span3">
-							<select class="form-control span12">
+							<select id="typeList" class="form-control span12">
 							    <option value="0">Integer</option>
 							    <option value="1">String</option>
 							    <option value="2">Date</option>
 							</select>
 						</div>
 						<div id="btndiv" class="span3">
-							<input type="submit" class="btn btn-primary btn-block" value="Unblock"/>
+							<input type="submit" class="btn btn-primary btn-block" value="Add"/>
 						</div>
 					</div>
 				</div>
@@ -65,7 +66,7 @@
 				<div class="subdiv span12">
 					<div class="row">
 						<div class="span2 offset1">
-							<select class="form-control span12">
+							<select id="empList" class="form-control span12">
 							    <option value="0">Mike</option>
 							    <option value="1">Jack</option>
 							    <option value="2">Bob</option>
@@ -76,7 +77,7 @@
 						</div>
 					
 						<div class="span3">
-							<select class="form-control span12">
+							<select id="depList" class="form-control span12">
 							    <option value="0">Human Resource</option>
 							    <option value="1">IT</option>
 							    <option value="2">Market</option>

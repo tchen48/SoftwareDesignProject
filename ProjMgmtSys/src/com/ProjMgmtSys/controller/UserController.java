@@ -38,17 +38,28 @@ public class UserController {
 		int usertype = user.getUserType();
 		session.setMaxInactiveInterval(1200);
 		session.setAttribute("userName", user.getUserName());
+		session.setAttribute("userId", user.getUserId());
 		model.addAttribute("userName", user.getUserName());
-		if(usertype == UserType.SUPERADMIN){			
+		if(usertype == UserType.SUPERADMIN){
 			return "adminHome";
 		}
 		else if(usertype == UserType.DEPTMANAGER){
+			session.setAttribute("depName", user.getDepName());
+			session.setAttribute("depId", user.getDepId());
 			return "deptMngHome";
 		}
 		else if(usertype == UserType.GROUPMANAGER){
+			session.setAttribute("depName", user.getDepName());
+			session.setAttribute("depId", user.getDepId());
+			session.setAttribute("groName", user.getGroName());
+			session.setAttribute("groId", user.getGroId());
 			return "groMngHome";
 		}
 		else{
+			session.setAttribute("depName", user.getDepName());
+			session.setAttribute("depId", user.getDepId());
+			session.setAttribute("groName", user.getGroName());
+			session.setAttribute("groId", user.getGroId());
 			return "empHome";
 		}
 //			

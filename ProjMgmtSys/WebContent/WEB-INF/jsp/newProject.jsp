@@ -27,7 +27,7 @@
 							<input type="text"  class="span12" placeholder="Enter the name of the new field"  required="true" />
 						</div>
 						<div class="span3">
-							<select id="typeList" class="form-control span12">
+							<select class="form-control span12">
 							    <option value="0">Integer</option>
 							    <option value="1">String</option>
 							    <option value="2">Date</option>
@@ -39,51 +39,38 @@
 					</div>
 				</div>
 				
+				<div class="subdiv span12">
+					<div class="row">
+						<div class="span4 offset1">
+							<input type="text"  class="span12" placeholder="Enter the name of the new project"  required="true" />
+						</div>
+						<div class="span2 offset2 labelcenter">
+							<label>Start Date</label>
+						</div>
+						<div class="span1">
+							<input id="dobYear" type="text" placeholder="YYYY" pattern=".{4}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
+				  		</div>
+				  		<div class="span1">
+				  		   	<input id="dobDay" type="text"  placeholder="DD" pattern=".{1,2}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
+				  		</div>
+				  		<div class="span1">
+				  		    <input id="dobMonth" type="text" placeholder="MM" pattern=".{1,2}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
+						</div>
+					</div>
+				</div>
+				
 				<div class="container-fluid">
 					<div class="row-fluid">
-						<table id="empTable" class="table table-striped span2">
-							<thead>
-							    <tr>
-							      <th>Group Members</th>
-							    </tr>
-						  	</thead>
-							<tbody>
-						    	<tr>
-							      <td>...</td>
-							      <td>...</td>
-							    </tr>
-							</tbody>
-						</table>
-						<table id="projTable" class="table table-striped span10">
-							<thead>
-							    <tr>
-							      <th>Project ID</th>
-							      <th>Name</th>
-							      <th>Start</th>
-							      <th>End</th>
-							      <th>Status</th>
-							      <th>Description</th>
-							    </tr>
-						  	</thead>
-							<tbody>
-						    	<tr>
-							      <td>...</td>
-							      <td>...</td>
-							      <td>...</td>
-							      <td>...</td>
-							      <td>...</td>
-							      <td>...</td>
-							    </tr>
-							    <tr>
-							      <td>...</td>
-							      <td>...</td>
-							      <td>...</td>
-							      <td>...</td>
-							      <td>...</td>
-							      <td>...</td>
-							    </tr>
-							</tbody>
-						</table>
+						<div class="span2">
+							<select class="form-control span12">
+							    <option value="0">Integer</option>
+							    <option value="1">String</option>
+							    <option value="2">Date</option>
+							</select>
+						</div>
+						<div class="span10">
+							<input type="submit" class="btn btn-primary btn-block" value="Add"/>
+						</div>
 					</div>
 				</div>
 				

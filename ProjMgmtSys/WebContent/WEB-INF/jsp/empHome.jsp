@@ -16,7 +16,9 @@
 		<div class="row-fluid">
 			<div id="content">
 				<h1>Employee Home</h1>
-				<h3>Hello ${userName}</h3>
+				<h3>Hello <%=session.getAttribute("userName")%>(<%=session.getAttribute("userId")%>)</h3>		
+				<h5><%=session.getAttribute("depName")%>(<%=session.getAttribute("depId")%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=session.getAttribute("groName")%>(<%=session.getAttribute("groId")%>)</h5>
+
 				<!--<h3>Group 17 <br/>
 					Shihuan Shao&nbsp;&nbsp;&nbsp;&nbsp;Tuyue Chen&nbsp;&nbsp;&nbsp;&nbsp;Yongming Zhang</h3>
 				<form:form method="post" action="home.html" commandName="user">

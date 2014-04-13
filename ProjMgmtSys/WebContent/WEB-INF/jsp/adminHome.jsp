@@ -15,7 +15,7 @@
 		<div class="row-fluid">
 			<div id="content">
 				<h1>Admin Home</h1>
-				<h3>Hello <%=session.getAttribute("userName") %></h3>
+				<h3>Hello <%=session.getAttribute("userName")%>(<%=session.getAttribute("userId")%>)</h3>
 <!--  				<form:form method="post" action="createDept.html" commandName="deptName">-->
 					<div class="span12 alertdiv" style="margin-top:60px; height:50px">					
 					</div>
@@ -67,7 +67,7 @@
 						</div>
 						<div class="row">
 							<div class="span3 offset1">
-								<select class="form-control span12">
+								<select id="depList" class="form-control span12">
 								    <option value="0">Human Resource</option>
 								    <option value="1">IT</option>
 								    <option value="2">Market</option>
