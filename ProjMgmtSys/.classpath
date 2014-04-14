@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/activation.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/ant-commons-logging.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/antlr-2.7.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/hibernate3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/javassist-3.12.1.GA.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/jstl-1.1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/jta-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/mail.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/mysql-connector-java-5.1.24-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/org.eclipse.persistence.asm_3.3.1.v201302191223.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/org.springframework.beans_4.0.0.20130829-M3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/org.springframework.context_4.0.0.20130829-M3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/org.springframework.core_4.0.0.20130829-M3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/org.springframework.expression_4.0.0.20130829-M3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/org.springframework.web.servlet_4.0.0.20130829-M3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/org.springframework.web_4.0.0.20130829-M3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/slf4j-jdk14-1.5.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaosh/Documents/workspace-sts-3.4.0.M1/ProjMgmtSys/WebContent/WEB-INF/lib/standard-1.1.2.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>

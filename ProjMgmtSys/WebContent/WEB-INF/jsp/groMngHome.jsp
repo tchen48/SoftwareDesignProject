@@ -98,19 +98,6 @@
 		</div>
 	</div>
 		
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
 				<!--<h3>Group 17 <br/>
 					Shihuan Shao&nbsp;&nbsp;&nbsp;&nbsp;Tuyue Chen&nbsp;&nbsp;&nbsp;&nbsp;Yongming Zhang</h3>
 				<form:form method="post" action="home.html" commandName="user">
@@ -127,8 +114,5 @@
 						</div>
 					</div>
 				</form:form>-->
-			</div>
-		</div>
-	</div>
 </body>
 </html>

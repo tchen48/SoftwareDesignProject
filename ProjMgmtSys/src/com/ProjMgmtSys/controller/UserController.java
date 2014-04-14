@@ -120,7 +120,7 @@ public class UserController {
 //			}
 	}
 	
-	
+
 	@RequestMapping("/newProject")
     public String newProject(@ModelAttribute("user") User user, Model model){	
         return "newProject";
@@ -130,4 +130,5 @@ public class UserController {
     public String project(@ModelAttribute("user") User user, Model model){	
         return "project";
     }
+
 }
