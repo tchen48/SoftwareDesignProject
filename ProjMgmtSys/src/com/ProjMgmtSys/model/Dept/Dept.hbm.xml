@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.ProjMgmtSys.model.Dept">
+	<class name="Dept" table="dept">
+		<id name="depId" column="depId">
+			<generator class="increment" />
+		</id>	
+		<property name="depName">
+			<column name="depName" length="50" not-null="true" />
+		</property>
+	</class>
+</hibernate-mapping>
