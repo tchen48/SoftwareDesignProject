@@ -1,14 +1,14 @@
 package com.ProjMgmtSys.model.Gro;
 
 public class Gro {
-	private String groId;
+	private int groId;
 	private String groName;
-	private String depId;
+	private int depId;
 	
-	public String getGroId() {
+	public int getGroId() {
 		return groId;
 	}
-	public void setGroId(String groId) {
+	public void setGroId(int groId) {
 		this.groId = groId;
 	}
 	public String getGroName() {
@@ -17,10 +17,10 @@ public class Gro {
 	public void setGroName(String groName) {
 		this.groName = groName;
 	}
-	public String getDepId() {
+	public int getDepId() {
 		return depId;
 	}
-	public void setDepId(String depId) {
+	public void setDepId(int depId) {
 		this.depId = depId;
 	}
 	

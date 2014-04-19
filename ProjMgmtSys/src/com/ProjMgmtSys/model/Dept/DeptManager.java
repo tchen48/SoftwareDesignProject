@@ -22,9 +22,24 @@ public class DeptManager {
 		session.save(dept);
 		session.getTransaction().commit();
 		session.close();
-		return  "" + dept.getDepId();
+		return queryDeptId(depName);
 	}
 	
+	public static String queryDeptId(String depName){
+		createSession();
+		String hql = "from Dept as dept where dept.depName=:depName";
+		Query query = session.createQuery(hql);
+		query.setString("depName", depName);
+		List <Dept>list = query.list();
+		Dept dept = null;
+		java.util.Iterator<Dept> iter = list.iterator();
+		while (iter.hasNext()) {
+			dept = iter.next();
+		}					
+		session.getTransaction().commit();
+		session.close();
+		return "" + dept.getDepId();		
+	}
 	
 	@SuppressWarnings("unchecked")
 	public static Dept queryDept(String depId){

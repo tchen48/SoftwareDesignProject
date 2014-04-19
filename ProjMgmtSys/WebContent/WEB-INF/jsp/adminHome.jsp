@@ -9,6 +9,8 @@
 	<title>Administrator Home Page</title>
 	<link rel="stylesheet" type="text/css" href="resources/css/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="resources/css/mainstyle.css" />
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="resources/js/jsfunc.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -22,10 +24,10 @@
 				<div class="subdiv span12">
 					<div class="row">
 						<div class="span7 offset1">
-							<input type="text"  class="span12" placeholder="Enter the name of the new department"  required="true" />
+							<input type="text" id="depName" class="span12" placeholder="Enter the name of the new department" required="true" />
 						</div>
 						<div id="btndiv" class="span3">
-							<input type="submit" class="btn btn-primary btn-block" value="Create Department"/>
+							<button class="btn btn-primary btn-block" onclick="newDept();"/>Create Department</button>
 						</div>
 					</div>
 				</div>

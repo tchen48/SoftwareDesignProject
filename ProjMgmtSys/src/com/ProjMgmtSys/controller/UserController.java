@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
+
+
+import com.ProjMgmtSys.model.Dept.Dept;
+import com.ProjMgmtSys.model.Dept.DeptManager;
 import com.ProjMgmtSys.model.User.*;
 
 @Controller("userController")
@@ -120,7 +124,15 @@ public class UserController {
 //			}
 	}
 	
-
+	
+	@RequestMapping("/newDept")  
+	 public @ResponseBody  
+	 String newDept(@RequestParam(value = "depName") String depName) {  
+		System.out.println("deptName " + depName);
+		String depId = DeptManager.createDept(depName);
+		return depId;  	  
+	 } 
+	
 	@RequestMapping("/newProject")
     public String newProject(@ModelAttribute("user") User user, Model model){	
         return "newProject";
@@ -130,5 +142,4 @@ public class UserController {
     public String project(@ModelAttribute("user") User user, Model model){	
         return "project";
     }
-
 }

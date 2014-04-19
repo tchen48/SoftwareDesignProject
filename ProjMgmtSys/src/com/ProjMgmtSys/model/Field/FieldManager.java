@@ -14,7 +14,7 @@ public class FieldManager {
         session.beginTransaction();
 	}
 	
-	public static String createField(String fieldName, String dataType, String objId, String depId, String groId){
+	public static String createField(String fieldName, String dataType, int objId, int depId, int groId){
 		Field field = new Field();
 		field.setFieldName(fieldName);
 		field.setDataType(dataType);
@@ -31,11 +31,11 @@ public class FieldManager {
 	
 	
 	@SuppressWarnings("unchecked")
-	public static Object queryField(String fieldId){
+	public static Object queryField(int fieldId){
 		createSession();
 		String hql = "from Field as field where field.fieldId=:fieldId";
 		Query query = session.createQuery(hql);
-		query.setString("fieldId", fieldId);
+		query.setInteger("fieldId", fieldId);
 		List <Field>list = query.list();
 		Field field = null;
 		java.util.Iterator<Field> iter = list.iterator();
@@ -47,11 +47,11 @@ public class FieldManager {
 		return field;	
 	}
 	
-	public static void updateFieldName(String fieldId, String fieldName){
+	public static void updateFieldName(int fieldId, String fieldName){
 		createSession();
 		String hql1 = "update Field as field set field.fieldName=:fieldName where fieldId=:fieldId";
 		Query query1 = session.createQuery(hql1);
-		query1.setString("fieldId", fieldId);
+		query1.setInteger("fieldId", fieldId);
 		query1.setString("fieldName", fieldName);
 		query1.executeUpdate(); 
 		session.getTransaction().commit();

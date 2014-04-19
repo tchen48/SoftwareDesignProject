@@ -14,7 +14,7 @@ public class DataManager {
         session.beginTransaction();
 	}
 	
-	public static String createData(String Value, String fieldId, String objId, String rowId, String depId, String groId){
+	public static String createData(String Value, int fieldId, int objId, int rowId, int depId, int groId){
 		Data data = new Data();
 		data.setValue(Value);
 		data.setFieldId(fieldId);
@@ -32,11 +32,11 @@ public class DataManager {
 	
 	
 	@SuppressWarnings("unchecked")
-	public static Object queryData(String dataId){
+	public static Object queryData(int dataId){
 		createSession();
 		String hql = "from Data as data where data.dataId=:dataId";
 		Query query = session.createQuery(hql);
-		query.setString("dataId", dataId);
+		query.setInteger("dataId", dataId);
 		List <Data>list = query.list();
 		Data data = null;
 		java.util.Iterator<Data> iter = list.iterator();
@@ -48,11 +48,11 @@ public class DataManager {
 		return data;	
 	}
 	
-	public static void updateValue(String dataId, String value){
+	public static void updateValue(int dataId, String value){
 		createSession();
 		String hql1 = "update Data as data set data.value=:value where dataId=:dataId";
 		Query query1 = session.createQuery(hql1);
-		query1.setString("dataId", dataId);
+		query1.setInteger("dataId", dataId);
 		query1.setString("value", value);
 		query1.executeUpdate(); 
 		session.getTransaction().commit();

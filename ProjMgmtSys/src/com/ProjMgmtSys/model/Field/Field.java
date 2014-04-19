@@ -1,17 +1,17 @@
 package com.ProjMgmtSys.model.Field;
 
 public class Field {
-	private String fieldId;
+	private int fieldId;
 	private String fieldName;
 	private String dataType;
-	private String objId;
-	private String depId;
-	private String groId;
+	private int objId;
+	private int depId;
+	private int groId;
 	
-	public String getFieldId() {
+	public int getFieldId() {
 		return fieldId;
 	}
-	public void setFieldId(String fieldId) {
+	public void setFieldId(int fieldId) {
 		this.fieldId = fieldId;
 	}
 	public String getFieldName() {
@@ -26,22 +26,22 @@ public class Field {
 	public void setDataType(String dataType) {
 		this.dataType = dataType;
 	}
-	public String getObjId() {
+	public int getObjId() {
 		return objId;
 	}
-	public void setObjId(String objId) {
+	public void setObjId(int objId) {
 		this.objId = objId;
 	}
-	public String getDepId() {
+	public int getDepId() {
 		return depId;
 	}
-	public void setDepId(String depId) {
+	public void setDepId(int depId) {
 		this.depId = depId;
 	}
-	public String getGroId() {
+	public int getGroId() {
 		return groId;
 	}
-	public void setGroId(String groId) {
+	public void setGroId(int groId) {
 		this.groId = groId;
 	}
 	

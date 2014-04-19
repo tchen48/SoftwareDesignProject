@@ -98,12 +98,12 @@ public class UserManager {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static LoginResult validate(String userId, String password){
+	public static LoginResult validate(int userId, String password){
 		LoginResult loginResult = new LoginResult();
 		createSession();
 		String hql = "from User as user where user.userId=:userId";
 		Query query = session.createQuery(hql);
-		query.setString("userId", userId);
+		query.setInteger("userId", userId);
 		List <User>list = query.list();
 		User user = null;
 		java.util.Iterator<User> iter = list.iterator();
@@ -139,7 +139,7 @@ public class UserManager {
 	
 	public static int increaseFail(User user){
 		int fail = user.getFail();
-		String userId = user.getUserId();
+		int userId = user.getUserId();
 		fail++;
 		if(fail == MAXFAIL){
 			blockUser(userId);
@@ -149,7 +149,7 @@ public class UserManager {
 			createSession();
 			String hql = "update User as u set u.fail=:fail where userId=:userId";
 			Query query = session.createQuery(hql);
-			query.setString("userId", userId);
+			query.setInteger("userId", userId);
 			query.setInteger("fail", fail);
 			query.executeUpdate(); 
 			session.getTransaction().commit();
@@ -157,33 +157,33 @@ public class UserManager {
 			return StatusCode.ACCT_NOT_BLOCKED;
 		}		
 	}
-	public static void resetFail(String userId){
+	public static void resetFail(int userId){
 		createSession();
 		String hql = "update User as u set u.fail=:fail where userId=:userId";
 		Query query = session.createQuery(hql);
-		query.setString("userId", userId);
+		query.setInteger("userId", userId);
 		query.setInteger("fail", 0);
 		query.executeUpdate(); 
 		session.getTransaction().commit();
 		session.close();
 		return;
 	}
-	public static void blockUser(String userId){
+	public static void blockUser(int userId){
 		createSession();
 		String hql = "update User as u set u.block=:block where userId=:userId";
 		Query query = session.createQuery(hql);
-		query.setString("userId", userId);
+		query.setInteger("userId", userId);
 		query.setBoolean("block", true);
 		query.executeUpdate(); 
 		session.getTransaction().commit();
 		session.close();
 		return;
 	}
-	public static void unblockUser(String userId){
+	public static void unblockUser(int userId){
 		createSession();
 		String hql = "update User as u set u.block=:block where userId=:userId";
 		Query query = session.createQuery(hql);
-		query.setString("userId", userId);
+		query.setInteger("userId", userId);
 		query.setBoolean("block", false);
 		query.executeUpdate(); 
 		session.getTransaction().commit();

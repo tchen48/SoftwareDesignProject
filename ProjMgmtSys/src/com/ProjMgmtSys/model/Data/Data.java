@@ -1,18 +1,18 @@
 package com.ProjMgmtSys.model.Data;
 
 public class Data {
-	private String dataId;
+	private int dataId;
 	private String value;
-	private String fieldId;	
-	private String objId;
-	private String rowId;	
-	private String depId;
-	private String groId;
+	private int fieldId;	
+	private int objId;
+	private int rowId;	
+	private int depId;
+	private int groId;
 	
-	public String getDataId() {
+	public int getDataId() {
 		return dataId;
 	}
-	public void setDataId(String dataId) {
+	public void setDataId(int dataId) {
 		this.dataId = dataId;
 	}
 	public String getValue() {
@@ -21,34 +21,34 @@ public class Data {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	public String getFieldId() {
+	public int getFieldId() {
 		return fieldId;
 	}
-	public void setFieldId(String fieldId) {
+	public void setFieldId(int fieldId) {
 		this.fieldId = fieldId;
 	}
-	public String getObjId() {
+	public int getObjId() {
 		return objId;
 	}
-	public void setObjId(String objId) {
+	public void setObjId(int objId) {
 		this.objId = objId;
 	}
-	public String getRowId() {
+	public int getRowId() {
 		return rowId;
 	}
-	public void setRowId(String rowId) {
+	public void setRowId(int rowId) {
 		this.rowId = rowId;
 	}
-	public String getDepId() {
+	public int getDepId() {
 		return depId;
 	}
-	public void setDepId(String depId) {
+	public void setDepId(int depId) {
 		this.depId = depId;
 	}
-	public String getGroId() {
+	public int getGroId() {
 		return groId;
 	}
-	public void setGroId(String groId) {
+	public void setGroId(int groId) {
 		this.groId = groId;
 	}
 	

@@ -1,16 +1,16 @@
 package com.ProjMgmtSys.model.Object;
 
 public class Object {
-	private String objId;
+	private int objId;
 	private String objName;
-	private String depId;
-	private String groId;
-	private String rowNO;
+	private int depId;
+	private int groId;
+	private int rowNO;
 	
-	public String getObjId() {
+	public int getObjId() {
 		return objId;
 	}
-	public void setObjId(String objId) {
+	public void setObjId(int objId) {
 		this.objId = objId;
 	}
 	public String getObjName() {
@@ -19,22 +19,22 @@ public class Object {
 	public void setObjName(String objName) {
 		this.objName = objName;
 	}
-	public String getDepId() {
+	public int getDepId() {
 		return depId;
 	}
-	public void setDepId(String depId) {
+	public void setDepId(int depId) {
 		this.depId = depId;
 	}
-	public String getGroId() {
+	public int getGroId() {
 		return groId;
 	}
-	public void setGroId(String groId) {
+	public void setGroId(int groId) {
 		this.groId = groId;
 	}
-	public String getRowNO() {
+	public int getRowNO() {
 		return rowNO;
 	}
-	public void setRowNO(String rowNO) {
+	public void setRowNO(int rowNO) {
 		this.rowNO = rowNO;
 	}
 	

@@ -1,12 +1,12 @@
 package com.ProjMgmtSys.model.Dept;
 
 public class Dept {
-	private String depId;
+	private int depId;
 	private String depName;
-	public String getDepId() {
+	public int getDepId() {
 		return depId;
 	}
-	public void setDepId(String depId) {
+	public void setDepId(int depId) {
 		this.depId = depId;
 	}
 	public String getDepName() {

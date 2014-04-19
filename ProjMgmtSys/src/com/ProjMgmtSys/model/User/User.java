@@ -2,7 +2,7 @@ package com.ProjMgmtSys.model.User;
 
 public class User {
 	//Define the user type
-	private String userId;
+	private int userId;
 	private String userName;
 	private String password;
 	private int userType;
@@ -16,10 +16,10 @@ public class User {
 //		fail = 0;
 //		block = false;
 //	}
-	public String getUserId() {
+	public int getUserId() {
 		return userId;
 	}
-	public void setUserId(String userId) {
+	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 	public String getUserName() {
