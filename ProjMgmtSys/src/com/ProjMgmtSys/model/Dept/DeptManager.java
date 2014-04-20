@@ -42,17 +42,17 @@ public class DeptManager {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static Dept queryDept(String depId){
+	public static Dept queryDept(int depId){
 		createSession();
 		String hql = "from Dept as dept where dept.depId=:depId";
 		Query query = session.createQuery(hql);
-		query.setString("depId", depId);
+		query.setInteger("depId", depId);
 		List <Dept>list = query.list();
 		Dept dept = null;
 		java.util.Iterator<Dept> iter = list.iterator();
 		while (iter.hasNext()) {
 			dept = iter.next();
-		}					
+		}
 		session.getTransaction().commit();
 		session.close();
 		return dept;		
