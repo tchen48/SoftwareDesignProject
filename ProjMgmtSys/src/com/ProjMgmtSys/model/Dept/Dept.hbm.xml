@@ -4,7 +4,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="com.ProjMgmtSys.model.Dept">
-	<class name="Dept" table="dept">
+	<class name="Dept" table="dept" dynamic-update="true">
 		<id name="depId" column="depId">
 			<generator class="increment" />
 		</id>	

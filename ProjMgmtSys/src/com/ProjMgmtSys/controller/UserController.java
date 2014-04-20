@@ -126,12 +126,34 @@ public class UserController {
 	
 	
 	@RequestMapping("/newDept")  
-	 public @ResponseBody  
-	 String newDept(@RequestParam(value = "depName") String depName) {  
-		System.out.println("deptName " + depName);
+	public @ResponseBody  
+	String newDept(@RequestParam(value = "depName") String depName) {  
 		String depId = DeptManager.createDept(depName);
 		return depId;  	  
-	 } 
+	} 
+	
+	@RequestMapping("/modifyDept")  
+	public @ResponseBody  
+	String modifyDept(
+		@RequestParam(value = "oldName") String oldName,
+		@RequestParam(value = "newName") String newName) {  
+		return  DeptManager.updateDepName(oldName, newName);
+	} 
+	
+	@RequestMapping("/unblockUser")  
+	public @ResponseBody  
+	String unblock(
+		@RequestParam(value = "userId") String userId) { 
+		int intId;
+		try{
+			intId = Integer.parseInt(userId);
+			return  UserManager.unblockUser(intId);
+		}
+		catch (NumberFormatException e){
+			return "UserID must be Integer";
+		}		
+	} 
+	
 	
 	@RequestMapping("/newProject")
     public String newProject(@ModelAttribute("user") User user, Model model){	

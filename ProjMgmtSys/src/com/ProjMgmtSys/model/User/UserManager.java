@@ -179,15 +179,15 @@ public class UserManager {
 		session.close();
 		return;
 	}
-	public static void unblockUser(int userId){
+	public static String unblockUser(int userId){
 		createSession();
-		String hql = "update User as u set u.block=:block where userId=:userId";
+		String hql = "update User as u set u.block=:block where u.userId=:userId";
 		Query query = session.createQuery(hql);
 		query.setInteger("userId", userId);
 		query.setBoolean("block", false);
 		query.executeUpdate(); 
 		session.getTransaction().commit();
 		session.close();
-		return;
+		return "1";
 	}
 }

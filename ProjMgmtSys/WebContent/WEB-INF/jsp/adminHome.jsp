@@ -17,7 +17,6 @@
 		<div class="row-fluid">
 			<h1>Admin Home</h1>
 			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <%=session.getAttribute("userId")%>)</h3>
-<!--  				<form:form method="post" action="createDept.html" commandName="deptName">-->
 				<div id="alertdiv" class="span12 alertdiv" style="margin-top:60px; height:50px">					
 				</div>
 				
@@ -35,13 +34,13 @@
 				<div class="subdiv span12">
 					<div class="row">
 						<div class="span3 offset1">
-							<input type="text"  class="span12" placeholder="Enter the department name/ID"  required="true" />
+							<input type="text" id="oldDepName" class="span12" placeholder="Enter the department name"  required="true" />
 						</div>
 						<div class="span3">
-							<input type="text"  class="span12" placeholder="Enter the new department name"  required="true" />
+							<input type="text" id="newDepName" class="span12" placeholder="Enter the new department name"  required="true" />
 						</div>
 						<div id="btndiv" class="span3 offset1">
-							<input type="submit" class="btn btn-primary btn-block" value="Modify Department"/>
+							<button class="btn btn-primary btn-block" onclick="modifyDept();">Modify Department</button>
 						</div>
 					</div>
 				</div>
@@ -49,10 +48,10 @@
 				<div class="subdiv span12">
 					<div class="row">
 						<div class="span7 offset1">
-							<input type="text"  class="span12" placeholder="Enter the user name/ID"  required="true" />
+							<input type="text" id="unblockId" class="span12" placeholder="Enter the user ID"  required="true" />
 						</div>
 						<div id="btndiv" class="span3">
-							<input type="submit" class="btn btn-primary btn-block" value="Unblock"/>
+							<button class="btn btn-primary btn-block" onclick="unblock()">Unblock</button>
 						</div>
 					</div>
 				</div>
@@ -85,7 +84,6 @@
 						</div>
 					</div>
 				</div>
-<!--				</form:form>-->
 			<!--<h3>Group 17 <br/>
 				Shihuan Shao&nbsp;&nbsp;&nbsp;&nbsp;Tuyue Chen&nbsp;&nbsp;&nbsp;&nbsp;Yongming Zhang</h3>
 			<form:form method="post" action="home.html" commandName="user">
