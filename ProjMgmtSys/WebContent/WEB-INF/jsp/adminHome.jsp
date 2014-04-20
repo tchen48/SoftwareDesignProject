@@ -18,7 +18,7 @@
 			<h1>Admin Home</h1>
 			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <%=session.getAttribute("userId")%>)</h3>
 <!--  				<form:form method="post" action="createDept.html" commandName="deptName">-->
-				<div class="span12 alertdiv" style="margin-top:60px; height:50px">					
+				<div id="alertdiv" class="span12 alertdiv" style="margin-top:60px; height:50px">					
 				</div>
 				
 				<div class="subdiv span12">
