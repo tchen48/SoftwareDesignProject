@@ -17,78 +17,76 @@
 		<div class="row-fluid">
 			<h1>Admin Home</h1>
 			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <%=session.getAttribute("userId")%>)</h3>
-<!--  				<form:form method="post" action="createDept.html" commandName="deptName">-->
-				<div id="createDeptAlert" class="span12 alertdiv" style="margin-top:-20px; height:50px; position:absolute; opacity: .90;z-index:10;  ">					
-				</div>
-				</br>
-				<div class="subdiv span12">
-					<div class="row">
-						<div class="span7 offset1">
-							<input type="text" id="depName" class="span12" placeholder="Enter the name of the new department" required="true" />
-						</div>
-						<div id="btndiv" class="span3">
-							<button class="btn btn-primary btn-block" onclick="newDept();"/>Create Department</button>
-						</div>
+
+			<div id="createDeptAlert" class="span12" style="height:30px; margin-top:20px; margin-bottom:20px; opacity: .90;"></div>
+			</br>
+			<div class="subdiv span12">
+				<div class="row">
+					<div class="span7 offset1">
+						<input type="text" id="depName" class="span12" placeholder="Enter the name of the new department" required="true" />
+					</div>
+					<div id="btndiv" class="span3">
+						<button class="btn btn-primary btn-block" onclick="newDept();"/>Create Department</button>
 					</div>
 				</div>
-				
-				<div class="subdiv span12">
-					<div class="row">
-						<div class="span3 offset1">
-							<input type="text"  class="span12" placeholder="Enter the department name/ID"  required="true" />
-						</div>
-						<div class="span3">
-							<input type="text"  class="span12" placeholder="Enter the new department name"  required="true" />
-						</div>
-						<div id="btndiv" class="span3 offset1">
-							<input type="submit" class="btn btn-primary btn-block" value="Modify Department"/>
-						</div>
+			</div>
+			
+			<div class="subdiv span12">
+				<div class="row">
+					<div class="span3 offset1">
+						<input type="text" id="oldDepName" class="span12" placeholder="Enter the department name"  required="true" />
+					</div>
+					<div class="span3">
+						<input type="text" id="newDepName" class="span12" placeholder="Enter the new department name"  required="true" />
+					</div>
+					<div id="btndiv" class="span3 offset1">
+						<button class="btn btn-primary btn-block" onclick="modifyDept();">Modify Department</button>
 					</div>
 				</div>
-				
-				<div class="subdiv span12">
-					<div class="row">
-						<div class="span7 offset1">
-							<input type="text"  class="span12" placeholder="Enter the user name/ID"  required="true" />
-						</div>
-						<div id="btndiv" class="span3">
-							<input type="submit" class="btn btn-primary btn-block" value="Unblock"/>
-						</div>
+			</div>
+			
+			<div class="subdiv span12">
+				<div class="row">
+					<div class="span7 offset1">
+						<input type="text" id="unblockId" class="span12" placeholder="Enter the user ID"  required="true" />
+					</div>
+					<div id="btndiv" class="span3">
+						<button class="btn btn-primary btn-block" onclick="unblock()">Unblock</button>
 					</div>
 				</div>
-				
-				<div id="createEmpAlert" class="span12 alertdiv" style="margin-top:360px; height:50px; position:absolute; opacity: .90;z-index:10;  ">					
-				</div>
-				</br>
-				<div class="subdiv span12">
-					<div class="row">
-						<div class="span7 offset1">
-							<input type="text"  id="empName" class="span12" placeholder="Enter the name of new employee"  required="true" />
-						</div>
-						<div class="span4 labelcenter">
-							<label>ID: </label>
-						</div>
+			</div>
+			
+			<div id="createEmpAlert" class="span12 alertdiv" style="height:30px; margin-bottom:20px;opacity: .90;">					
+			</div>
+			</br>
+			<div class="subdiv span12">
+				<div class="row">
+					<div class="span7 offset1">
+						<input type="text"  id="empName" class="span12" placeholder="Enter the name of new employee"  required="true" />
 					</div>
-					<div class="row">
-						<div class="span3 offset1">
-							<select id="depList" class="form-control span12">
-							    <option value="0">Human Resource</option>
-							    <option value="1">IT</option>
-							    <option value="2">Market</option>
-							</select>
-						</div>
-						<div class="span3 offset1 labelcenter">
-							<label class="checkbox" style="margin:auto auto">
-								<input type="checkbox" id = "isManager"value="">
-								Department Manager?
-							</label>
-						</div>
-						<div class="span3">
-							<input type="submit" onclick="newEmp();"class="btn btn-primary btn-block" value="Create Employee"/>
-						</div>
+					<div class="span4 labelcenter">
+						<label id="idLabel">ID: </label>
 					</div>
 				</div>
-<!--				</form:form>-->
+				<div class="row">
+					<div class="span3 offset1">
+						<select id="depList" class="form-control span12">
+						    <option value="0">Human Resource</option>
+						    <option value="1">IT</option>
+						    <option value="2">Market</option>
+						</select>
+					</div>
+					<div class="span3 offset1 labelcenter">
+						<label class="checkbox" style="margin:auto auto">
+							<input type="checkbox" id = "isManager"value="">
+							Department Manager?
+						</label>
+					</div>
+					<div class="span3">
+						<input type="submit" onclick="newEmp();"class="btn btn-primary btn-block" value="Create Employee"/>
+					</div>
+				</div>
+			</div>
 			<!--<h3>Group 17 <br/>
 				Shihuan Shao&nbsp;&nbsp;&nbsp;&nbsp;Tuyue Chen&nbsp;&nbsp;&nbsp;&nbsp;Yongming Zhang</h3>
 			<form:form method="post" action="home.html" commandName="user">

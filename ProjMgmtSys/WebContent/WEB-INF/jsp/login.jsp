@@ -24,7 +24,7 @@
 						<div id="alertdiv">
 							${ErrorMsg}						
 						</div>
-						<form:input id="input1" class="span12" placeholder="UserID" type="text" value="" path="userId" required="true" />
+						<form:input id="input1" class="span12" placeholder="UserID" type="text" path="userId" required="true" />
 						<form:input id="input2" class="span12" placeholder="Password" type="password" path="password" required="true" />
 						<div id="btndiv" class="span6 offset3">
 							<input type="submit" class="btn btn-large btn-success btn-block" value="Log In"/>

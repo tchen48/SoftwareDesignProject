@@ -29,13 +29,14 @@ public class UserManager {
 
 		createSession();
 		
-		Dept dept = DeptManager.queryDept(depId);
+		Dept dept = DeptManager.queryDeptById(depId);
 		System.out.println(dept.getDepName());
 		user.setDepName(dept.getDepName());
 		
-		Gro gro = GroManager.queryGro(groId);
-		user.setGroName(gro.getGroName());
-		System.out.println(gro.getGroName());
+//		Gro gro = GroManager.queryGro(groId);
+//		user.setGroName(gro.getGroName());
+//		System.out.println(gro.getGroName());
+		user.setGroName("N/A");
 
 		System.out.println("test!!!!!");
 		session.save(user);
@@ -192,15 +193,15 @@ public class UserManager {
 		session.close();
 		return;
 	}
-	public static void unblockUser(int userId){
+	public static String unblockUser(int userId){
 		createSession();
-		String hql = "update User as u set u.block=:block where userId=:userId";
+		String hql = "update User as u set u.block=:block where u.userId=:userId";
 		Query query = session.createQuery(hql);
 		query.setInteger("userId", userId);
 		query.setBoolean("block", false);
 		query.executeUpdate(); 
 		session.getTransaction().commit();
 		session.close();
-		return;
+		return "1";
 	}
 }
