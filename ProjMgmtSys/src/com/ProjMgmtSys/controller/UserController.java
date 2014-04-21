@@ -8,10 +8,14 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletException;  
+import javax.servlet.http.HttpServlet;  
+import javax.servlet.http.HttpServletRequest;  	 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import net.sf.json.*;
+import org.apache.struts2.ServletActionContext;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +30,7 @@ import com.ProjMgmtSys.model.Dept.Dept;
 import com.ProjMgmtSys.model.Dept.DeptManager;
 import com.ProjMgmtSys.model.Gro.GroManager;
 import com.ProjMgmtSys.model.User.*;
+import com.opensymphony.xwork2.*;
 
 @Controller("userController")
 public class UserController {
@@ -63,7 +68,7 @@ public class UserController {
 			session.setAttribute("depId", user.getDepId());
 			session.setAttribute("groId", user.getGroId());
 			return "groMngHome";
-		}
+		}	
 		else{
 			String depName = DeptManager.queryDeptById(user.getDepId()).getDepName();
 			session.setAttribute("depName", depName);
@@ -172,6 +177,34 @@ public class UserController {
 		return empId;  	  
 	 } 
 	
+	@RequestMapping("/newPass")  
+	 public @ResponseBody  
+	 String newPass(@RequestParam(value = "oldPass") String oldPass,
+		 			@RequestParam(value = "newPass") String newPass,
+		 			@RequestParam(value = "userId") String userId) throws Exception {  
+
+		int result = UserManager.validatePassword(userId, oldPass);
+		if(result == StatusCode.LOGIN_SUCCESS){
+			UserManager.updatePassword(userId, newPass);
+			return "A new Password is created!";  	  
+		}
+		else
+
+			throw new Exception("Error!") ;
+	 } 
+	 
+	@RequestMapping("/getDept.html")  
+	 public @ResponseBody  
+	 String getDept(HttpServletRequest request, HttpServletResponse response)throws IOException  {  
+		
+		List<Dept> list = DeptManager.geyAllDepName();  
+		JSONArray jsonArray = JSONArray.fromObject(list); 
+		//response.setCharacterEncoding("UTF-8");  
+		//response.getWriter().print(jsonArray);  
+		System.out.println( jsonArray); 
+		response.getWriter().print(jsonArray);  
+		return null;
+	 }
 	@RequestMapping("/newGroup")  
 	public @ResponseBody  
 	String newGroup(@RequestParam(value = "groName") String groName, 

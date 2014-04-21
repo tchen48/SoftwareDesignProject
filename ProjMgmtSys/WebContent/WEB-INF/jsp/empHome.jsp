@@ -9,31 +9,34 @@
 <title>Employee Home Page</title>
 <link rel="stylesheet" type="text/css" href="resources/css/bootstrap.css" />
 <link rel="stylesheet" type="text/css" href="resources/css/mainstyle.css" />
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="resources/js/jsfunc.js"></script>
 </head>
 <body>
 	<div class="container">
 		<div class="row-fluid">
 			<div id="content">
 				<h1>Staff Home</h1>
-				<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <%=session.getAttribute("userId")%>)</h3>		
+				<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <span id="userId"><%=session.getAttribute("userId")%></span>)</h3>		
 				<h5><%=session.getAttribute("depName")%>&nbsp;(id: <%=session.getAttribute("depId")%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=session.getAttribute("groName")%>&nbsp;(id: <%=session.getAttribute("groId")%>)</h5>
-	
-				<div class="span12 alertdiv" style="margin-top:60px; height:50px">					
-				</div>
 				
+				</br>
+	            <div id="newPassAlert" class="span12 alertdiv" style="margin-top:-20px; height:50px; position:absolute; opacity: .90;z-index:10;  ">					
+				</div>
+				</br>
 				<div class=" span12">
 					<div class="subdiv span12">
 						<div class="span3" style="margin-left: 50px">
-							<input type="password"  class="span12" placeholder="Original Password"  required="true" />
+							<input type="password"  id = "oldPass" class="span12" placeholder="Original Password"  required="true" />
 						</div>
 						<div class="span3">
-							<input type="password"  class="span12" placeholder="New Password"  required="true" />
+							<input type="password"  id="newPass" class="span12" placeholder="New Password"  required="true" />
 						</div>
 						<div class="span3">
-							<input type="password"  class="span12" placeholder="Confirm"  required="true" />
+							<input type="password"  id="reNewPass" class="span12" placeholder="Confirm"  required="true" />
 						</div>
 						<div class="span2">
-							<input type="submit" class="btn btn-warning btn-block" value="Change Password"/>
+							<input type="submit" onClick = "newPass()" class="btn btn-warning btn-block" value="Change Password"/>
 						</div>
 					</div>					
 					<div class="subdiv span12" style="margin-left:0">

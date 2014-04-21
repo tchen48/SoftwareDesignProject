@@ -93,7 +93,7 @@ public class UserManager {
 		createSession();
 		String hql = "from User as user where user.userId=:userId"; //and user.password=:password";
 		Query query = session.createQuery(hql);
-		query.setString("userId", userId);
+		query.setInteger("userId", Integer.parseInt(userId) );
 		List <User>list = query.list();
 		User user = null;
 		java.util.Iterator<User> iter = list.iterator();

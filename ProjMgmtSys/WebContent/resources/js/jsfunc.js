@@ -18,6 +18,8 @@ function newDept() {
 	     		addAlert("alert-error", alertText, "#createDeptAlert");
      		}
      		else{
+				$('#depList').empty();
+	     		getDepList();
 	     		var alertText = "Department " + depName + " is successfully created! Dept ID: " + response;
 				$('#depName').val("");
 	     		addAlert("alert-success", alertText, "#createDeptAlert");
@@ -50,6 +52,8 @@ function modifyDept() {
 	     		addAlert("alert-error", alertText, "#createDeptAlert");
      		}
      		else{
+				$('#depList').empty();
+	     		getDepList();
 	     		var alertText = "Department " + oldName + " is changed to " + newName;
 	     		addAlert("alert-success", alertText, "#createDeptAlert");
      		}
@@ -88,23 +92,69 @@ function newEmp(){
 	var empName = $("#empName").val();
 	var depList = $("#depList").val();
 	var isManager = $("#isManager").is(':checked')?true:false;
+	if(empName == ""){
+    	var alertText = "Employee name can't be blank";
+    	addAlert("alert-error", alertText, "#createEmpAlert");
+    	return;
+    }
 	 $.ajax({
 		 type:"Post",
 		 url:"newEmp.html",
 		 data:"empName="+empName+"&depList="+depList+"&isManager="+isManager,
 		 success:function(response){
 			 var alertText = "A new employee called "+empName+" is successfully created ! Emp ID is "+response;
+			 $('#empName').val("");
 			 $("#idLabel").text("ID: " + response);
 			 addAlert("alert-success",alertText,"#createEmpAlert");
 		 },
 		 error:function(e){
 			 var alertText = 'Error: ' + e;
-	     	 addAlert("alert-error", alertText,"#createEmpAlert");
+			 $('#empName').val("");
+	     	addAlert("alert-error", alertText,"#createEmpAlert");
 		 }
 	 });
 	
 }
 
+function newPass(){
+	var userId = $("#userId").text();
+	var newPass = $("#newPass").val();
+	var reNewPass = $("#reNewPass").val();
+	var oldPass = $("#oldPass").val();
+	if ( oldPass == "" || newPass == ""||reNewPass == "" ){
+		addAlert("alert-error","Passwords cannot be blank!","#newPassAlert");
+		return;
+	}
+	if(reNewPass != newPass){
+		addAlert("alert-error","The passwords you typed do not match! Please type again!","#newPassAlert");
+		return;
+	}
+	$.ajax({
+		type:"Post",
+		url:"newPass.html",
+		data:"oldPass="+oldPass+"&newPass="+newPass+"&userId="+userId,
+		success:function(response){
+			
+			$('#oldPass').val("");
+			$('#newPass').val("");
+			$('#reNewPass').val("");
+			var alertText = response;
+			addAlert("alert-success",alertText,"#newPassAlert");
+		},
+		error:function( jqXHR, textStatus,errorThrown){
+			
+			$('#oldPass').val("");
+			$('#newPass').val("");
+			$('#reNewPass').val("");
+			var alertText;
+			if(errorThrown == "Internal Server Error")
+				alertText = "Uncorrect password!";
+			else
+				alertText = "Unkown Error!";
+			addAlert("alert-error",alertText,"#newPassAlert");
+		}
+	});
+}
 //Dept Manager Functions
 function newGroup() {  
     var groName = $('#groName').val();  
@@ -198,9 +248,28 @@ function addAlert(alertClass, alertText, alertID){
 	$(newalert).fadeIn(1000).delay(2000).fadeOut(1500);
 }
 
+
 function addOptions(json, selectId){
 	for(var i = 0; i < json.length; i++){
 		alert(json[i].userName + " " + json[i].userId);
 		$(selectId).append('<option value="' + json[i].userId + '">' + json[i].userName + '</option>');
 	}
 }
+
+//Generate Department Option
+function getDepList(){
+	$.ajax({   
+        type:'get',   
+        url:"getDept.html",   
+        dataType: 'json',   
+        success:function(data){  
+            $.each(data,function(i,list){ 
+            	$('#depList')
+                .append($("<option></option>")
+                .attr("value",list.depId)
+                .text(list.depName)); 
+        	}) ;
+    	} 
+	}) ;
+}
+

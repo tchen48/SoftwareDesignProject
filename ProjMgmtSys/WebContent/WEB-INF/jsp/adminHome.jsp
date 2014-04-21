@@ -71,9 +71,7 @@
 				<div class="row">
 					<div class="span3 offset1">
 						<select id="depList" class="form-control span12">
-						    <option value="0">Human Resource</option>
-						    <option value="1">IT</option>
-						    <option value="2">Market</option>
+
 						</select>
 					</div>
 					<div class="span3 offset1 labelcenter">
@@ -105,5 +103,11 @@
 			</form:form>-->
 		</div>
 	</div>
+	<script>
+		$(document).ready(function(){
+			$('#depList').empty();
+			getDepList();
+		});
+	</script>
 </body>
 </html>
