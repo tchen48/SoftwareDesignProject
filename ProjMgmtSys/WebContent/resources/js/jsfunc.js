@@ -1,3 +1,4 @@
+//Admin Functions
 function newDept() {  
     var depName = $('#depName').val();  
     if(depName.trim().length == 0){
@@ -55,7 +56,7 @@ function modifyDept() {
      	},  
      	error : function(e) { 
      		var alertText = 'Error: ' + e;
-     		addAlert("alert-error", alertText);
+     		addAlert("alert-error", alertText, "#createDeptAlert");
      	}  
     });  
 }  
@@ -104,6 +105,72 @@ function newEmp(){
 	
 }
 
+//Dept Manager Functions
+function newGroup() {  
+    var groName = $('#groName').val();  
+    var depId = $('#depIdSpan').text();
+    if(groName.trim().length == 0){
+    	var alertText = "Group name can't be blank";
+    	addAlert("alert-error", alertText, "#alertdiv");
+    	return;
+    }
+    	
+    $.ajax({  
+    	type : "Post",   
+    	url : "newGroup.html",   
+    	data : "groName=" + groName + "&depId=" + depId,  
+     	success : function(response) {
+     		if(response == ""){
+     			var alertText = "Group " + groName + " is already existed in Department " + depId;
+				$('#groName').val("");
+	     		addAlert("alert-error", alertText, "#alertdiv");
+     		}
+     		else{
+	     		var alertText = "Group " + groName + " is successfully created! Group ID: " + response;
+				$('#groName').val("");
+	     		addAlert("alert-success", alertText, "#alertdiv");
+     		}
+     	},  
+     	error : function(e) { 
+     		var alertText = 'Error: ' + e;
+     		$('#groName').val("");
+     		addAlert("alert-error", alertText, "#alertdiv");
+     	}  
+    });  
+}  
+
+function modifyGroup() {  
+    var oldName = $('#oldGroName').val();  
+    var newName = $('#newGroName').val();
+    var depId = $('#depIdSpan').text();
+    if(oldName.trim().length == 0 || newName.trim().length == 0){
+    	var alertText = "Group name can't be blank";
+    	addAlert("alert-error", alertText, "#alertdiv");
+    	return;
+    }
+    
+    $.ajax({  
+    	type : "Post",   
+    	url : "modifyGroup.html",   
+    	data : "oldName=" + oldName + "&newName=" + newName + "&depId=" + depId,  
+     	success : function(response) {
+     		if(response == "0"){
+     			var alertText = "Illegal group name!";
+	     		addAlert("alert-error", alertText, "#alertdiv");
+     		}
+     		else{
+	     		var alertText = "Group " + oldName + " is changed to " + newName;
+	     		addAlert("alert-success", alertText, "#alertdiv");
+     		}
+     	},  
+     	error : function(e) { 
+     		var alertText = 'Error: ' + e;
+     		addAlert("alert-error", alertText, "#alertdiv");
+     	}  
+    });  
+}
+
+//General Funcations
 function addAlert(alertClass, alertText, alertID){
 	$(alertID).empty();
 	var newalert = document.createElement("div");

@@ -5,27 +5,29 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Department Manager Home Page</title>
-<link rel="stylesheet" type="text/css" href="resources/css/bootstrap.css" />
-<link rel="stylesheet" type="text/css" href="resources/css/mainstyle.css" />
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>Department Manager Home Page</title>
+	<link rel="stylesheet" type="text/css" href="resources/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="resources/css/mainstyle.css" />
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="resources/js/jsfunc.js"></script>
 </head>
 <body>
 	<div class="container">
 		<div class="row-fluid">
 			<h1>Department Manager Home</h1>
 			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <%=session.getAttribute("userId")%>)</h3>		
-			<h5><%=session.getAttribute("depName")%>&nbsp;(id: <%=session.getAttribute("depId")%>)</h5>
-			<div class="span12 alertdiv" style="margin-top:60px; height:50px">					
+			<h5><%=session.getAttribute("depName")%>&nbsp;(id: <span id="depIdSpan"><%=session.getAttribute("depId")%></span>)</h5>
+			<div id="alertdiv" class="span12" style="margin-top:60px; height:50px">					
 			</div>
 			
 			<div class="subdiv span12">
 				<div class="row">
 					<div class="span7 offset1">
-						<input type="text"  class="span12" placeholder="Enter the name of the new group"  required="true" />
+						<input type="text" id="groName" class="span12" placeholder="Enter the name of the new group"  required="true" />
 					</div>
 					<div id="btndiv" class="span3">
-						<input type="submit" class="btn btn-primary btn-block" value="Create Group"/>
+						<button class="btn btn-primary btn-block" onclick="newGroup();"/>Create Group</button>
 					</div>
 				</div>
 			</div>
@@ -33,13 +35,13 @@
 			<div class="subdiv span12">
 				<div class="row">
 					<div class="span3 offset1">
-						<input type="text"  class="span12" placeholder="Enter the group name/ID"  required="true" />
+						<input type="text" id="oldGroName" class="span12" placeholder="Enter the group name"  required="true" />
 					</div>
 					<div class="span3">
-						<input type="text"  class="span12" placeholder="Enter the new group name"  required="true" />
+						<input type="text" id="newGroName" class="span12" placeholder="Enter the new group name"  required="true" />
 					</div>
 					<div id="btndiv" class="span3 offset1">
-						<input type="submit" class="btn btn-primary btn-block" value="Modify Department"/>
+						<button class="btn btn-primary btn-block" onclick="modifyGroup();">Modify Group</button>
 					</div>
 				</div>
 			</div>
