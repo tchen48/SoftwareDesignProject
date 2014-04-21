@@ -5,6 +5,11 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.ProjMgmtSys.model.Dept.Dept;
+import com.ProjMgmtSys.model.Dept.DeptManager;
+import com.ProjMgmtSys.model.Gro.Gro;
+import com.ProjMgmtSys.model.Gro.GroManager;
+
 
 public class UserManager {
 	private static Session session;
@@ -21,10 +26,18 @@ public class UserManager {
 		user.setUserType(userType);
 		user.setGroId(groId);
 		user.setDepId(depId);
-		/*
-		 * Need to query group name and dept name via corresponding methods in deptManager and groManager		 * 
-		 * */
+
 		createSession();
+		
+		Dept dept = DeptManager.queryDept(depId);
+		System.out.println(dept.getDepName());
+		user.setDepName(dept.getDepName());
+		
+		Gro gro = GroManager.queryGro(groId);
+		user.setGroName(gro.getGroName());
+		System.out.println(gro.getGroName());
+
+		System.out.println("test!!!!!");
 		session.save(user);
 		session.getTransaction().commit();
 		session.close();

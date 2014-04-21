@@ -14,15 +14,16 @@ public class CroManager {
         session.beginTransaction();
 	}
 	
-	public static String createGro(String groName, String depId){
+	public static String createGro(String groName, int depId){
 		Gro gro = new Gro();
 		gro.setGroName(groName);
 		gro.setDepId(depId);
-		
+
 		createSession();
 		session.save(gro);
 		session.getTransaction().commit();
 		session.close();
+
 		return  "" + gro.getGroId();
 	}
 	

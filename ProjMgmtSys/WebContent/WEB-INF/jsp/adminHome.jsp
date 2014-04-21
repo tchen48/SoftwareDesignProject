@@ -17,9 +17,9 @@
 		<div class="row-fluid">
 			<h1>Admin Home</h1>
 			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <%=session.getAttribute("userId")%>)</h3>
-				<div id="alertdiv" class="span12 alertdiv" style="margin-top:60px; height:50px">					
-				</div>
-				
+
+			<div id="createDeptAlert" class="span12 alertdiv" style="margin-top:20px; height:50px; opacity: .90;"></div>
+				</br>
 				<div class="subdiv span12">
 					<div class="row">
 						<div class="span7 offset1">
@@ -56,10 +56,12 @@
 					</div>
 				</div>
 				
+				<div id="createEmpAlert" class="span12 alertdiv" style="height:50px; margin-top:20px; opacity: .90;"></div>
+				</br>
 				<div class="subdiv span12">
 					<div class="row">
 						<div class="span7 offset1">
-							<input type="text"  class="span12" placeholder="Enter the name of new employee"  required="true" />
+							<input type="text"  id="empName" class="span12" placeholder="Enter the name of new employee"  required="true" />
 						</div>
 						<div class="span4 labelcenter">
 							<label>ID: </label>
@@ -75,12 +77,12 @@
 						</div>
 						<div class="span3 offset1 labelcenter">
 							<label class="checkbox" style="margin:auto auto">
-								<input type="checkbox" value="">
+								<input type="checkbox" id = "isManager"value="">
 								Department Manager?
 							</label>
 						</div>
 						<div class="span3">
-							<input type="submit" class="btn btn-primary btn-block" value="Create Employee"/>
+							<input type="submit" onclick="newEmp();"class="btn btn-primary btn-block" value="Create Employee"/>
 						</div>
 					</div>
 				</div>

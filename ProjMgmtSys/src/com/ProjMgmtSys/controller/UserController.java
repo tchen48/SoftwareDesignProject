@@ -155,6 +155,18 @@ public class UserController {
 	} 
 	
 	
+	@RequestMapping("/newEmp")  
+	 public @ResponseBody  
+	 String newEmp( @RequestParam(value = "empName") String empName,
+			 		@RequestParam(value = "depList") int depList,
+			 		@RequestParam(value = "isManager") boolean isManager) {  
+		System.out.println("empName " + empName); 
+		System.out.println("depList " + depList); 
+		System.out.println("isManager " + isManager);
+		String empId = UserManager.createUser(empName, "123", isManager?1:3, 0, depList);
+		return empId;  	  
+	 } 
+	
 	@RequestMapping("/newProject")
     public String newProject(@ModelAttribute("user") User user, Model model){	
         return "newProject";
