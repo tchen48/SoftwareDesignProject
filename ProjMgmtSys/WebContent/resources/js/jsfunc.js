@@ -18,6 +18,8 @@ function newDept() {
 	     		addAlert("alert-error", alertText, "#createDeptAlert");
      		}
      		else{
+				$('#depList').empty();
+	     		getDepList();
 	     		var alertText = "Department " + depName + " is successfully created! Dept ID: " + response;
 				$('#depName').val("");
 	     		addAlert("alert-success", alertText, "#createDeptAlert");
@@ -50,6 +52,8 @@ function modifyDept() {
 	     		addAlert("alert-error", alertText, "#createDeptAlert");
      		}
      		else{
+				$('#depList').empty();
+	     		getDepList();
 	     		var alertText = "Department " + oldName + " is changed to " + newName;
 	     		addAlert("alert-success", alertText, "#createDeptAlert");
      		}
@@ -88,6 +92,11 @@ function newEmp(){
 	var empName = $("#empName").val();
 	var depList = $("#depList").val();
 	var isManager = $("#isManager").is(':checked')?true:false;
+	if(empName == ""){
+    	var alertText = "Employee name can't be blank";
+    	addAlert("alert-error", alertText, "#createEmpAlert");
+    	return;
+    }
 	 $.ajax({
 		 type:"Post",
 		 url:"newEmp.html",
@@ -107,7 +116,6 @@ function newEmp(){
 	
 }
 
-<<<<<<< HEAD
 function newPass(){
 	var userId = $("#userId").text();
 	var newPass = $("#newPass").val();
@@ -146,10 +154,7 @@ function newPass(){
 			addAlert("alert-error",alertText,"#newPassAlert");
 		}
 	});
-	
 }
-function addAlert(alertClass, alertText,alertID){
-=======
 //Dept Manager Functions
 function newGroup() {  
     var groName = $('#groName').val();  
@@ -217,11 +222,27 @@ function modifyGroup() {
 
 //General Funcations
 function addAlert(alertClass, alertText, alertID){
->>>>>>> origin/develop
 	$(alertID).empty();
 	var newalert = document.createElement("div");
 	newalert.className = "alert " + alertClass;
 	newalert.innerHTML = alertText;
 	$(alertID).append(newalert);
 	$(newalert).fadeIn(1000).delay(2000).fadeOut(1500);
+}
+
+//Generate Department Option
+function getDepList(){
+	$.ajax({   
+        type:'get',   
+        url:"getDept.html",   
+        dataType: 'json',   
+        success:function(data){  
+            $.each(data,function(i,list){ 
+            	$('#depList')
+                .append($("<option></option>")
+                .attr("value",list.depId)
+                .text(list.depName)); 
+        	}) ;
+    	} 
+	}) ;
 }

@@ -113,4 +113,18 @@ public class DeptManager {
 		return "1";
 	}
 	
+	public static List <Dept> geyAllDepName(){
+		createSession();
+		String hql = "from Dept as dept";
+		Query query = session.createQuery(hql);
+		List <Dept> list = query.list();
+		Dept dept = null;
+		session.getTransaction().commit();
+		session.close();
+		java.util.Iterator<Dept> iter = list.iterator();
+		while (iter.hasNext()) {
+			System.out.println(iter.next().getDepId());
+		}			
+		return list;	
+	}
 }

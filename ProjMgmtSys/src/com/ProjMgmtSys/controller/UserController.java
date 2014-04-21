@@ -5,9 +5,34 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
+
+
+
+
+
+
+
+import javax.servlet.ServletException;  
+import javax.servlet.http.HttpServlet;  
+import javax.servlet.http.HttpServletRequest;  	 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
+
+
+
+
+
+
+
+
+import net.sf.json.*;  
+
+import org.apache.struts2.ServletActionContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,15 +41,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
-
-
-
-
 import com.ProjMgmtSys.model.Dept.Dept;
 import com.ProjMgmtSys.model.Dept.DeptManager;
 import com.ProjMgmtSys.model.Gro.GroManager;
 import com.ProjMgmtSys.model.User.*;
+import com.opensymphony.xwork2.*;
 
 @Controller("userController")
 public class UserController {
@@ -185,6 +206,19 @@ public class UserController {
 
 			throw new Exception("Error!") ;
 	 } 
+	 
+	@RequestMapping("/getDept.html")  
+	 public @ResponseBody  
+	 String getDept(HttpServletRequest request, HttpServletResponse response)throws IOException  {  
+		
+		List<Dept> list = DeptManager.geyAllDepName();  
+		JSONArray jsonArray = JSONArray.fromObject(list); 
+		//response.setCharacterEncoding("UTF-8");  
+		//response.getWriter().print(jsonArray);  
+		System.out.println( jsonArray); 
+		response.getWriter().print(jsonArray);  
+		return null;
+	 }
 	@RequestMapping("/newGroup")  
 	public @ResponseBody  
 	String newGroup(@RequestParam(value = "groName") String groName, 
