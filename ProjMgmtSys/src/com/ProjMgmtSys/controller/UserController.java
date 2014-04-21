@@ -5,20 +5,22 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-
-
-
 
 import com.ProjMgmtSys.model.Dept.Dept;
 import com.ProjMgmtSys.model.Dept.DeptManager;
@@ -50,21 +52,22 @@ public class UserController {
 			return "adminHome";
 		}
 		else if(usertype == UserType.DEPTMANAGER){
-			session.setAttribute("depName", user.getDepName());
+			String depName = DeptManager.queryDeptById(user.getDepId()).getDepName();
+			session.setAttribute("depName", depName);
 			session.setAttribute("depId", user.getDepId());
 			return "deptMngHome";
 		}
 		else if(usertype == UserType.GROUPMANAGER){
-			session.setAttribute("depName", user.getDepName());
+			String depName = DeptManager.queryDeptById(user.getDepId()).getDepName();
+			session.setAttribute("depName", depName);
 			session.setAttribute("depId", user.getDepId());
-			session.setAttribute("groName", user.getGroName());
 			session.setAttribute("groId", user.getGroId());
 			return "groMngHome";
 		}
 		else{
-			session.setAttribute("depName", user.getDepName());
+			String depName = DeptManager.queryDeptById(user.getDepId()).getDepName();
+			session.setAttribute("depName", depName);
 			session.setAttribute("depId", user.getDepId());
-			session.setAttribute("groName", user.getGroName());
 			session.setAttribute("groId", user.getGroId());
 			return "empHome";
 		}
@@ -179,7 +182,7 @@ public class UserController {
 			return GroManager.createGro(groName, intId);
 		}
 		catch (NumberFormatException e){
-			return "DeptID must be Integer";
+			return "GroupID must be Integer";
 		}		
 	} 
 	
@@ -195,9 +198,28 @@ public class UserController {
 			return  GroManager.updateGroName(oldName, newName, intId);
 		}
 		catch (NumberFormatException e){
-			return "DeptID must be Integer";
+			return "GroupID must be Integer";
 		}
 	} 
+	
+	@RequestMapping(value = "/getDepEmpList", method = RequestMethod.GET)
+	public @ResponseBody
+	String getDepEmpList(
+		@RequestParam(value = "depId") String depId,
+		@RequestParam(value = "allemp") String allEmp){
+		try{
+			JSONArray jsonA = UserManager.getDeptEmpList(Integer.parseInt(depId), Integer.parseInt(allEmp));
+			return jsonA.toString();
+		}
+////				result = GroManager.getDeptGroList(Integer.parseInt(depId));
+////				System.out.println(result);
+//				return null;
+//		}
+		catch (NumberFormatException e){
+			return null;
+		}
+	}
+	
 	
 	@RequestMapping("/newProject")
     public String newProject(@ModelAttribute("user") User user, Model model){	

@@ -1,10 +1,15 @@
 package com.ProjMgmtSys.model.User;
  
+import java.util.ArrayList;
 import java.util.List;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.ProjMgmtSys.controller.DeptElementCode;
 import com.ProjMgmtSys.model.Dept.Dept;
 import com.ProjMgmtSys.model.Dept.DeptManager;
 import com.ProjMgmtSys.model.Gro.Gro;
@@ -31,14 +36,12 @@ public class UserManager {
 		
 		Dept dept = DeptManager.queryDeptById(depId);
 		System.out.println(dept.getDepName());
-		user.setDepName(dept.getDepName());
 		
 //		Gro gro = GroManager.queryGro(groId);
 //		user.setGroName(gro.getGroName());
 //		System.out.println(gro.getGroName());
-		user.setGroName("N/A");
 
-		System.out.println("test!!!!!");
+//		System.out.println("test!!!!!");
 		session.save(user);
 		session.getTransaction().commit();
 		session.close();
@@ -204,4 +207,57 @@ public class UserManager {
 		session.close();
 		return "1";
 	}
+	
+	public static JSONArray getDeptEmpList(int depId, int allEmp){
+		JSONArray array = new JSONArray();
+//		JSONArray array = JSONArray.fromObject(userList);
+		createSession();
+		String hql;
+		if(allEmp == DeptElementCode.UNASSIGNED_EMP)
+			hql = "from User as user where user.depId=:depId and user.userType=:userType and user.groId=:groId";
+		else
+			hql = "from User as user where user.depId=:depId and user.userType=:userType";
+		Query query = session.createQuery(hql);
+		query.setInteger("depId", depId);
+		if(allEmp == DeptElementCode.UNASSIGNED_EMP)
+			query.setInteger("groId", 0);
+		query.setInteger("userType", UserType.EMPLOYEE);
+		List <User>list = query.list();
+		java.util.Iterator<User> iter = list.iterator();
+		UserNameId nameid = new UserNameId();
+		User user = null;
+		while (iter.hasNext()) {
+			user = iter.next();
+			System.out.println(user.getUserId() + " " + user.getUserName());
+			nameid.setUserId(user.getUserId());
+			nameid.setUserName(user.getUserName());
+			array.add(nameid);
+		}					
+		session.getTransaction().commit();
+		session.close();
+		
+		System.out.println("array: " + array.toString());  
+		return array;
+	}
+	
+	
+//	public static UserNameId[] getDeptEmpList(int depId){
+//		createSession();
+//		String hql = "from User as user where user.depId=:depId";
+//		Query query = session.createQuery(hql);
+//		query.setInteger("depId", depId);
+//		List <User>list = query.list();
+//		java.util.Iterator<User> iter = list.iterator();
+//		UserNameId[] userList = new UserNameId[list.size()];
+//		User user = null;
+//		int count = 0;
+//		while (iter.hasNext()) {
+//			user = iter.next();
+//			userList[count] = new UserNameId(user.getUserId(), user.getUserName());
+//			count++;
+//		}					
+//		session.getTransaction().commit();
+//		session.close();
+//		return userList;
+//	}
 }

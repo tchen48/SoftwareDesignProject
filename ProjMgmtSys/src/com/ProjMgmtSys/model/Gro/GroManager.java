@@ -81,6 +81,24 @@ public class GroManager {
 		return gro;		
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static Gro queryGroById(int groId, int depId){
+		createSession();
+		String hql = "from Gro as gro where gro.groId=:groId and gro.depId=:depId";
+		Query query = session.createQuery(hql);
+		query.setInteger("groId", groId);
+		query.setInteger("depId", depId);
+		List <Gro>list = query.list();
+		Gro gro = null;
+		java.util.Iterator<Gro> iter = list.iterator();
+		while (iter.hasNext()) {
+			gro = iter.next();
+		}
+		session.getTransaction().commit();
+		session.close();
+		return gro;		
+	}
+	
 	public static String updateGroName(String oldName, String newName, int depId){
 		int repeat = checkRepeatGro(newName, depId);
 		if(repeat == -1)
@@ -102,4 +120,23 @@ public class GroManager {
 		return "1";
 	}
 	
+//	public static JSONObject getDeptGroList(int depId){
+//		JSONObject obj = new JSONObject();
+//		createSession();
+//		String hql = "from Gro as gro where gro.depId=:depId";
+//		Query query = session.createQuery(hql);
+//		query.setInteger("depId", depId);
+//		List <Gro>list = query.list();
+//		java.util.Iterator<Gro> iter = list.iterator();
+//		Gro gro = null;
+//		int count = 0;
+//		while (iter.hasNext()) {
+//			gro = iter.next();
+//			obj.put(gro.getGroId(), gro.getGroName());
+//			count++;
+//		}					
+//		session.getTransaction().commit();
+//		session.close();
+//		return obj;
+//	}
 }

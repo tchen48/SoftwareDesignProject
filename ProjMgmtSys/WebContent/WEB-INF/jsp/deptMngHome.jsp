@@ -68,9 +68,9 @@
 				<div class="row">
 					<div class="span2 offset1">
 						<select id="empList" class="form-control span12">
-						    <option value="0">Mike</option>
+					<!--    <option value="0">Mike</option>
 						    <option value="1">Jack</option>
-						    <option value="2">Bob</option>
+						    <option value="2">Bob</option> -->
 						</select>
 					</div>
 					<div class="span1 labelcenter">
@@ -79,9 +79,9 @@
 				
 					<div class="span3">
 						<select id="depList" class="form-control span12">
-						    <option value="0">Human Resource</option>
+			<!--    	    <option value="0">Human Resource</option>
 						    <option value="1">IT</option>
-						    <option value="2">Market</option>
+						    <option value="2">Market</option> -->
 						</select>
 					</div>
 					<div class="span2">
@@ -115,5 +115,8 @@
 			</form:form>-->
 		</div>
 	</div>
+	<script>
+		getDeptEmp();
+	</script>
 </body>
 </html>
