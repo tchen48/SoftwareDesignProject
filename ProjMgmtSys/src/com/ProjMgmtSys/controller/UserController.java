@@ -163,7 +163,7 @@ public class UserController {
 		System.out.println("empName " + empName); 
 		System.out.println("depList " + depList); 
 		System.out.println("isManager " + isManager);
-		String empId = UserManager.createUser(empName, "123", isManager?1:3, 0, depList);
+		String empId = UserManager.createUser(empName, empName, isManager?1:3, 0, depList);
 		return empId;  	  
 	 } 
 	

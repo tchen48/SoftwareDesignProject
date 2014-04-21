@@ -29,13 +29,14 @@ public class UserManager {
 
 		createSession();
 		
-		Dept dept = DeptManager.queryDept(depId);
+		Dept dept = DeptManager.queryDeptById(depId);
 		System.out.println(dept.getDepName());
 		user.setDepName(dept.getDepName());
 		
-		Gro gro = GroManager.queryGro(groId);
-		user.setGroName(gro.getGroName());
-		System.out.println(gro.getGroName());
+//		Gro gro = GroManager.queryGro(groId);
+//		user.setGroName(gro.getGroName());
+//		System.out.println(gro.getGroName());
+		user.setGroName("N/A");
 
 		System.out.println("test!!!!!");
 		session.save(user);

@@ -1,5 +1,11 @@
 function newDept() {  
     var depName = $('#depName').val();  
+    if(depName.trim().length == 0){
+    	var alertText = "Department name can't be blank";
+    	addAlert("alert-error", alertText, "#createDeptAlert");
+    	return;
+    }
+    	
     $.ajax({  
     	type : "Post",   
     	url : "newDept.html",   
@@ -27,6 +33,12 @@ function newDept() {
 function modifyDept() {  
     var oldName = $('#oldDepName').val();  
     var newName = $('#newDepName').val();
+    if(oldName.trim().length == 0 || newName.trim().length == 0){
+    	var alertText = "Department name can't be blank";
+    	addAlert("alert-error", alertText, "#createDeptAlert");
+    	return;
+    }
+    
     $.ajax({  
     	type : "Post",   
     	url : "modifyDept.html",   
@@ -34,11 +46,11 @@ function modifyDept() {
      	success : function(response) {
      		if(response == "0"){
      			var alertText = "Illegal department name!";
-	     		addAlert("alert-error", alertText);
+	     		addAlert("alert-error", alertText, "#createDeptAlert");
      		}
      		else{
 	     		var alertText = "Department " + oldName + " is changed to " + newName;
-	     		addAlert("alert-success", alertText);
+	     		addAlert("alert-success", alertText, "#createDeptAlert");
      		}
      	},  
      	error : function(e) { 
@@ -57,16 +69,16 @@ function unblock(){
 		success : function(response) {
 			if(response == "1"){
 	     		var alertText = "Unblock succeed";
-	     		addAlert("alert-success", alertText);
+	     		addAlert("alert-success", alertText, "#createDeptAlert");
 			}
 			else{
 				var alertText = "Unblock failed";
-	     		addAlert("alert-error", alertText);
+	     		addAlert("alert-error", alertText, "#createDeptAlert");
 			}
      	},  
      	error : function(e) { 
      		var alertText = 'Error: ' + e;
-     		addAlert("alert-error", alertText);
+     		addAlert("alert-error", alertText, "#createDeptAlert");
      	}  
 	});
 }
@@ -81,11 +93,12 @@ function newEmp(){
 		 data:"empName="+empName+"&depList="+depList+"&isManager="+isManager,
 		 success:function(response){
 			 var alertText = "A new employee called "+empName+" is successfully created ! Emp ID is "+response;
+			 $("#idLabel").text("ID: " + response);
 			 addAlert("alert-success",alertText,"#createEmpAlert");
 		 },
 		 error:function(e){
 			 var alertText = 'Error: ' + e;
-	     		addAlert("alert-error", alertText,"#createEmpAlert");
+	     	 addAlert("alert-error", alertText,"#createEmpAlert");
 		 }
 	 });
 	
@@ -97,5 +110,5 @@ function addAlert(alertClass, alertText, alertID){
 	newalert.className = "alert " + alertClass;
 	newalert.innerHTML = alertText;
 	$(alertID).append(newalert);
-	$(alertID).fadeIn(1000).delay(2000).fadeOut(1500);
+	$(newalert).fadeIn(1000).delay(2000).fadeOut(1500);
 }

@@ -63,7 +63,7 @@ public class DeptManager {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static Dept queryDeptById(String depId){
+	public static Dept queryDeptById(int depId){
 		createSession();
 		String hql = "from Dept as dept where dept.depId=:depId";
 		Query query = session.createQuery(hql);
@@ -102,7 +102,7 @@ public class DeptManager {
 		
 		Dept dept1 = queryDeptByName(oldName);
 		if(dept1 == null)
-			return "1";
+			return "0";
 		
 		createSession();
 		String hql = "update Dept as dept set dept.depName=:newName where dept.depName=:oldName";
