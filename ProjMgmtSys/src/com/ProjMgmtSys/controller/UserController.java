@@ -19,6 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 
+
+
+
+
+
 import com.ProjMgmtSys.model.Dept.Dept;
 import com.ProjMgmtSys.model.Dept.DeptManager;
 import com.ProjMgmtSys.model.User.*;
@@ -58,7 +63,7 @@ public class UserController {
 			session.setAttribute("groName", user.getGroName());
 			session.setAttribute("groId", user.getGroId());
 			return "groMngHome";
-		}
+		}	
 		else{
 			session.setAttribute("depName", user.getDepName());
 			session.setAttribute("depId", user.getDepId());
@@ -143,6 +148,22 @@ public class UserController {
 		System.out.println("isManager " + isManager);
 		String empId = UserManager.createUser(empName, "123", isManager?1:3, 0, depList);
 		return empId;  	  
+	 } 
+	
+	@RequestMapping("/newPass")  
+	 public @ResponseBody  
+	 String newPass(@RequestParam(value = "oldPass") String oldPass,
+		 			@RequestParam(value = "newPass") String newPass,
+		 			@RequestParam(value = "userId") String userId) throws Exception {  
+
+		int result = UserManager.validatePassword(userId, oldPass);
+		if(result == StatusCode.LOGIN_SUCCESS){
+			UserManager.updatePassword(userId, newPass);
+			return "A new Password is created!";  	  
+		}
+		else
+
+			throw new Exception("Error!") ;
 	 } 
 	
 	@RequestMapping("/newProject")
