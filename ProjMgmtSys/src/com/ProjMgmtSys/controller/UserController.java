@@ -21,11 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 
-
-
-
 import com.ProjMgmtSys.model.Dept.Dept;
 import com.ProjMgmtSys.model.Dept.DeptManager;
+import com.ProjMgmtSys.model.Gro.GroManager;
 import com.ProjMgmtSys.model.User.*;
 
 @Controller("userController")
@@ -187,6 +185,35 @@ public class UserController {
 
 			throw new Exception("Error!") ;
 	 } 
+	@RequestMapping("/newGroup")  
+	public @ResponseBody  
+	String newGroup(@RequestParam(value = "groName") String groName, 
+					@RequestParam(value = "depId") String depId) {  
+		int intId;
+		try{
+			intId = Integer.parseInt(depId);
+			return GroManager.createGro(groName, intId);
+		}
+		catch (NumberFormatException e){
+			return "DeptID must be Integer";
+		}		
+	} 
+	
+	@RequestMapping("/modifyGroup")  
+	public @ResponseBody  
+	String modifyGroup(
+		@RequestParam(value = "oldName") String oldName,
+		@RequestParam(value = "newName") String newName,
+		@RequestParam(value = "depId") String depId) {  
+		int intId;
+		try{
+			intId = Integer.parseInt(depId);
+			return  GroManager.updateGroName(oldName, newName, intId);
+		}
+		catch (NumberFormatException e){
+			return "DeptID must be Integer";
+		}
+	} 
 	
 	@RequestMapping("/newProject")
     public String newProject(@ModelAttribute("user") User user, Model model){	

@@ -26,13 +26,11 @@ public class DeptManager {
 		session.save(dept);
 		session.getTransaction().commit();
 		session.close();
-		return queryDeptId(depName);
+		return "" + dept.getDepId();
+//		return queryDeptId(depName);
 	}
 	
 	public static int checkRepeatDept(String depName){
-		Dept dept = new Dept();
-		dept.setDepName(depName);
-		
 		createSession();
 		String hql = "from Dept as dept where dept.depName=:depName";
 		Query query = session.createQuery(hql);
