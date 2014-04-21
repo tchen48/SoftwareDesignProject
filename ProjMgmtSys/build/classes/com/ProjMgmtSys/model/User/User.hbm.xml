@@ -17,7 +17,7 @@
 		</property>
 		
 		<property name="userType">
-			<column name="usertype"  not-null="true"/>
+			<column name="usertype" not-null="true"/>
 		</property>
 		
 		<property name="groId">

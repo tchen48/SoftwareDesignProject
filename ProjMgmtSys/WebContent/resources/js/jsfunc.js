@@ -111,6 +111,10 @@ function newPass(){
 	var newPass = $("#newPass").val();
 	var reNewPass = $("#reNewPass").val();
 	var oldPass = $("#oldPass").val();
+	if ( oldPass == "" || newPass == ""||reNewPass == "" ){
+		addAlert("alert-error","Passwords cannot be blank!","#newPassAlert");
+		return;
+	}
 	if(reNewPass != newPass){
 		addAlert("alert-error","The passwords you typed do not match! Please type again!","#newPassAlert");
 		return;
