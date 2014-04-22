@@ -2,10 +2,16 @@ package com.ProjMgmtSys.model.Gro;
  
 import java.util.List;
 
+import net.sf.json.JSONArray;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.ProjMgmtSys.controller.DeptElementCode;
 import com.ProjMgmtSys.model.Dept.Dept;
+import com.ProjMgmtSys.model.User.User;
+import com.ProjMgmtSys.model.User.NameId;
+import com.ProjMgmtSys.model.User.UserType;
 
 
 public class GroManager {
@@ -120,23 +126,26 @@ public class GroManager {
 		return "1";
 	}
 	
-//	public static JSONObject getDeptGroList(int depId){
-//		JSONObject obj = new JSONObject();
-//		createSession();
-//		String hql = "from Gro as gro where gro.depId=:depId";
-//		Query query = session.createQuery(hql);
-//		query.setInteger("depId", depId);
-//		List <Gro>list = query.list();
-//		java.util.Iterator<Gro> iter = list.iterator();
-//		Gro gro = null;
-//		int count = 0;
-//		while (iter.hasNext()) {
-//			gro = iter.next();
-//			obj.put(gro.getGroId(), gro.getGroName());
-//			count++;
-//		}					
-//		session.getTransaction().commit();
-//		session.close();
-//		return obj;
-//	}
+	public static JSONArray getDeptGroList(int depId){
+		JSONArray array = new JSONArray();
+		createSession();
+		String hql;
+		hql = "from Gro as gro where gro.depId=:depId";
+		Query query = session.createQuery(hql);
+		query.setInteger("depId", depId);
+		List <Gro>list = query.list();
+		java.util.Iterator<Gro> iter = list.iterator();
+		NameId nameid = new NameId();
+		Gro gro = null;
+		while (iter.hasNext()) {
+			gro = iter.next();
+			nameid.setId(gro.getGroId());
+			nameid.setName(gro.getGroName());
+			array.add(nameid);
+		}					
+		session.getTransaction().commit();
+		session.close();
+		return array;
+	}
+	
 }

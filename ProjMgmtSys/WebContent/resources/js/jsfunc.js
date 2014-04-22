@@ -227,7 +227,6 @@ function getDeptEmp(){
 		url : "getDepEmpList.html",
 		data : "depId=" + depId + "&allemp=" + 0,
 		success : function(response){
-			alert(response);
 			var json = $.parseJSON(response);
 			addOptions(json, "#empList");
 		},
@@ -236,6 +235,52 @@ function getDeptEmp(){
      		addAlert("alert-error", alertText, "#alertdiv");
 		}
 	});
+}
+
+function getDeptGro(){
+	var depId = $('#depIdSpan').text();
+	$.ajax({
+		type : "Get",
+		url : "getDepGroList.html",
+		data : "depId=" + depId,
+		success : function(response){
+			var json = $.parseJSON(response);
+			addOptions(json, "#groList");
+		},
+		error : function(e){
+			var alertText = 'Error: ' + e;
+     		addAlert("alert-error", alertText, "#alertdiv");
+		}
+	});
+}
+
+function assignEmp(){
+	var userId = $('#empList').val();
+	var userName = $('#empList option:selected').text();
+	var groId = $('#groList').val();
+	var groName = $('#groList option:selected').text();
+	var isGroMng = $('#groMngBox').prop('checked');
+	$.ajax({
+		type : "Post",
+		url : "assignEmp.html",
+		data : "userId=" + userId + "&groId=" + groId + "&isGroMng=" + isGroMng,
+		success : function(response) {
+			if(response == '1'){
+				$('#empList  option:selected').remove();
+	     		var alertText = userName + " is assigned to " + groName;
+	     		addAlert("alert-success", alertText, "#alertdiv");
+			}
+			else{
+				var alertText = "Assignment failed";
+	     		addAlert("alert-error", alertText, "#alertdiv");
+			}
+     	},  
+     	error : function(e) { 
+     		var alertText = 'Error: ' + e;
+     		addAlert("alert-error", alertText, "#alertdiv");
+     	}  
+	});
+
 }
 
 //General Funcations
@@ -251,8 +296,7 @@ function addAlert(alertClass, alertText, alertID){
 
 function addOptions(json, selectId){
 	for(var i = 0; i < json.length; i++){
-		alert(json[i].userName + " " + json[i].userId);
-		$(selectId).append('<option value="' + json[i].userId + '">' + json[i].userName + '</option>');
+		$(selectId).append('<option value="' + json[i].id + '">' + json[i].name + '</option>');
 	}
 }
 

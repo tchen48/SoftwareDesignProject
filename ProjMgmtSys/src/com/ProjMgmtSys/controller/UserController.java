@@ -253,6 +253,29 @@ public class UserController {
 		}
 	}
 	
+	@RequestMapping(value = "/getDepGroList", method = RequestMethod.GET)
+	public @ResponseBody
+	String getDepGroList(
+		@RequestParam(value = "depId") String depId){
+		try{
+			JSONArray jsonA = GroManager.getDeptGroList(Integer.parseInt(depId));
+			return jsonA.toString();
+		}
+		catch (NumberFormatException e){
+			return null;
+		}
+	}
+	
+	@RequestMapping(value = "/assignEmp")
+	public @ResponseBody
+	String assignEmp(
+		@RequestParam(value = "userId") String userId,
+		@RequestParam(value = "groId") String groId,
+		@RequestParam(value = "isGroMng") String isGroMng){
+		System.out.println(userId + " " + groId + " " + isGroMng);
+		return UserManager.assignEmp(Integer.parseInt(userId), Integer.parseInt(groId), Boolean.parseBoolean(isGroMng));
+	}
+	
 	
 	@RequestMapping("/newProject")
     public String newProject(@ModelAttribute("user") User user, Model model){	

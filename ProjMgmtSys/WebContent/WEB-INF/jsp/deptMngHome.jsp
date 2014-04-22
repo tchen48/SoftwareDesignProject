@@ -68,9 +68,6 @@
 				<div class="row">
 					<div class="span2 offset1">
 						<select id="empList" class="form-control span12">
-					<!--    <option value="0">Mike</option>
-						    <option value="1">Jack</option>
-						    <option value="2">Bob</option> -->
 						</select>
 					</div>
 					<div class="span1 labelcenter">
@@ -78,22 +75,19 @@
 					</div>
 				
 					<div class="span3">
-						<select id="depList" class="form-control span12">
-			<!--    	    <option value="0">Human Resource</option>
-						    <option value="1">IT</option>
-						    <option value="2">Market</option> -->
+						<select id="groList" class="form-control span12">
 						</select>
 					</div>
 					<div class="span2">
 						<div class="span10 offset2 labelcenter">
 							<label class="checkbox" style="margin:auto auto">
-								<input type="checkbox" value="">
+								<input id="groMngBox" type="checkbox">
 								Group Leader?
 							</label>
 						</div>
 					</div>
 					<div class="span2">
-						<input type="submit" class="btn btn-primary btn-block" value="Assign Employee"/>
+						<button class="btn btn-primary btn-block" onclick="assignEmp();">Assign Employee</button>
 					</div>
 				</div>
 			</div>
@@ -117,6 +111,7 @@
 	</div>
 	<script>
 		getDeptEmp();
+		getDeptGro();
 	</script>
 </body>
 </html>

@@ -210,7 +210,6 @@ public class UserManager {
 	
 	public static JSONArray getDeptEmpList(int depId, int allEmp){
 		JSONArray array = new JSONArray();
-//		JSONArray array = JSONArray.fromObject(userList);
 		createSession();
 		String hql;
 		if(allEmp == DeptElementCode.UNASSIGNED_EMP)
@@ -224,40 +223,35 @@ public class UserManager {
 		query.setInteger("userType", UserType.EMPLOYEE);
 		List <User>list = query.list();
 		java.util.Iterator<User> iter = list.iterator();
-		UserNameId nameid = new UserNameId();
+		NameId nameid = new NameId();
 		User user = null;
 		while (iter.hasNext()) {
 			user = iter.next();
-			System.out.println(user.getUserId() + " " + user.getUserName());
-			nameid.setUserId(user.getUserId());
-			nameid.setUserName(user.getUserName());
+			nameid.setId(user.getUserId());
+			nameid.setName(user.getUserName());
 			array.add(nameid);
 		}					
 		session.getTransaction().commit();
 		session.close();
-		
-		System.out.println("array: " + array.toString());  
 		return array;
 	}
 	
+	public static String assignEmp(int userId, int groId, Boolean isGroMng){
+		createSession();
+		String hql;
+		if(isGroMng)
+			hql = "update User as u set u.groId=:groId, u.userType=:userType where u.userId=:userId";
+		else
+			hql = "update User as u set u.groId=:groId where u.userId=:userId";
+		Query query = session.createQuery(hql);
+		query.setInteger("userId", userId);
+		query.setInteger("groId", groId);
+		if(isGroMng)
+			query.setInteger("userType", UserType.GROUPMANAGER);
+		query.executeUpdate(); 
+		session.getTransaction().commit();
+		session.close();
+		return "1";
+	 }
 	
-//	public static UserNameId[] getDeptEmpList(int depId){
-//		createSession();
-//		String hql = "from User as user where user.depId=:depId";
-//		Query query = session.createQuery(hql);
-//		query.setInteger("depId", depId);
-//		List <User>list = query.list();
-//		java.util.Iterator<User> iter = list.iterator();
-//		UserNameId[] userList = new UserNameId[list.size()];
-//		User user = null;
-//		int count = 0;
-//		while (iter.hasNext()) {
-//			user = iter.next();
-//			userList[count] = new UserNameId(user.getUserId(), user.getUserName());
-//			count++;
-//		}					
-//		session.getTransaction().commit();
-//		session.close();
-//		return userList;
-//	}
-}
+};
