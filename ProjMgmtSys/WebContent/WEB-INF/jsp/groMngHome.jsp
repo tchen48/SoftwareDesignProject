@@ -9,13 +9,17 @@
 	<title>Group Manager Home Page</title>
 	<link rel="stylesheet" type="text/css" href="resources/css/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="resources/css/mainstyle.css" />
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="resources/js/jsfunc.js"></script>
 </head>
 <body>
 	<div class="container">
 		<div class="row-fluid">
 			<h1>Group Manager Home</h1>
-			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <%=session.getAttribute("userId")%>)</h3>		
-			<h5><%=session.getAttribute("depName")%>&nbsp;(id: <%=session.getAttribute("depId")%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=session.getAttribute("groName")%>&nbsp;(id: <%=session.getAttribute("groId")%>)</h5>
+			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <%=session.getAttribute("userId")%>)</h3>	
+			<h5><%=session.getAttribute("depName")%>&nbsp;(id: <span id="depIdSpan"><%=session.getAttribute("depId")%></span>)
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<%=session.getAttribute("groName")%>&nbsp;(id: <span id="groIdSpan"><%=session.getAttribute("groId")%></span>)</h5>	
 			
 			<div class="span12 alertdiv" style="margin-top:60px; height:50px">					
 			</div>
@@ -54,9 +58,6 @@
 								    </tr>
 							  	</thead>
 								<tbody>
-							    	<tr>
-								      <td>...</td>
-								    </tr>
 								</tbody>
 							</table>
 						</div>
@@ -97,20 +98,9 @@
 			</div>
 		</div>
 	</div>
-		
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
+	<script>
+		getGroEmp();
+	</script>
 				<!--<h3>Group 17 <br/>
 					Shihuan Shao&nbsp;&nbsp;&nbsp;&nbsp;Tuyue Chen&nbsp;&nbsp;&nbsp;&nbsp;Yongming Zhang</h3>
 				<form:form method="post" action="home.html" commandName="user">
@@ -127,8 +117,5 @@
 						</div>
 					</div>
 				</form:form>-->
-			</div>
-		</div>
-	</div>
 </body>
 </html>

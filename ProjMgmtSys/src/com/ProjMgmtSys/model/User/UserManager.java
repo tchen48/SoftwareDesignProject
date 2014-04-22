@@ -208,19 +208,19 @@ public class UserManager {
 		return "1";
 	}
 	
-	public static JSONArray getDeptEmpList(int depId, int allEmp){
+	public static JSONArray getEmpList(int depId, int groId, int unassigned){
 		JSONArray array = new JSONArray();
 		createSession();
 		String hql;
-		if(allEmp == DeptElementCode.UNASSIGNED_EMP)
+		if(unassigned == DeptElementCode.UNASSIGNED_EMP)
 			hql = "from User as user where user.depId=:depId and user.userType=:userType and user.groId=:groId";
 		else
-			hql = "from User as user where user.depId=:depId and user.userType=:userType";
+			hql = "from User as user where user.depId=:depId and user.groId=:groId";
 		Query query = session.createQuery(hql);
 		query.setInteger("depId", depId);
-		if(allEmp == DeptElementCode.UNASSIGNED_EMP)
-			query.setInteger("groId", 0);
-		query.setInteger("userType", UserType.EMPLOYEE);
+		query.setInteger("groId", groId);
+		if(unassigned == DeptElementCode.UNASSIGNED_EMP)
+			query.setInteger("userType", UserType.EMPLOYEE);
 		List <User>list = query.list();
 		java.util.Iterator<User> iter = list.iterator();
 		NameId nameid = new NameId();
@@ -233,6 +233,7 @@ public class UserManager {
 		}					
 		session.getTransaction().commit();
 		session.close();
+		System.out.println(array.toString());
 		return array;
 	}
 	
@@ -240,7 +241,7 @@ public class UserManager {
 		createSession();
 		String hql;
 		if(isGroMng)
-			hql = "update User as u set u.groId=:groId, u.userType=:userType where u.userId=:userId";
+			hql = "update User as u set u.groId=:groId u.userType=:userType where u.userId=:userId";
 		else
 			hql = "update User as u set u.groId=:groId where u.userId=:userId";
 		Query query = session.createQuery(hql);

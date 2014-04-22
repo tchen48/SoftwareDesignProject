@@ -224,8 +224,8 @@ function getDeptEmp(){
 	var depId = $('#depIdSpan').text();
 	$.ajax({
 		type : "Get",
-		url : "getDepEmpList.html",
-		data : "depId=" + depId + "&allemp=" + 0,
+		url : "getEmpList.html",
+		data : "depId=" + depId +  "&groId=" + 0 + "&unassigned=" + 1,
 		success : function(response){
 			var json = $.parseJSON(response);
 			addOptions(json, "#empList");
@@ -280,10 +280,29 @@ function assignEmp(){
      		addAlert("alert-error", alertText, "#alertdiv");
      	}  
 	});
-
 }
 
-//General Funcations
+//Group Manager Functions
+function getGroEmp(){
+	var depId = $('#depIdSpan').text();
+	var groId = $('#groIdSpan').text();
+	$.ajax({
+		type : "Get",
+		url : "getEmpList.html",
+		data : "depId=" + depId +  "&groId=" + groId + "&unassigned=" + 0,
+		success : function(response){
+			var json = $.parseJSON(response);
+			addTable(json, "#empTable");
+		},
+		error : function(e){
+			var alertText = 'Error: ' + e;
+     		addAlert("alert-error", alertText, "#alertdiv");
+		}
+	});
+}
+
+
+//General Functions
 function addAlert(alertClass, alertText, alertID){
 	$(alertID).empty();
 	var newalert = document.createElement("div");
@@ -297,6 +316,15 @@ function addAlert(alertClass, alertText, alertID){
 function addOptions(json, selectId){
 	for(var i = 0; i < json.length; i++){
 		$(selectId).append('<option value="' + json[i].id + '">' + json[i].name + '</option>');
+	}
+}
+
+function addTable(json, tableId){
+	var table = tableId + " tbody";
+	for(var i = 0; i < json.length; i++){
+		var tr = $("<tr></tr>").appendTo(table);
+		tr.append("<td>" + json[i].name + "</td>");
+//		.append('<option value="' + json[i].id + '">' + json[i].name + '</option>');
 	}
 }
 

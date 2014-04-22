@@ -235,13 +235,14 @@ public class UserController {
 		}
 	} 
 	
-	@RequestMapping(value = "/getDepEmpList", method = RequestMethod.GET)
+	@RequestMapping(value = "/getEmpList", method = RequestMethod.GET)
 	public @ResponseBody
-	String getDepEmpList(
+	String getEmpList(
 		@RequestParam(value = "depId") String depId,
-		@RequestParam(value = "allemp") String allEmp){
+		@RequestParam(value = "groId") String groId,
+		@RequestParam(value = "unassigned") String unassigned){
 		try{
-			JSONArray jsonA = UserManager.getDeptEmpList(Integer.parseInt(depId), Integer.parseInt(allEmp));
+			JSONArray jsonA = UserManager.getEmpList(Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(unassigned));
 			return jsonA.toString();
 		}
 ////				result = GroManager.getDeptGroList(Integer.parseInt(depId));
