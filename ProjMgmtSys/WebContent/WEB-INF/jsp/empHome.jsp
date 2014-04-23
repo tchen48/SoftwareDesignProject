@@ -18,10 +18,10 @@
 			<div id="content">
 				<h1>Staff Home</h1>
 				<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <span id="userId"><%=session.getAttribute("userId")%></span>)</h3>		
-				<h5><%=session.getAttribute("depName")%>&nbsp;(id: <%=session.getAttribute("depId")%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=session.getAttribute("groName")%>&nbsp;(id: <%=session.getAttribute("groId")%>)</h5>
+				<h5>Dept: <%=session.getAttribute("depName")%>&nbsp;(id: <%=session.getAttribute("depId")%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Group: <%=session.getAttribute("groName")%>&nbsp;(id: <%=session.getAttribute("groId")%>)</h5>
 				
 				</br>
-	            <div id="newPassAlert" class="span12 alertdiv" style="margin-top:-20px; height:50px; position:absolute; opacity: .90;z-index:10;  ">					
+	            <div id="alertdiv" class="span12" style="margin-top:60px; height:50px">					
 				</div>
 				</br>
 				<div class=" span12">

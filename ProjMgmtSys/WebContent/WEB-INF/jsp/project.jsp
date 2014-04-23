@@ -24,8 +24,8 @@
 		<div class="row-fluid">
 			<h1>Project</h1>
 			<h3><%=session.getAttribute("userName")%>&nbsp;(id: <%=session.getAttribute("userId")%>)</h3>		
-			<h5><%=session.getAttribute("depName")%>&nbsp;(id: <%=session.getAttribute("depId")%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=session.getAttribute("groName")%>&nbsp;(id: <%=session.getAttribute("groId")%>)</h5>
-			<h5><%=session.getAttribute("projName")%>&nbsp;(id: <%=session.getAttribute("projId")%>)</h5>
+			<h5>Dept: <%=session.getAttribute("depName")%>&nbsp;(id: <%=session.getAttribute("depId")%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Group: <%=session.getAttribute("groName")%>&nbsp;(id: <%=session.getAttribute("groId")%>)</h5>
+			<h5>Project: <%=session.getAttribute("projName")%>&nbsp;(id: <%=session.getAttribute("projId")%>)</h5>
 			
 			<div class="span12 alertdiv" style="margin-top:60px; height:50px">					
 			</div>

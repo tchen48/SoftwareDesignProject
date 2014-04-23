@@ -122,11 +122,11 @@ function newPass(){
 	var reNewPass = $("#reNewPass").val();
 	var oldPass = $("#oldPass").val();
 	if ( oldPass == "" || newPass == ""||reNewPass == "" ){
-		addAlert("alert-error","Passwords cannot be blank!","#newPassAlert");
+		addAlert("alert-error","Passwords cannot be blank!","#alertdiv");
 		return;
 	}
 	if(reNewPass != newPass){
-		addAlert("alert-error","The passwords you typed do not match! Please type again!","#newPassAlert");
+		addAlert("alert-error","The passwords you typed do not match! Please type again!","#alertdiv");
 		return;
 	}
 	$.ajax({
@@ -139,7 +139,7 @@ function newPass(){
 			$('#newPass').val("");
 			$('#reNewPass').val("");
 			var alertText = response;
-			addAlert("alert-success",alertText,"#newPassAlert");
+			addAlert("alert-success",alertText,"#alertdiv");
 		},
 		error:function( jqXHR, textStatus,errorThrown){
 			
@@ -151,7 +151,7 @@ function newPass(){
 				alertText = "Uncorrect password!";
 			else
 				alertText = "Unkown Error!";
-			addAlert("alert-error",alertText,"#newPassAlert");
+			addAlert("alert-error",alertText,"#alertdiv");
 		}
 	});
 }
@@ -309,7 +309,7 @@ function addAlert(alertClass, alertText, alertID){
 	newalert.className = "alert " + alertClass;
 	newalert.innerHTML = alertText;
 	$(alertID).append(newalert);
-	$(newalert).fadeIn(1000).delay(2000).fadeOut(1500);
+	$(newalert).fadeIn(1500).delay(2000).fadeOut(1500);
 }
 
 
@@ -324,7 +324,6 @@ function addTable(json, tableId){
 	for(var i = 0; i < json.length; i++){
 		var tr = $("<tr></tr>").appendTo(table);
 		tr.append("<td>" + json[i].name + "</td>");
-//		.append('<option value="' + json[i].id + '">' + json[i].name + '</option>');
 	}
 }
 

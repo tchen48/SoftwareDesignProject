@@ -64,14 +64,18 @@ public class UserController {
 		}
 		else if(usertype == UserType.GROUPMANAGER){
 			String depName = DeptManager.queryDeptById(user.getDepId()).getDepName();
+			String groName = GroManager.queryGroById(user.getGroId(), user.getDepId()).getGroName();
 			session.setAttribute("depName", depName);
+			session.setAttribute("groName", groName);
 			session.setAttribute("depId", user.getDepId());
 			session.setAttribute("groId", user.getGroId());
 			return "groMngHome";
 		}	
 		else{
 			String depName = DeptManager.queryDeptById(user.getDepId()).getDepName();
+			String groName = GroManager.queryGroById(user.getGroId(), user.getDepId()).getGroName();
 			session.setAttribute("depName", depName);
+			session.setAttribute("groName", groName);
 			session.setAttribute("depId", user.getDepId());
 			session.setAttribute("groId", user.getGroId());
 			return "empHome";
