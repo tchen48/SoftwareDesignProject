@@ -16,7 +16,7 @@
 	<div class="container">
 		<div class="row-fluid">
 			<h1>Admin Home</h1>
-			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <%=session.getAttribute("userId")%>)</h3>
+			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <span id="userId"><%=session.getAttribute("userId")%></span>)</h3>
 
 			<div id="createDeptAlert" class="span12" style="height:30px; margin-top:20px; margin-bottom:20px; opacity: .90;"></div>
 			</br>
@@ -83,6 +83,20 @@
 					<div class="span3">
 						<input type="submit" onclick="newEmp();"class="btn btn-primary btn-block" value="Create Employee"/>
 					</div>
+				</div>
+			</div>
+			<div class="subdiv span12">
+				<div class="span3" style="margin-left: 50px">
+					<input type="password"  id = "oldPass" class="span12" placeholder="Original Password"  required="true" />
+				</div>
+				<div class="span3">
+					<input type="password"  id="newPass" class="span12" placeholder="New Password"  required="true" />
+				</div>
+				<div class="span3">
+					<input type="password"  id="reNewPass" class="span12" placeholder="Confirm"  required="true" />
+				</div>
+				<div class="span2">
+					<input type="submit" onClick = "newPass()" class="btn btn-warning btn-block" value="Change Password"/>
 				</div>
 			</div>
 			<!--<h3>Group 17 <br/>

@@ -16,18 +16,18 @@
 	<div class="container">
 		<div class="row-fluid">
 			<h1>Group Manager Home</h1>
-			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <%=session.getAttribute("userId")%>)</h3>	
+			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <span id="userId"><%=session.getAttribute("userId")%></span>)</h3>	
 			<h5>Dept: <%=session.getAttribute("depName")%>&nbsp;(id: <span id="depIdSpan"><%=session.getAttribute("depId")%></span>)
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				Group: <%=session.getAttribute("groName")%>&nbsp;(id: <span id="groIdSpan"><%=session.getAttribute("groId")%></span>)</h5>	
 			
-			<div class="span12 alertdiv" style="margin-top:60px; height:50px">					
+			<div id="alertdiv" class="span12" style="margin-top:60px; height:50px">					
 			</div>
 			
 			<div class="subdiv span12">
 				<div class="row">
 					<div class="span4 offset1">
-						<input type="text"  class="span12" placeholder="Enter the name of the new field"  required="true" />
+						<input id="fieldName" type="text"  class="span12" placeholder="Enter the name of the new field"  required="true" />
 					</div>
 					<div class="span3">
 						<select id="typeList" class="form-control span12">
@@ -37,8 +37,22 @@
 						</select>
 					</div>
 					<div id="btndiv" class="span3">
-						<input type="submit" class="btn btn-primary btn-block" value="Add"/>
+						<button class="btn btn-primary btn-block" onclick="addField('gro');">Add</button>
 					</div>
+				</div>
+			</div>
+			<div class="subdiv span12">
+				<div class="span3" style="margin-left: 50px">
+					<input type="password"  id = "oldPass" class="span12" placeholder="Original Password"  required="true" />
+				</div>
+				<div class="span3">
+					<input type="password"  id="newPass" class="span12" placeholder="New Password"  required="true" />
+				</div>
+				<div class="span3">
+					<input type="password"  id="reNewPass" class="span12" placeholder="Confirm"  required="true" />
+				</div>
+				<div class="span2">
+					<input type="submit" onClick = "newPass()" class="btn btn-warning btn-block" value="Change Password"/>
 				</div>
 			</div>
 			<div class="span12">

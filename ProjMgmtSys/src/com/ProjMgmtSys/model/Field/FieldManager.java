@@ -14,7 +14,7 @@ public class FieldManager {
         session.beginTransaction();
 	}
 	
-	public static String createField(String fieldName, String dataType, int objId, int depId, int groId){
+	public static String createField(String fieldName, int dataType, int objId, int depId, int groId){
 		Field field = new Field();
 		field.setFieldName(fieldName);
 		field.setDataType(dataType);

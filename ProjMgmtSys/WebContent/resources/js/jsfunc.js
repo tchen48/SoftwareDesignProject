@@ -65,6 +65,22 @@ function modifyDept() {
     });  
 }  
 
+function getDepList(){
+	$.ajax({   
+        type:'get',   
+        url:"getDept.html",   
+        dataType: 'json',   
+        success:function(data){  
+            $.each(data,function(i,list){ 
+            	$('#depList')
+                .append($("<option></option>")
+                .attr("value",list.depId)
+                .text(list.depName)); 
+        	}) ;
+    	} 
+	}) ;
+}
+
 function unblock(){
 	var userId = $("#unblockId").val();
 	$.ajax({
@@ -139,7 +155,10 @@ function newPass(){
 			$('#newPass').val("");
 			$('#reNewPass').val("");
 			var alertText = response;
-			addAlert("alert-success",alertText,"#alertdiv");
+			if(response ==  "A new Password is created!")
+				addAlert("alert-success",alertText,"#alertdiv");
+			else
+				addAlert("alert-error",alertText,"#alertdiv")
 		},
 		error:function( jqXHR, textStatus,errorThrown){
 			
@@ -309,6 +328,11 @@ function addAlert(alertClass, alertText, alertID){
 	newalert.className = "alert " + alertClass;
 	newalert.innerHTML = alertText;
 	$(alertID).append(newalert);
+	
+	if(alertClass == 'alert-error'){
+		 $("html,body").animate({scrollTop: $(alertID).offset().top}, 500);
+	}
+	
 	$(newalert).fadeIn(1500).delay(2000).fadeOut(1500);
 }
 
@@ -327,20 +351,39 @@ function addTable(json, tableId){
 	}
 }
 
-//Generate Department Option
-function getDepList(){
-	$.ajax({   
-        type:'get',   
-        url:"getDept.html",   
-        dataType: 'json',   
-        success:function(data){  
-            $.each(data,function(i,list){ 
-            	$('#depList')
-                .append($("<option></option>")
-                .attr("value",list.depId)
-                .text(list.depName)); 
-        	}) ;
-    	} 
-	}) ;
+//Customization Function
+function addField(level){
+	var depId = $('#depIdSpan').text();
+	var groId;
+	if(level == "dept")
+		groId = 0;
+	else
+		groId = $('#groIdSpan').text();
+	var objId = 0;
+	var fieldName = $('#fieldName').val();
+	var fieldType = $("#typeList").val();
+	$.ajax({
+		type : "Post",
+		url : "addField.html",
+		data : "depId=" + depId +  "&groId=" + groId  +  "&objId=" + objId + "&fieldName=" + fieldName + "&fieldType=" + fieldType,
+		success : function(response){
+			$('#fieldName').val("");
+			if(response == "1"){
+				alertText = "Field " + fieldName + " is added successfully!";
+				addAlert("alert-success", alertText, "#alertdiv");
+			}
+			else{
+				alertText = "Field " + fieldName + " is failed to be added!";
+				addAlert("alert-error", alertText, "#alertdiv");
+			}
+		},
+		error : function(e){
+			$('#fieldName').val("");
+			var alertText = 'Error: ' + e;
+     		addAlert("alert-error", alertText, "#alertdiv");
+		}
+	});
 }
+
+
 

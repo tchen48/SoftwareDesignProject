@@ -3,7 +3,7 @@ package com.ProjMgmtSys.model.Field;
 public class Field {
 	private int fieldId;
 	private String fieldName;
-	private String dataType;
+	private int dataType;
 	private int objId;
 	private int depId;
 	private int groId;
@@ -20,10 +20,10 @@ public class Field {
 	public void setFieldName(String fieldName) {
 		this.fieldName = fieldName;
 	}
-	public String getDataType() {
+	public int getDataType() {
 		return dataType;
 	}
-	public void setDataType(String dataType) {
+	public void setDataType(int dataType) {
 		this.dataType = dataType;
 	}
 	public int getObjId() {

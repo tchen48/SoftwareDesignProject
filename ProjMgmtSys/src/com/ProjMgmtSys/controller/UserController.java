@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.sf.json.*;
-import org.apache.struts2.ServletActionContext;
 
+import org.apache.struts2.ServletActionContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ProjMgmtSys.model.Dept.Dept;
 import com.ProjMgmtSys.model.Dept.DeptManager;
+import com.ProjMgmtSys.model.Field.FieldManager;
 import com.ProjMgmtSys.model.Gro.GroManager;
 import com.ProjMgmtSys.model.User.*;
 import com.opensymphony.xwork2.*;
@@ -193,8 +194,8 @@ public class UserController {
 			return "A new Password is created!";  	  
 		}
 		else
-
-			throw new Exception("Error!") ;
+			return "Incorrect old password";
+//			throw new Exception("Error!") ;
 	 } 
 	 
 	@RequestMapping("/getDept.html")  
@@ -205,7 +206,7 @@ public class UserController {
 		JSONArray jsonArray = JSONArray.fromObject(list); 
 		//response.setCharacterEncoding("UTF-8");  
 		//response.getWriter().print(jsonArray);  
-		System.out.println( jsonArray); 
+		System.out.println(jsonArray); 
 		response.getWriter().print(jsonArray);  
 		return null;
 	 }
@@ -291,4 +292,16 @@ public class UserController {
     public String project(@ModelAttribute("user") User user, Model model){	
         return "project";
     }
+	
+	@RequestMapping("/addField")
+	public @ResponseBody
+	String addField(
+			@RequestParam(value = "depId") String depId,
+			@RequestParam(value = "groId") String groId,
+			@RequestParam(value = "objId") String objId,
+			@RequestParam(value = "fieldName") String fieldName,
+			@RequestParam(value = "fieldType") String fieldType){
+		FieldManager.createField(fieldName, Integer.parseInt(fieldType), Integer.parseInt(objId), Integer.parseInt(depId), Integer.parseInt(groId));
+		return "1";
+	}
 }
