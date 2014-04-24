@@ -17,8 +17,10 @@
 		<div class="row-fluid">
 			<div id="content">
 				<h1>Staff Home</h1>
-				<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <span id="userId"><%=session.getAttribute("userId")%></span>)</h3>		
-				<h5>Dept: <%=session.getAttribute("depName")%>&nbsp;(id: <%=session.getAttribute("depId")%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Group: <%=session.getAttribute("groName")%>&nbsp;(id: <%=session.getAttribute("groId")%>)</h5>
+				<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <span id="userIdSpan"><%=session.getAttribute("userId")%></span>)</h3>		
+				<h5>Dept: <%=session.getAttribute("depName")%>&nbsp;(id: <span id="depIdSpan"><%=session.getAttribute("depId")%></span>)
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					Group: <%=session.getAttribute("groName")%>&nbsp;(id: <span id="groIdSpan"><%=session.getAttribute("groId")%></span>)</h5>
 				
 				</br>
 	            <div id="alertdiv" class="span12" style="margin-top:60px; height:50px">					

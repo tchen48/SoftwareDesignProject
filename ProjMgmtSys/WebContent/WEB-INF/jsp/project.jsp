@@ -23,8 +23,10 @@
 	<div class="container">
 		<div class="row-fluid">
 			<h1>Project</h1>
-			<h3><%=session.getAttribute("userName")%>&nbsp;(id: <%=session.getAttribute("userId")%>)</h3>		
-			<h5>Dept: <%=session.getAttribute("depName")%>&nbsp;(id: <%=session.getAttribute("depId")%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Group: <%=session.getAttribute("groName")%>&nbsp;(id: <%=session.getAttribute("groId")%>)</h5>
+			<h3><%=session.getAttribute("userName")%>&nbsp;(id: <span id="userIdSpan"><%=session.getAttribute("userId")%></span>)</h3>		
+			<h5>Dept: <%=session.getAttribute("depName")%>&nbsp;(id: <span id="depIdSpan"><%=session.getAttribute("depId")%></span>)
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				Group: <%=session.getAttribute("groName")%>&nbsp;(id: <span id="groIdSpan"><%=session.getAttribute("groId")%></span>)</h5>
 			<h5>Project: <%=session.getAttribute("projName")%>&nbsp;(id: <%=session.getAttribute("projId")%>)</h5>
 			
 			<div class="span12 alertdiv" style="margin-top:60px; height:50px">					
@@ -51,10 +53,11 @@
 				</div>
 				<div class="row" style="margin-bottom:30px">
 					<div class="span4 offset1">
-						<input class="datepicker" placeholder="Choose Start Date" type="text">
-					</div>
+						<input placeholder="Choose Start Date" type="date" id="startdate" />
+	<!--			<input class="datepicker" placeholder="Choose Start Date" type="text">  -->
 					<div class="span4 offset">
-						<input class="datepicker" placeholder="Choose End Date" type="text">
+						<input placeholder="Choose End Date" type="date" id="enddate" />
+	<!--				<input class="datepicker" placeholder="Choose End Date" type="text">-->
 					</div>
 				</div>
 				<div class="row" style="margin-bottom:30px">

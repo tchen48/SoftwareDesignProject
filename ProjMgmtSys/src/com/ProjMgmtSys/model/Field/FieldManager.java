@@ -2,8 +2,15 @@ package com.ProjMgmtSys.model.Field;
  
 import java.util.List;
 
+import net.sf.json.JSONArray;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
+
+import com.ProjMgmtSys.controller.DeptElementCode;
+import com.ProjMgmtSys.model.Field.NameId;
+import com.ProjMgmtSys.model.User.User;
+import com.ProjMgmtSys.model.User.UserType;
 
 
 public class FieldManager {
@@ -57,5 +64,32 @@ public class FieldManager {
 		session.getTransaction().commit();
 		session.close();
 	}
+	
+	public static JSONArray getCustomizedField(int depId, int groId, int objId){
+		JSONArray array = new JSONArray();
+		createSession();
+		String hql = "from Field as field where field.depId=:depId and field.objId=:objId and (field.groId=:groId1 or field.groId=:groId2)";
+		Query query = session.createQuery(hql);
+		query.setInteger("depId", depId);
+		query.setInteger("groId1", 0);
+		query.setInteger("groId2", groId);
+		query.setInteger("objId", objId);
+		List <Field>list = query.list();
+		java.util.Iterator<Field> iter = list.iterator();
+		NameId nameId = new NameId();
+		Field field = null;
+		while (iter.hasNext()) {
+			field = iter.next();
+			nameId.setId(field.getFieldId());
+			nameId.setName(field.getFieldName());
+			nameId.setType(field.getDataType());
+			array.add(nameId);
+		}					
+		session.getTransaction().commit();
+		session.close();
+		System.out.println(array.toString());
+		return array;
+	}
+
 	
 }

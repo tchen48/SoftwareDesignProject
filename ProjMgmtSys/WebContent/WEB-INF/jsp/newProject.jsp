@@ -13,9 +13,10 @@
 	<link rel="stylesheet" href="/resources/demos/style.css">
 	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 	<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+	<script src="resources/js/jsfunc.js"></script>
 	<script>
 		$(function() {
-	   		$( "#datepicker" ).datepicker();
+	   		$( ".datepicker" ).datepicker();
 	  	});
 	</script>
 </head>
@@ -23,8 +24,10 @@
 	<div class="container">
 		<div class="row-fluid">
 			<h1>New Project</h1>
-			<h3><%=session.getAttribute("userName")%>&nbsp;(id: <%=session.getAttribute("userId")%>)</h3>		
-			<h5><%=session.getAttribute("depName")%>&nbsp;(id: <%=session.getAttribute("depId")%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=session.getAttribute("groName")%>&nbsp;(id: <%=session.getAttribute("groId")%>)</h5>
+			<h3><%=session.getAttribute("userName")%>&nbsp;(id: <span id="userIdSpan"><%=session.getAttribute("userId")%></span>)</h3>		
+			<h5>Dept: <%=session.getAttribute("depName")%>&nbsp;(id: <span id="depIdSpan"><%=session.getAttribute("depId")%></span>)
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				Group: <%=session.getAttribute("groName")%>&nbsp;(id: <span id="groIdSpan"><%=session.getAttribute("groId")%></span>)</h5>
 			
 			<div class="span12 alertdiv" style="margin-top:60px; height:50px">					
 			</div>
@@ -32,15 +35,18 @@
 			<div class="subdiv span12">
 				<div class="content span8 offset2">
 				<div>
-					<input type="text"  class="span12" placeholder="Enter the name of the new project"  required="true" />
+					<input type="text"  class="span12" placeholder="Enter the name of the new project" required="true" id="projectName" />
 				</div>
 				<div>
-					<input class="span6" placeholder="Choose Start Date" type="text" id="datepicker">
+					<input class="span6 datepicker" placeholder="Choose Start Date" type="text" id="startdate" />
 				</div>
+				<script>
+					getCustomizedField("proj");
+				</script>
+
 				<div>
-					<textarea class="input-block-level" placeholder="Enter project description" rows="5"></textarea>
+					<textarea class="input-block-level" placeholder="Enter project description" rows="5" id="description"></textarea>
 				</div>
-				<div class="span12" id="customdiv"></div>
 				<div class="span12" style="margin-bottom: 30px;">
 					<div class="span3 offset4">
 					<input type="submit" class="btn btn-primary btn-block" value="Create"/>
@@ -51,6 +57,7 @@
 				</div>
 				</div>
 			</div>
+			
 			
 			<!--<h3>Group 17 <br/>
 				Shihuan Shao&nbsp;&nbsp;&nbsp;&nbsp;Tuyue Chen&nbsp;&nbsp;&nbsp;&nbsp;Yongming Zhang</h3>

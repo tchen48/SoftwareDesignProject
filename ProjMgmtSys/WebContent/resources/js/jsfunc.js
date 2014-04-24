@@ -133,10 +133,11 @@ function newEmp(){
 }
 
 function newPass(){
-	var userId = $("#userId").text();
+	var userId = $("#userIdSpan").text();
 	var newPass = $("#newPass").val();
 	var reNewPass = $("#reNewPass").val();
 	var oldPass = $("#oldPass").val();
+	alert(userId);
 	if ( oldPass == "" || newPass == ""||reNewPass == "" ){
 		addAlert("alert-error","Passwords cannot be blank!","#alertdiv");
 		return;
@@ -384,6 +385,78 @@ function addField(level){
 		}
 	});
 }
+
+function getCustomizedField(type){
+	var depId = $('#depIdSpan').text();
+	var groId = $('#groIdSpan').text();
+	var objId;
+	if(type == PROJ_FIELD)
+		objId = OBJ_PROJ;
+	else
+		objId = OBJ_DETAIL;
+	$.ajax({
+		type : "Get",
+		url : "getCustomizedField.html",
+		data : "depId=" + depId +  "&groId=" + groId  +  "&objId=" + objId,
+		success : function(response){
+			if(type == PROJ_FIELD){
+				var json = $.parseJSON(response);
+				addCustomizedField(json, NEW_PROJ_LOCATION);
+			}
+			else{
+				alertText = "Field " + fieldName + " is failed to be added!";
+				addAlert("alert-error", alertText, "#alertdiv");
+			}
+		},
+		error : function(e){
+			var alertText = 'Error: ' + e;
+     		addAlert("alert-error", alertText, "#alertdiv");
+		}
+	});
+}
+
+function addCustomizedField(json, location){
+	for(var i = 0; i < json.length; i++){
+		var name = json[i].name;
+		var id = json[i].id;
+		var type;
+		if(json[i].type == TYPE_INTEGER)
+			type = "number";
+		else if(json[i].type == TYPE_STRING)
+			type = "text";
+		if(json[i].type == TYPE_DATE)
+			type = "date";
+		
+		var newDiv = $("<div><input type='text'></div>").insertAfter($(location));
+		newDiv.attr("id","customdiv" + i);
+		newDiv.addClass("customdiv");
+		var inputSelector = "#" + newDiv.attr("id") + " input";
+		$(inputSelector).addClass("span6");
+		if(json[i].type == TYPE_DATE){
+			$(inputSelector).datepicker();
+		}
+		else
+			$(inputSelector).attr("type", type);
+		$(inputSelector).attr({
+			placeholder: name,
+			id: id
+		});
+		location = "#" + newDiv.attr("id");
+	}
+}
+
+//Global Variables used for customized field
+var PROJ_FIELD = "proj";
+var DETAIL_FIELD = "detail";
+
+var NEW_PROJ_LOCATION = "#startdate";
+
+var OBJ_PROJ = 0;
+var OBJ_DETAIL = 1;
+
+var TYPE_INTEGER = 0;
+var TYPE_STRING = 1;
+var TYPE_DATE = 2;
 
 
 

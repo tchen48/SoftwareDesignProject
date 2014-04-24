@@ -304,4 +304,19 @@ public class UserController {
 		FieldManager.createField(fieldName, Integer.parseInt(fieldType), Integer.parseInt(objId), Integer.parseInt(depId), Integer.parseInt(groId));
 		return "1";
 	}
+	
+	@RequestMapping("/getCustomizedField")
+	public @ResponseBody
+	String getCustomizedField(
+			@RequestParam(value = "depId") String depId,
+			@RequestParam(value = "groId") String groId,
+			@RequestParam(value = "objId") String objId){
+		JSONArray jsonA = FieldManager.getCustomizedField(Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(objId));
+		return jsonA.toString();
+	}
+	
+	@RequestMapping("/groMngHome")
+    public String groMngHome(@ModelAttribute("user") User user, Model model){	
+        return "groMngHome";
+    }
 }
