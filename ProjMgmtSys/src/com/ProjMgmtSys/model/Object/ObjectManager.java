@@ -46,12 +46,39 @@ public class ObjectManager {
 		return object;	
 	}
 	
+	public static int queryRowNO(int objId){
+		createSession();
+		String hql = "from Object where objId=:objId";
+		Query query = session.createQuery(hql); 
+		query.setInteger("objId", objId);
+		List <Object>list = query.list();
+		Object object = null;
+		java.util.Iterator<Object> iter = list.iterator();
+		while (iter.hasNext()) {
+			object = iter.next();
+		}					
+		session.getTransaction().commit();
+		session.close();
+		return object.getRowNO();	
+	}
+	
 	public static void updateObjName(int objId, String objName){
 		createSession();
-		String hql1 = "update Object as object set object.objName=:objName where objId=:objId";
+		String hql1 = "update Object set objName=:objName where objId=:objId";
 		Query query1 = session.createQuery(hql1);
 		query1.setInteger("objId", objId);
 		query1.setString("objName", objName);
+		query1.executeUpdate(); 
+		session.getTransaction().commit();
+		session.close();
+	}
+	
+	public static void updateRowNO(int objId, int rowNO){
+		createSession();
+		String hql1 = "update Object set rowNO=:rowNO where objId=:objId";
+		Query query1 = session.createQuery(hql1);
+		query1.setInteger("objId", objId);
+		query1.setInteger("rowNO", rowNO);
 		query1.executeUpdate(); 
 		session.getTransaction().commit();
 		session.close();

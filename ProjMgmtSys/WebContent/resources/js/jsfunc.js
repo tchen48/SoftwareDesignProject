@@ -321,6 +321,50 @@ function getGroEmp(){
 	});
 }
 
+function createProject(){
+	var depId = $('#depIdSpan').text();
+	var groId = $('#groIdSpan').text();
+	var objId = OBJ_PROJ;
+	var data = [];
+	data.push({
+		"id" : 1,
+		"val" : $('#projectName').val()
+	});
+	data.push({
+		"id" : 2,
+		"val" : $('#description').val()
+	});
+	data.push({
+		"id" : 3,
+		"val" : $('#startdate').val()
+	});
+	data.push({
+		"id" : 4,
+		"val" : STATUS_NOT_START
+	});
+	var id = 5;
+	while($("#" + id).length > 0){
+		data.push({
+			"id" : id,
+			"val" : $("#" + id).val()
+		});
+		id++;
+	}
+	$.ajax({
+		type : "Post",
+		url : "createProject.html",
+		data : "jsonArray=" + JSON.stringify(data) + "&depId=" + depId + "&groId=" + groId + "&objId=" + objId,
+		success : function(response){
+			var alertText = "Project " + $('#projectName').val() + " is successfully created! Project ID: " + response;
+			addAlert("alert-success", alertText, "#alertdiv");
+		},
+		error : function(e){
+			var alertText = 'Error: ' + e;
+     		addAlert("alert-error", alertText, "#alertdiv");
+		}
+	});
+	
+}
 
 //General Functions
 function addAlert(alertClass, alertText, alertID){
@@ -457,6 +501,11 @@ var OBJ_DETAIL = 1;
 var TYPE_INTEGER = 0;
 var TYPE_STRING = 1;
 var TYPE_DATE = 2;
+
+var STATUS_NOT_START = 0;
+var STATUS_IN_PROGRESS = 1;
+var STATUS_COMPLETED = 2;
+var STATUS_ABANDONED = 2;
 
 
 

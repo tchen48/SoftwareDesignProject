@@ -1,9 +1,21 @@
 package com.ProjMgmtSys.model.Data;
  
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.xml.bind.JAXBException;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.xml.sax.SAXException;
+
+import com.ProjMgmtSys.model.Object.ObjectManager;
+import com.sun.xml.internal.bind.v2.runtime.reflect.ListIterator;
 
 
 public class DataManager {
@@ -30,6 +42,32 @@ public class DataManager {
 		return  "" + data.getDataId();
 	}
 	
+	public static String createData(JSONArray jArray, int objId, int depId, int groId) throws SAXException, JAXBException{
+		List<Data> dataList = new ArrayList<Data>();
+		int rowNO = ObjectManager.queryRowNO(objId);
+		for(Object json : jArray){
+			JSONObject jObj = (JSONObject)json;
+			Data data = new Data();
+			data.setDepId(depId);
+			data.setFieldId(jObj.getInt("id"));
+			data.setGroId(groId);
+			data.setObjId(objId);
+			data.setValue("" + jObj.get("val"));
+			data.setRowId(rowNO);
+			dataList.add(data);
+		}
+		Iterator<Data> iter = dataList.iterator();
+		createSession();
+		while(iter.hasNext()){
+			Data data = iter.next();
+			session.save(data);
+		}
+		session.getTransaction().commit();
+		session.close();
+		int projId = rowNO;
+		ObjectManager.updateRowNO(objId, rowNO + 1);
+		return "" + projId;
+	}
 	
 	@SuppressWarnings("unchecked")
 	public static Object queryData(int dataId){

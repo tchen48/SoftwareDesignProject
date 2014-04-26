@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;  	 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.JAXBException;
 
 import net.sf.json.*;
 
@@ -25,7 +26,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.xml.sax.SAXException;
 
+import com.ProjMgmtSys.model.Data.DataManager;
 import com.ProjMgmtSys.model.Dept.Dept;
 import com.ProjMgmtSys.model.Dept.DeptManager;
 import com.ProjMgmtSys.model.Field.FieldManager;
@@ -319,4 +322,16 @@ public class UserController {
     public String groMngHome(@ModelAttribute("user") User user, Model model){	
         return "groMngHome";
     }
+	
+	@RequestMapping("/createProject")
+	public @ResponseBody
+	String createProject(
+			@RequestParam(value = "jsonArray") String jsonArray,
+			@RequestParam(value = "depId") String depId,
+			@RequestParam(value = "groId") String groId,
+			@RequestParam(value = "objId") String objId) throws NumberFormatException, SAXException, JAXBException{
+		System.out.println(jsonArray);
+		JSONArray jArray = (JSONArray) JSONSerializer.toJSON(jsonArray);
+		return DataManager.createData(jArray, Integer.parseInt(objId), Integer.parseInt(depId), Integer.parseInt(groId));
+	}
 }

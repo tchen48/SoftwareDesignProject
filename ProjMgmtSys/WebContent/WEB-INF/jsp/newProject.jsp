@@ -29,7 +29,7 @@
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				Group: <%=session.getAttribute("groName")%>&nbsp;(id: <span id="groIdSpan"><%=session.getAttribute("groId")%></span>)</h5>
 			
-			<div class="span12 alertdiv" style="margin-top:60px; height:50px">					
+			<div id="alertdiv" class="span12 " style="margin-top:60px; height:50px">					
 			</div>
 			
 			<div class="subdiv span12">
@@ -49,7 +49,7 @@
 				</div>
 				<div class="span12" style="margin-bottom: 30px;">
 					<div class="span3 offset4">
-					<input type="submit" class="btn btn-primary btn-block" value="Create"/>
+						<button class="btn btn-primary btn-block" onclick="createProject();">Create</button>
 					</div>
 					<div class="span3 offset1">
 					<a href="groMngHome.html" class="btn btn-block">Cancel</a>
