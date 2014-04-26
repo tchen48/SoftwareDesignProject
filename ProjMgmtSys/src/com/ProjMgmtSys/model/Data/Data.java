@@ -1,7 +1,7 @@
 package com.ProjMgmtSys.model.Data;
 
 public class Data {
-	private int dataId;
+	private String dataId;
 	private String value;
 	private int fieldId;	
 	private int objId;
@@ -9,10 +9,10 @@ public class Data {
 	private int depId;
 	private int groId;
 	
-	public int getDataId() {
+	public String getDataId() {
 		return dataId;
 	}
-	public void setDataId(int dataId) {
+	public void setDataId(String dataId) {
 		this.dataId = dataId;
 	}
 	public String getValue() {

@@ -6,4 +6,6 @@ public class UserType {
 	public static final int DEPTMANAGER = 1;
 	public static final int GROUPMANAGER = 2;
 	public static final int EMPLOYEE = 3;
+	
+	public static final String[] USERTYPE = {"Admin", "Dept Manager", "Group Manager", "Employee"};
 }

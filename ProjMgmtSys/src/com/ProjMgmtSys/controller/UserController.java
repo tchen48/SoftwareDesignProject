@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
+import com.ProjMgmtSys.model.Data.Data;
 import com.ProjMgmtSys.model.Data.DataManager;
 import com.ProjMgmtSys.model.Dept.Dept;
 import com.ProjMgmtSys.model.Dept.DeptManager;
@@ -56,6 +57,7 @@ public class UserController {
 		session.setMaxInactiveInterval(1200);
 		session.setAttribute("userName", user.getUserName());
 		session.setAttribute("userId", user.getUserId());
+		session.setAttribute("userType", UserType.USERTYPE[usertype]);
 		model.addAttribute("userName", user.getUserName());
 		if(usertype == UserType.SUPERADMIN){
 			return "adminHome";
@@ -333,5 +335,17 @@ public class UserController {
 		System.out.println(jsonArray);
 		JSONArray jArray = (JSONArray) JSONSerializer.toJSON(jsonArray);
 		return DataManager.createData(jArray, Integer.parseInt(objId), Integer.parseInt(depId), Integer.parseInt(groId));
+	}
+	
+	@RequestMapping("/getStatus")
+	public @ResponseBody
+	String getStatus(
+			@RequestParam(value = "depId") String depId,
+			@RequestParam(value = "groId") String groId,
+			@RequestParam(value = "objId") String objId,
+			@RequestParam(value = "projId") String projId){
+		int fieldId = 4;
+		Data data = DataManager.queryData(Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(objId), Integer.parseInt(projId), fieldId);
+		return data.getValue();
 	}
 }

@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="/resources/demos/style.css">
 	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 	<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+	<script src="resources/js/jsfunc.js"></script>
 	<script>
 		$(function() {
 	   		$( ".datepicker" ).datepicker();
@@ -23,13 +24,13 @@
 	<div class="container">
 		<div class="row-fluid">
 			<h1>Project</h1>
-			<h3><%=session.getAttribute("userName")%>&nbsp;(id: <span id="userIdSpan"><%=session.getAttribute("userId")%></span>)</h3>		
+			<h3><%=session.getAttribute("userName")%>&nbsp;(id: <span id="userIdSpan"><%=session.getAttribute("userId")%></span>&nbsp;&nbsp;&nbsp;&nbsp;<span id="userTypeSpan"><%=session.getAttribute("userType")%></span>)</h3>		
 			<h5>Dept: <%=session.getAttribute("depName")%>&nbsp;(id: <span id="depIdSpan"><%=session.getAttribute("depId")%></span>)
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				Group: <%=session.getAttribute("groName")%>&nbsp;(id: <span id="groIdSpan"><%=session.getAttribute("groId")%></span>)</h5>
-			<h5>Project: <%=session.getAttribute("projName")%>&nbsp;(id: <%=session.getAttribute("projId")%>)</h5>
+			<h5>Project: <%=session.getAttribute("projName")%>&nbsp;(id: <span id="projIdSpan"><%=session.getAttribute("projId")%></span>)</h5>
 			
-			<div class="span12 alertdiv" style="margin-top:60px; height:50px">					
+			<div class="span12" id="alertdiv" style="margin-top:60px; height:50px">					
 			</div>
 			
 			<div class="span12 subdiv">
@@ -41,7 +42,10 @@
 						<div id="statusdiv"class="span2 labelcenter">
 							<label id="statusLabel">Hidden Status</label>
 						</div>
-						<div class="span3">
+						<div class="span3" id="statusdiv">
+							<script>
+								addStatus();
+							</script>
 							<select id="statusList" class="form-control span12">
 							    <option value="0">Not Started</option>
 							    <option value="1">In-Progress</option>
@@ -95,22 +99,6 @@
 				</table>
 			</div>
 		</div>
-				<!--<h3>Group 17 <br/>
-					Shihuan Shao&nbsp;&nbsp;&nbsp;&nbsp;Tuyue Chen&nbsp;&nbsp;&nbsp;&nbsp;Yongming Zhang</h3>
-				<form:form method="post" action="home.html" commandName="user">
-					<div id="resultdiv">
-						
-					</div>
-					<div id="logindiv" class="span6 offset3">
-						<form:input id="input1" class="span12" placeholder="UserID" type="text" value="" path="userId" required="true" />
-						<form:input id="input2" class="span12" placeholder="Password" type="password" path="password" required="true" />
-					</div>
-					<div id="btndiv" class="span8 offset2">
-						<div class="span6 offset3">
-							<input type="submit" class="btn btn-large btn-success btn-block" value="Log In"/>
-						</div>
-					</div>
-				</form:form>-->
 	</div>
 </body>
 </html>

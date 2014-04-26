@@ -47,6 +47,7 @@ public class DataManager {
 		int rowNO = ObjectManager.queryRowNO(objId);
 		for(Object json : jArray){
 			JSONObject jObj = (JSONObject)json;
+			createSession();
 			Data data = new Data();
 			data.setDepId(depId);
 			data.setFieldId(jObj.getInt("id"));
@@ -54,16 +55,22 @@ public class DataManager {
 			data.setObjId(objId);
 			data.setValue("" + jObj.get("val"));
 			data.setRowId(rowNO);
-			dataList.add(data);
+			data.setDataId(objId + "_" + depId + "_" + groId + "_" + rowNO + "_" + jObj.getInt("id"));		
+			session.save(data);
+			session.getTransaction().commit();
+			session.close();
+//			dataList.add(data);
 		}
 		Iterator<Data> iter = dataList.iterator();
-		createSession();
-		while(iter.hasNext()){
-			Data data = iter.next();
-			session.save(data);
-		}
-		session.getTransaction().commit();
-		session.close();
+		
+//		while(iter.hasNext()){
+//			createSession();
+//			Data data = iter.next();
+//			session.save(data);
+//			session.getTransaction().commit();
+//			session.close();
+//		}
+		
 		int projId = rowNO;
 		ObjectManager.updateRowNO(objId, rowNO + 1);
 		return "" + projId;
@@ -75,6 +82,26 @@ public class DataManager {
 		String hql = "from Data as data where data.dataId=:dataId";
 		Query query = session.createQuery(hql);
 		query.setInteger("dataId", dataId);
+		List <Data>list = query.list();
+		Data data = null;
+		java.util.Iterator<Data> iter = list.iterator();
+		while (iter.hasNext()) {
+			data = iter.next();
+		}					
+		session.getTransaction().commit();
+		session.close();
+		return data;	
+	}
+
+	public static Data queryData(int depId, int groId, int objId, int rowId, int fieldId){
+		createSession();
+		String hql = "from Data where depId=:depId, objId=:objId, groId=:groId, rowId=:rowId, fieldId=:fieldId, ";
+		Query query = session.createQuery(hql);
+		query.setInteger("depId", depId);
+		query.setInteger("groId", groId);
+		query.setInteger("objId", objId);
+		query.setInteger("rowId", rowId);
+		query.setInteger("fieldId", fieldId);
 		List <Data>list = query.list();
 		Data data = null;
 		java.util.Iterator<Data> iter = list.iterator();

@@ -326,29 +326,36 @@ function createProject(){
 	var groId = $('#groIdSpan').text();
 	var objId = OBJ_PROJ;
 	var data = [];
-	data.push({
-		"id" : 1,
-		"val" : $('#projectName').val()
-	});
-	data.push({
-		"id" : 2,
-		"val" : $('#description').val()
-	});
-	data.push({
-		"id" : 3,
-		"val" : $('#startdate').val()
-	});
-	data.push({
-		"id" : 4,
-		"val" : STATUS_NOT_START
-	});
-	var id = 5;
+//	data.push({
+//		"id" : 1,
+//		"val" : $('#projectName').val()
+//	});
+//	data.push({
+//		"id" : 2,
+//		"val" : $('#description').val()
+//	});
+//	data.push({
+//		"id" : 3,
+//		"val" : $('#startdate').val()
+//	});
+//	data.push({
+//		"id" : 4,
+//		"val" : STATUS_NOT_START
+//	});
+	var id = 1;
 	while($("#" + id).length > 0){
 		data.push({
 			"id" : id,
 			"val" : $("#" + id).val()
 		});
 		id++;
+		if(id == 4){
+			data.push({
+				"id" : 4,
+				"val" : STATUS_NOT_START
+			});
+			id++;
+		}
 	}
 	$.ajax({
 		type : "Post",
@@ -357,13 +364,26 @@ function createProject(){
 		success : function(response){
 			var alertText = "Project " + $('#projectName').val() + " is successfully created! Project ID: " + response;
 			addAlert("alert-success", alertText, "#alertdiv");
+			id = 1;
+			while($("#" + id).length > 0){
+				$("#" + id).val("");
+				id++;
+				if(id == 4)
+					id = 5;
+			}
 		},
 		error : function(e){
 			var alertText = 'Error: ' + e;
      		addAlert("alert-error", alertText, "#alertdiv");
+     		id = 1;
+			while($("#" + id).length > 0){
+				$("#" + id).val("");
+				id++;
+				if(id == 4)
+					id = 5;
+			}
 		}
 	});
-	
 }
 
 //General Functions
@@ -466,10 +486,8 @@ function addCustomizedField(json, location){
 		var type;
 		if(json[i].type == TYPE_INTEGER)
 			type = "number";
-		else if(json[i].type == TYPE_STRING)
+		else
 			type = "text";
-		if(json[i].type == TYPE_DATE)
-			type = "date";
 		
 		var newDiv = $("<div><input type='text'></div>").insertAfter($(location));
 		newDiv.attr("id","customdiv" + i);
@@ -477,7 +495,10 @@ function addCustomizedField(json, location){
 		var inputSelector = "#" + newDiv.attr("id") + " input";
 		$(inputSelector).addClass("span6");
 		if(json[i].type == TYPE_DATE){
+			$(inputSelector).attr("type", "text");
+			$(inputSelector).addClass("datepicker");
 			$(inputSelector).datepicker();
+			name = "Manually input " + name + "(MM/DD/YYYY)";
 		}
 		else
 			$(inputSelector).attr("type", type);
@@ -489,11 +510,41 @@ function addCustomizedField(json, location){
 	}
 }
 
+function addStatus(){
+	var userId = $('#userIdSpan').text();
+	var projId = $('#projIdSpan').Text();
+	var depId = $('#depIdSpan').text();
+	var groId = $('#groIdSpan').text();
+	var orjId = 0;
+	var userType = $('#userTypeSpan').text();
+	$.ajax({
+		type : "Get",
+		url : "getStatus.html",
+		data : "depId=" + depId +  "&groId=" + groId  +  "&objId=" + objId + "&projId=" + projId,
+		success : function(response){
+			int status = parseInt(response);
+			if(userType == USER_GRO){
+				select = document.createElement('select');
+				select.attr('id', 'statusList');
+				for(var i = 0; i < STATUS.length; i++){
+					select.append('<option value="' + i + '">' + STATUS[i] + '</option>');
+				}
+				$('statusdiv').append(select);
+				$('statusList').val(status).attr('selected', true);
+			}
+		},
+		error : function(e){
+			var alertText = 'Error: ' + e;
+     		addAlert("alert-error", alertText, "#alertdiv");
+		}
+	});
+}
+
 //Global Variables used for customized field
 var PROJ_FIELD = "proj";
 var DETAIL_FIELD = "detail";
 
-var NEW_PROJ_LOCATION = "#startdate";
+var NEW_PROJ_LOCATION = "#3";
 
 var OBJ_PROJ = 0;
 var OBJ_DETAIL = 1;
@@ -507,5 +558,11 @@ var STATUS_IN_PROGRESS = 1;
 var STATUS_COMPLETED = 2;
 var STATUS_ABANDONED = 2;
 
+var STATUS = ["Not Start", "In Progress", "Completed", "Abandoned"];
 
+
+var USER_ADMIN = "Admin";
+var USER_DEPT = "Dept Manager";
+var USER_GRO = "Group Manager";
+var USER_EMP = "Employee";
 

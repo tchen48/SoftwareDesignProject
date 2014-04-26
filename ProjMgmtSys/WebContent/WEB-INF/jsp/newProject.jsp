@@ -35,17 +35,17 @@
 			<div class="subdiv span12">
 				<div class="content span8 offset2">
 				<div>
-					<input type="text"  class="span12" placeholder="Enter the name of the new project" required="true" id="projectName" />
+					<input type="text"  class="span12" placeholder="Enter the name of the new project" required="true" id="1" />
 				</div>
 				<div>
-					<input class="span6 datepicker" placeholder="Choose Start Date" type="text" id="startdate" />
+					<input class="span6 datepicker" placeholder="Choose Start Date" type="text" id="3" />
 				</div>
 				<script>
 					getCustomizedField("proj");
 				</script>
 
 				<div>
-					<textarea class="input-block-level" placeholder="Enter project description" rows="5" id="description"></textarea>
+					<textarea class="input-block-level" placeholder="Enter project description" rows="5" id="2"></textarea>
 				</div>
 				<div class="span12" style="margin-bottom: 30px;">
 					<div class="span3 offset4">
