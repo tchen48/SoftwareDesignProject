@@ -522,7 +522,7 @@ function addStatus(){
 		url : "getStatus.html",
 		data : "depId=" + depId +  "&groId=" + groId  +  "&objId=" + objId + "&projId=" + projId,
 		success : function(response){
-			int status = parseInt(response);
+			status = parseInt(response);
 			if(userType == USER_GRO){
 				select = document.createElement('select');
 				select.attr('id', 'statusList');
