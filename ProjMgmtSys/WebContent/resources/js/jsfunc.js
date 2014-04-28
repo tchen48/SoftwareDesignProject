@@ -448,13 +448,20 @@ function addProjTable(json, tableId, depId, groId){
 		
 		var nameLink = $("<a>" + json[i].name + "</a>");
 		nameLink.attr("href", "project/" + depId + "/" + groId + "/" + json[i].id + ".html");
+		/*
+		 *  this is another way of sending the project information(just a GET method). 
+		 *  this way won't change the relative path.
+		 *  it will map to "/project" instead of "/project/{depId}/{groId}/{rowId}"
+		 *  
+		 * */
+		//nameLink.attr("href", "project.html?depId=" + depId + "&groId=" + groId + "&rowId=" + json[i].id);
 		var nameTd = $("<td></td>").html(nameLink);
 		tr.append(nameTd);
 		tr.append("<td>" + json[i].startDate + "</td>");
 		tr.append("<td>" + json[i].status + "</td>");
 		tr.append("<td>" + json[i].description + "</td>");
 	}
-	$("#" + tableId + "")
+	$("#" + tableId + "");
 }
 
 //Customization Function

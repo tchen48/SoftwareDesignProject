@@ -309,8 +309,16 @@ public class UserController {
         return "newProject";
     }
 	
-	@RequestMapping("/project")
-    public String project(@ModelAttribute("user") User user, Model model){	
+	@RequestMapping(value="/project",method = RequestMethod.GET)
+    public String project(
+    		@RequestParam(value = "depId") int depId,
+			@RequestParam(value = "groId") int groId,
+			@RequestParam(value = "rowId") int rowId,
+			Model model){	
+		System.out.println(depId+groId+rowId);
+		String projName = DataManager.queryData(depId, groId, 0, rowId, FieldName.FIELD_PROJNAME).getValue();
+		model.addAttribute("ProjName", projName);
+		model.addAttribute("ProjId", rowId);
         return "project";
     }
 	
