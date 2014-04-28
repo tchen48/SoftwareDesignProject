@@ -564,23 +564,21 @@ function addStatus(){
 	var groId = $('#groIdSpan').text();
 	var objId = "0";
 	var userType = $('#userTypeSpan').text();
-	alert("depId=" + depId +  "&groId=" + groId  +  "&objId=" + objId + "&projId=" + projId);
 	$.ajax({
 		type : "Get",
 		url : "getStatus.html",
 		data : "depId=" + depId +  "&groId=" + groId  +  "&objId=" + objId + "&projId=" + projId,
 		success : function(response){
-
 			var status = parseInt(response);
-
 			if(userType == USER_GRO){
-				select = document.createElement('select');
+				alert(STATUS.length);
+				select = $('<select></select>');
 				select.attr('id', 'statusList');
 				for(var i = 0; i < STATUS.length; i++){
 					select.append('<option value="' + i + '">' + STATUS[i] + '</option>');
 				}
-				$('statusdiv').append(select);
-				$('statusList').val(status).attr('selected', true);
+				$('#statusListDiv').append(select);
+				$('#statusList').val(status).attr('selected', true);
 			}
 		},
 		error : function(e){

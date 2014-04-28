@@ -361,17 +361,15 @@ public class UserController {
 		return DataManager.createData(jArray, Integer.parseInt(objId), Integer.parseInt(depId), Integer.parseInt(groId));
 	}
 	
-	@RequestMapping("/getStatus")
+	@RequestMapping("/**/getStatus")
 	public @ResponseBody
 	String getStatus(
 			@RequestParam(value = "depId") String depId,
 			@RequestParam(value = "groId") String groId,
 			@RequestParam(value = "objId") String objId,
 			@RequestParam(value = "projId") String projId){
-		System.out.println(depId + " " + groId + " " + objId + " " + projId);
 		int fieldId = FieldName.FIELD_STATUS;
 		Data data = DataManager.queryData(Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(objId), Integer.parseInt(projId), fieldId);
-		System.out.println(data.getValue());
 		return data.getValue();
 	}
 	
@@ -380,7 +378,6 @@ public class UserController {
 		String projName = DataManager.queryData(depId, groId, 0, rowId, FieldName.FIELD_PROJNAME).getValue();
 		model.addAttribute("ProjName", projName);
 		model.addAttribute("ProjId", rowId);
-		System.out.println(depId + " " + groId + " " + rowId);
 		return "project";
 	}
 }

@@ -40,12 +40,6 @@
 							<label class="label label-info">status</label>
 						</div>
 						<div class="span4" id="statusListDiv">
-		<!-- 				<select id="statusList" class="form-control span12">
-							    <option value="0">Not Started</option>
-							    <option value="1">In-Progress</option>
-							    <option value="2">Completed</option>
-							    <option value="3">Abandoned</option>
-							</select>-->
 						</div>
 						<script>addStatus()</script>
 					</div>
@@ -78,18 +72,6 @@
 						    </tr>
 					  	</thead>
 						<tbody>
-					    	<tr>
-						      <td>...</td>
-						      <td>...</td>
-						      <td>...</td>
-						      <td>...</td>
-						    </tr>
-						    <tr>
-						      <td>...</td>
-						      <td>...</td>
-						      <td>...</td>
-						      <td>...</td>
-						    </tr>
 						</tbody>
 					</table>
 				</div>
