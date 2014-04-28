@@ -7,13 +7,13 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Group Manager Home Page</title>
-	<link rel="stylesheet" type="text/css" href="resources/css/bootstrap.css" />
-	<link rel="stylesheet" type="text/css" href="resources/css/mainstyle.css" />
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/mainstyle.css" />
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" href="/resources/demos/style.css">
 	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 	<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-	<script src="resources/js/jsfunc.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/jsfunc.js"></script>
 	<script>
 		$(function() {
 	   		$( ".datepicker" ).datepicker();

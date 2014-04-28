@@ -147,5 +147,4 @@ public class GroManager {
 		session.close();
 		return array;
 	}
-	
 }

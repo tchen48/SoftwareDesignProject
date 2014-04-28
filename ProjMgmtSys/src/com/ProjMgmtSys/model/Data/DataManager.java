@@ -14,7 +14,9 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.xml.sax.SAXException;
 
+import com.ProjMgmtSys.model.Gro.Gro;
 import com.ProjMgmtSys.model.Object.ObjectManager;
+import com.ProjMgmtSys.model.User.NameId;
 import com.sun.xml.internal.bind.v2.runtime.reflect.ListIterator;
 
 
@@ -95,7 +97,7 @@ public class DataManager {
 
 	public static Data queryData(int depId, int groId, int objId, int rowId, int fieldId){
 		createSession();
-		String hql = "from Data where depId=:depId, objId=:objId, groId=:groId, rowId=:rowId, fieldId=:fieldId, ";
+		String hql = "from Data where depId=:depId and objId=:objId and groId=:groId and rowId=:rowId and fieldId=:fieldId";
 		Query query = session.createQuery(hql);
 		query.setInteger("depId", depId);
 		query.setInteger("groId", groId);
@@ -124,4 +126,56 @@ public class DataManager {
 		session.close();
 	}
 	
+
+	public static JSONArray getProjList(int depId, int groId, int objId){
+		JSONArray array = new JSONArray();
+		createSession();
+		String hql;
+		hql = "from Data where depId=:depId and groId=:groId and objId=:objId";
+		Query query = session.createQuery(hql);
+		query.setInteger("depId", depId);
+		query.setInteger("groId", groId);
+		query.setInteger("objId", objId);
+		List <Data>list = query.list();
+		Iterator<Data> iter = list.iterator();
+		Data data = null;
+		List<BasicProj> projList = new ArrayList();
+		while(iter.hasNext()){
+			data = iter.next();
+			int target = -1;
+			for(int i = 0; i < projList.size(); i++){
+				if(projList.get(i).getId() == data.getRowId()){
+					target = i;
+					break;
+				}
+			}
+			BasicProj proj;
+			if(target > -1){
+				proj = projList.get(target);
+			}
+			else{
+				proj = new BasicProj();
+				proj.setId(data.getRowId());
+				projList.add(proj);
+			}
+			int fieldId = data.getFieldId();
+			String val = data.getValue();
+			if(fieldId == 1)
+				proj.setName(val);
+			else if(fieldId == 2)
+				proj.setDescription(val);
+			else if(fieldId == 3)
+				proj.setStartDate(val);
+			else if(fieldId == 4)
+				proj.setStatus(ProjStatus.PROJ_STATUS[Integer.parseInt(val)]);
+		}
+
+		Iterator<BasicProj> iterProj = projList.iterator();
+		while (iterProj.hasNext()) {
+			array.add(iterProj.next());
+		}					
+		session.getTransaction().commit();
+		session.close();
+		return array;
+	}
 }

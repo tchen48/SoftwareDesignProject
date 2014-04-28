@@ -7,10 +7,10 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Administrator Home Page</title>
-	<link rel="stylesheet" type="text/css" href="resources/css/bootstrap.css" />
-	<link rel="stylesheet" type="text/css" href="resources/css/mainstyle.css" />
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/mainstyle.css" />
 	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-	<script src="resources/js/jsfunc.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/jsfunc.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -19,14 +19,14 @@
 			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <span id="userId"><%=session.getAttribute("userId")%></span>)</h3>
 
 			<div id="createDeptAlert" class="span12" style="height:30px; margin-top:20px; margin-bottom:20px; opacity: .90;"></div>
-			</br>
+			<br/>
 			<div class="subdiv span12">
 				<div class="row">
 					<div class="span7 offset1">
 						<input type="text" id="depName" class="span12" placeholder="Enter the name of the new department" required="true" />
 					</div>
 					<div id="btndiv" class="span3">
-						<button class="btn btn-primary btn-block" onclick="newDept();"/>Create Department</button>
+						<button class="btn btn-primary btn-block" onclick="newDept();">Create Department</button>
 					</div>
 				</div>
 			</div>
@@ -58,7 +58,7 @@
 			
 			<div id="createEmpAlert" class="span12 alertdiv" style="height:30px; margin-bottom:20px;opacity: .90;">					
 			</div>
-			</br>
+			<br/>
 			<div class="subdiv span12">
 				<div class="row">
 					<div class="span7 offset1">
@@ -99,22 +99,6 @@
 					<input type="submit" onClick = "newPass()" class="btn btn-warning btn-block" value="Change Password"/>
 				</div>
 			</div>
-			<!--<h3>Group 17 <br/>
-				Shihuan Shao&nbsp;&nbsp;&nbsp;&nbsp;Tuyue Chen&nbsp;&nbsp;&nbsp;&nbsp;Yongming Zhang</h3>
-			<form:form method="post" action="home.html" commandName="user">
-				<div id="resultdiv">
-					
-				</div>
-				<div id="logindiv" class="span6 offset3">
-					<form:input id="input1" class="span12" placeholder="UserID" type="text" value="" path="userId" required="true" />
-					<form:input id="input2" class="span12" placeholder="Password" type="password" path="password" required="true" />
-				</div>
-				<div id="btndiv" class="span8 offset2">
-					<div class="span6 offset3">
-						<input type="submit" class="btn btn-large btn-success btn-block" value="Log In"/>
-					</div>
-				</div>
-			</form:form>-->
 		</div>
 	</div>
 	<script>

@@ -312,7 +312,7 @@ function getGroEmp(){
 		data : "depId=" + depId +  "&groId=" + groId + "&unassigned=" + 0,
 		success : function(response){
 			var json = $.parseJSON(response);
-			addTable(json, "#empTable");
+			addEmpTable(json, "#empTable");
 		},
 		error : function(e){
 			var alertText = 'Error: ' + e;
@@ -386,6 +386,26 @@ function createProject(){
 	});
 }
 
+function getGroProj(){
+	var depId = $('#depIdSpan').text();
+	var groId = $('#groIdSpan').text();
+	var objId = OBJ_PROJ;
+	
+	$.ajax({
+		type : "Get",
+		url : "getGroProj.html",
+		data : "depId=" + depId + "&groId=" + groId + "&objId=" + objId,
+		success : function(response){
+			var json = $.parseJSON(response);
+			addProjTable(json, "#projTable", depId, groId);
+		},
+		error : function(e){
+			var alertText = 'Error: ' + e;
+     		addAlert("alert-error", alertText, "#alertdiv");
+		}
+	});
+}
+
 //General Functions
 function addAlert(alertClass, alertText, alertID){
 	$(alertID).empty();
@@ -408,12 +428,29 @@ function addOptions(json, selectId){
 	}
 }
 
-function addTable(json, tableId){
+function addEmpTable(json, tableId){
 	var table = tableId + " tbody";
 	for(var i = 0; i < json.length; i++){
 		var tr = $("<tr></tr>").appendTo(table);
 		tr.append("<td>" + json[i].name + "</td>");
 	}
+}
+
+function addProjTable(json, tableId, depId, groId){
+	var table = tableId + " tbody";
+	for(var i = 0; i < json.length; i++){
+		var tr = $("<tr></tr>").appendTo(table);
+		tr.append("<td>" + json[i].id + "</td>");
+		
+		var nameLink = $("<a>" + json[i].name + "</a>");
+		nameLink.attr("href", "project/" + depId + "/" + groId + "/" + json[i].id + ".html");
+		var nameTd = $("<td></td>").html(nameLink);
+		tr.append(nameTd);
+		tr.append("<td>" + json[i].startDate + "</td>");
+		tr.append("<td>" + json[i].status + "</td>");
+		tr.append("<td>" + json[i].description + "</td>");
+	}
+	$("#" + tableId + "")
 }
 
 //Customization Function
@@ -511,18 +548,19 @@ function addCustomizedField(json, location){
 }
 
 function addStatus(){
-	var userId = $('#userIdSpan').text();
-	var projId = $('#projIdSpan').Text();
+	var projId = $('#projIdSpan').text();
 	var depId = $('#depIdSpan').text();
 	var groId = $('#groIdSpan').text();
-	var orjId = 0;
+	var objId = "0";
 	var userType = $('#userTypeSpan').text();
+	alert("depId=" + depId +  "&groId=" + groId  +  "&objId=" + objId + "&projId=" + projId);
 	$.ajax({
 		type : "Get",
 		url : "getStatus.html",
 		data : "depId=" + depId +  "&groId=" + groId  +  "&objId=" + objId + "&projId=" + projId,
 		success : function(response){
-			int status = parseInt(response);
+			alert(response);
+			var status = parseInt(response);
 			if(userType == USER_GRO){
 				select = document.createElement('select');
 				select.attr('id', 'statusList');
