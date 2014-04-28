@@ -198,6 +198,8 @@ function newGroup() {
      		else{
 	     		var alertText = "Group " + groName + " is successfully created! Group ID: " + response;
 				$('#groName').val("");
+				$('#groList').empty();
+				getDeptGro();
 	     		addAlert("alert-success", alertText, "#alertdiv");
      		}
      	},  
@@ -230,6 +232,8 @@ function modifyGroup() {
      		}
      		else{
 	     		var alertText = "Group " + oldName + " is changed to " + newName;
+				$('#groList').empty();
+	     		getDeptGro();
 	     		addAlert("alert-success", alertText, "#alertdiv");
      		}
      	},  

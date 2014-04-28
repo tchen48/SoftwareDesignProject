@@ -12,7 +12,7 @@
 			<column name="groName" length="50" not-null="true" />
 		</property>
 		<property name="depId">
-			<column name="depId" length="50" not-null="true" />
+			<column name="depId" not-null="true" />
 		</property>
 	</class>
 </hibernate-mapping>
