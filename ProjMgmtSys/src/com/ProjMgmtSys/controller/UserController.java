@@ -33,6 +33,7 @@ import com.ProjMgmtSys.model.Data.DataManager;
 import com.ProjMgmtSys.model.Dept.Dept;
 import com.ProjMgmtSys.model.Dept.DeptManager;
 import com.ProjMgmtSys.model.Field.FieldManager;
+import com.ProjMgmtSys.model.Field.FieldName;
 import com.ProjMgmtSys.model.Gro.GroManager;
 import com.ProjMgmtSys.model.User.*;
 import com.opensymphony.xwork2.*;
@@ -277,6 +278,21 @@ public class UserController {
 		}
 	}
 	
+	@RequestMapping(value = "/getGroProj", method = RequestMethod.GET)
+	public @ResponseBody
+	String getGroProj(
+		@RequestParam(value = "depId") String depId,
+		@RequestParam(value = "groId") String groId,
+		@RequestParam(value = "objId") String objId){
+		try{
+			JSONArray jsonA = DataManager.getProjList(Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(objId));
+			return jsonA.toString();
+		}
+		catch (NumberFormatException e){
+			return null;
+		}
+	}
+	
 	@RequestMapping(value = "/assignEmp")
 	public @ResponseBody
 	String assignEmp(
@@ -344,8 +360,19 @@ public class UserController {
 			@RequestParam(value = "groId") String groId,
 			@RequestParam(value = "objId") String objId,
 			@RequestParam(value = "projId") String projId){
-		int fieldId = 4;
+		System.out.println(depId + " " + groId + " " + objId + " " + projId);
+		int fieldId = FieldName.FIELD_STATUS;
 		Data data = DataManager.queryData(Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(objId), Integer.parseInt(projId), fieldId);
+		System.out.println(data.getValue());
 		return data.getValue();
+	}
+	
+	@RequestMapping("/project/{depId}/{groId}/{rowId}")
+	public String getProject(@PathVariable("depId") int depId, @PathVariable("groId") int groId, @PathVariable("rowId") int rowId, Model model){
+		String projName = DataManager.queryData(depId, groId, 0, rowId, FieldName.FIELD_PROJNAME).getValue();
+		model.addAttribute("ProjName", projName);
+		model.addAttribute("ProjId", rowId);
+		System.out.println(depId + " " + groId + " " + rowId);
+		return "project";
 	}
 }

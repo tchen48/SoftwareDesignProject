@@ -7,9 +7,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Project Management System</title>
-<link rel="stylesheet" type="text/css" href="resources/css/bootstrap.css" />
-<link rel="stylesheet" type="text/css" href="resources/css/loginstyle.css" />
-<script src="resources/js/jquery-1.11.0.js"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/loginstyle.css" />
+<script src="${pageContext.request.contextPath}/resources/js/jquery-1.11.0.js"></script>
 
 </head>
 <body>

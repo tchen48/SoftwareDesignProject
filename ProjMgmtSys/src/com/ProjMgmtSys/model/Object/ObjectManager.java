@@ -2,8 +2,13 @@ package com.ProjMgmtSys.model.Object;
  
 import java.util.List;
 
+import net.sf.json.JSONArray;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
+
+import com.ProjMgmtSys.model.Gro.Gro;
+import com.ProjMgmtSys.model.User.NameId;
 
 
 public class ObjectManager {
@@ -83,5 +88,4 @@ public class ObjectManager {
 		session.getTransaction().commit();
 		session.close();
 	}
-	
 }

@@ -7,10 +7,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Employee Home Page</title>
-<link rel="stylesheet" type="text/css" href="resources/css/bootstrap.css" />
-<link rel="stylesheet" type="text/css" href="resources/css/mainstyle.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/mainstyle.css" />
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="resources/js/jsfunc.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/jsfunc.js"></script>
 </head>
 <body>
 	<div class="container">
