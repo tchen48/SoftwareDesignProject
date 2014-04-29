@@ -6,7 +6,11 @@ function newDept() {
     	addAlert("alert-error", alertText, "#createDeptAlert");
     	return;
     }
-    	
+    if(!DEP_REG.test(depName)){
+    	var alertText = "Format of the department name is incorrect! Please try again";
+    	addAlert("alert-error", alertText, "#createDeptAlert");
+    	return;
+    }
     $.ajax({  
     	type : "Post",   
     	url : "newDept.html",   
@@ -41,7 +45,11 @@ function modifyDept() {
     	addAlert("alert-error", alertText, "#createDeptAlert");
     	return;
     }
-    
+    if(!DEP_REG.test(oldName)||!DEP_REG.test(newName)){
+    	var alertText = "Format of the department name is incorrect! Please try again";
+    	addAlert("alert-error", alertText, "#createDeptAlert");
+    	return;
+    }
     $.ajax({  
     	type : "Post",   
     	url : "modifyDept.html",   
@@ -83,6 +91,11 @@ function getDepList(){
 
 function unblock(){
 	var userId = $("#unblockId").val();
+	if(!ID_REG.test(userId)){
+    	var alertText = "Format of the id is incorrect! It contains only number!";
+    	addAlert("alert-error", alertText, "#createDeptAlert");
+    	return;
+    }
 	$.ajax({
 		type: "Post",
 		url: "unblockUser.html",
@@ -113,6 +126,11 @@ function newEmp(){
     	addAlert("alert-error", alertText, "#createEmpAlert");
     	return;
     }
+	if(!EMP_REG.test(empName)){
+    	var alertText = "Format of the name is incorrect! Please try again!";
+    	addAlert("alert-error", alertText, "#createDeptAlert");
+    	return;
+    }
 	 $.ajax({
 		 type:"Post",
 		 url:"newEmp.html",
@@ -137,7 +155,6 @@ function newPass(){
 	var newPass = $("#newPass").val();
 	var reNewPass = $("#reNewPass").val();
 	var oldPass = $("#oldPass").val();
-	alert(userId);
 	if ( oldPass == "" || newPass == ""||reNewPass == "" ){
 		addAlert("alert-error","Passwords cannot be blank!","#alertdiv");
 		return;
@@ -146,6 +163,11 @@ function newPass(){
 		addAlert("alert-error","The passwords you typed do not match! Please type again!","#alertdiv");
 		return;
 	}
+	if(!PASS_REG.test(newPass)){
+    	var alertText = "The password does not satisfy the minimum requriement! Please try again!";
+    	addAlert("alert-error", alertText, "#createDeptAlert");
+    	return;
+    }
 	$.ajax({
 		type:"Post",
 		url:"newPass.html",
@@ -184,7 +206,11 @@ function newGroup() {
     	addAlert("alert-error", alertText, "#alertdiv");
     	return;
     }
-    	
+    if(!GRO_REG.test(newName)){
+    	var alertText = "The format of the group name is incorrect! Please try again!";
+    	addAlert("alert-error", alertText, "#createDeptAlert");
+    	return;
+    }
     $.ajax({  
     	type : "Post",   
     	url : "newGroup.html",   
@@ -198,6 +224,8 @@ function newGroup() {
      		else{
 	     		var alertText = "Group " + groName + " is successfully created! Group ID: " + response;
 				$('#groName').val("");
+				$('#groList').empty();
+				getDeptGro();
 	     		addAlert("alert-success", alertText, "#alertdiv");
      		}
      	},  
@@ -218,7 +246,11 @@ function modifyGroup() {
     	addAlert("alert-error", alertText, "#alertdiv");
     	return;
     }
-    
+    if(!GRO_REG.test(newName)){
+    	var alertText = "The format of the group name is incorrect! Please try again!";
+    	addAlert("alert-error", alertText, "#createDeptAlert");
+    	return;
+    }
     $.ajax({  
     	type : "Post",   
     	url : "modifyGroup.html",   
@@ -230,6 +262,8 @@ function modifyGroup() {
      		}
      		else{
 	     		var alertText = "Group " + oldName + " is changed to " + newName;
+				$('#groList').empty();
+	     		getDeptGro();
 	     		addAlert("alert-success", alertText, "#alertdiv");
      		}
      	},  
@@ -477,6 +511,13 @@ function addProjTable(json, tableId, depId, groId){
 		
 		var nameLink = $("<a>" + json[i].name + "</a>");
 		nameLink.attr("href", "project/" + depId + "/" + groId + "/" + json[i].id + ".html");
+		/*
+		 *  this is another way of sending the project information(just a GET method). 
+		 *  this way won't change the relative path.
+		 *  it will map to "/project" instead of "/project/{depId}/{groId}/{rowId}"
+		 *  
+		 * */
+		//nameLink.attr("href", "project.html?depId=" + depId + "&groId=" + groId + "&rowId=" + json[i].id);
 		var nameTd = $("<td></td>").html(nameLink);
 		tr.append(nameTd);
 		tr.append("<td>" + json[i].startDate + "</td>");
@@ -496,6 +537,11 @@ function addField(level){
 		groId = $('#groIdSpan').text();
 	var objId = 0;
 	var fieldName = $('#fieldName').val();
+    if(!FIELD_REG.test(fieldName)){
+    	var alertText = "Format of the field name is incorrect! Please try again";
+    	addAlert("alert-error", alertText, "#createDeptAlert");
+    	return;
+    }
 	var fieldType = $("#typeList").val();
 	$.ajax({
 		type : "Post",
@@ -634,4 +680,13 @@ var USER_ADMIN = "Admin";
 var USER_DEPT = "Dept Manager";
 var USER_GRO = "Group Manager";
 var USER_EMP = "Employee";
+
+//regular expressions
+var ID_REG = /^\d+$/;
+var PASS_REG =/ */;
+var EMP_REG = /^[a-zA-Z]+( [a-zA-Z]+)*$/;
+var DEP_REG = /^[0-9a-zA-Z]+([-_ @#%][0-9a-zA-Z]+)*([+]{0,3})$/;
+var GRO_REG = /^[0-9a-zA-Z]+([-_ @#%][0-9a-zA-Z]+)*([+]{0,3})$/;
+var PROJ_REG = /^[0-9a-zA-Z]+([-_ @#%][0-9a-zA-Z]+)*([+]{0,3})$/;
+var FIELD_REG =/^[0-9a-zA-Z]+([ +_&\-][0-9a-zA-Z]+){0,4}$/;
 
