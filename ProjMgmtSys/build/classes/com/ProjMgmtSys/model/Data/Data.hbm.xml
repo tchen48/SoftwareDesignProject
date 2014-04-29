@@ -6,7 +6,7 @@
 <hibernate-mapping package="com.ProjMgmtSys.model.Data">
 	<class name="Data" table="data">
 		<id name="dataId" column="dataId">
-			<generator class="increment" />
+			<generator class="assigned" />
 		</id>
 		<property name="value">
 			<column name="value" length="50" not-null="true" />

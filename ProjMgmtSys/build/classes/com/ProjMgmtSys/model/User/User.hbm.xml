@@ -28,14 +28,6 @@
 			<column name="depId" not-null="true"/>
 		</property>
 		
-		<property name="depName">
-			<column name="depName" length="50" not-null="false" />
-		</property>
-		
-		<property name="groName">
-			<column name="groName" length="50" not-null="false" />
-		</property>
-		
 		<property name="fail">
 			<column name="fail" not-null="true"/>
 		</property>

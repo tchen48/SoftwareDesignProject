@@ -48,28 +48,11 @@
 							      <th>Project ID</th>
 							      <th>Name</th>
 							      <th>Start</th>
-							      <th>End</th>
 							      <th>Status</th>
 							      <th>Description</th>
 							    </tr>
 						  	</thead>
 							<tbody>
-						    	<tr>
-							      <td>1</td>
-							      <td><a href="project.html" class="btn btn-link">Project1</a></td>
-							      <td>...</td>
-							      <td>...</td>
-							      <td>...</td>
-							      <td>...</td>
-							    </tr>
-							    <tr>
-							      <td>...</td>
-							      <td>...</td>
-							      <td>...</td>
-							      <td>...</td>
-							      <td>...</td>
-							      <td>...</td>
-							    </tr>
 							</tbody>
 						</table>
 					</div>
@@ -94,5 +77,8 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		getGroProj();
+	</script>	
 </body>
 </html>
