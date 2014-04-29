@@ -360,7 +360,7 @@ public class UserController {
 		JSONArray jArray = (JSONArray) JSONSerializer.toJSON(jsonArray);
 		return DataManager.createData(jArray, Integer.parseInt(objId), Integer.parseInt(depId), Integer.parseInt(groId));
 	}
-	
+	//@RequestMapping("/getStatus")
 	@RequestMapping("/**/getStatus")
 	public @ResponseBody
 	String getStatus(
