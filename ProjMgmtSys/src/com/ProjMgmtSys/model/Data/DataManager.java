@@ -44,6 +44,7 @@ public class DataManager {
 		return  "" + data.getDataId();
 	}
 	
+	//Used for create Proj Object
 	public static String createData(JSONArray jArray, int objId, int depId, int groId) throws SAXException, JAXBException{
 		List<Data> dataList = new ArrayList<Data>();
 		int rowNO = ObjectManager.queryRowNO(objId);
@@ -61,21 +62,37 @@ public class DataManager {
 			session.save(data);
 			session.getTransaction().commit();
 			session.close();
-//			dataList.add(data);
 		}
 		Iterator<Data> iter = dataList.iterator();
-		
-//		while(iter.hasNext()){
-//			createSession();
-//			Data data = iter.next();
-//			session.save(data);
-//			session.getTransaction().commit();
-//			session.close();
-//		}
 		
 		int projId = rowNO;
 		ObjectManager.updateRowNO(objId, rowNO + 1);
 		return "" + projId;
+	}
+	
+	//Used for create Detail Object
+	public static String createData(JSONArray jArray, int objId, int depId, int groId, int projId) throws SAXException, JAXBException{
+		List<Data> dataList = new ArrayList<Data>();
+		int rowNO = ObjectManager.queryRowNO(objId);
+		for(Object json : jArray){
+			JSONObject jObj = (JSONObject)json;
+			createSession();
+			Data data = new Data();
+			data.setDepId(depId);
+			data.setFieldId(jObj.getInt("id"));
+			data.setGroId(groId);
+			data.setObjId(objId);
+			data.setValue("" + jObj.get("val"));
+			data.setRowId(projId);
+			data.setDataId(objId + "_" + depId + "_" + groId + "_" + rowNO + "_" + jObj.getInt("id"));		
+			session.save(data);
+			session.getTransaction().commit();
+			session.close();
+		}
+		Iterator<Data> iter = dataList.iterator();
+		
+		ObjectManager.updateRowNO(objId, rowNO + 1);
+		return rowNO + "";
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -122,6 +139,21 @@ public class DataManager {
 		query1.setInteger("dataId", dataId);
 		query1.setString("value", value);
 		query1.executeUpdate(); 
+		session.getTransaction().commit();
+		session.close();
+	}
+	
+	public static void updateValue(int depId, int groId, int objId, int rowId, int fieldId, String value){
+		createSession();
+		String hql = "update Data set value=:value where depId=:depId and groId=:groId and objId=:objId and rowId=:rowId and fieldId=:fieldId";
+		Query query = session.createQuery(hql);
+		query.setInteger("depId", depId);
+		query.setInteger("groId", groId);
+		query.setInteger("objId", objId);
+		query.setInteger("fieldId", fieldId);
+		query.setInteger("rowId", rowId);
+		query.setString("value", value);
+		query.executeUpdate(); 
 		session.getTransaction().commit();
 		session.close();
 	}
