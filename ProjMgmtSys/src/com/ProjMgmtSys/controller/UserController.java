@@ -357,7 +357,6 @@ public class UserController {
 			@RequestParam(value = "depId") String depId,
 			@RequestParam(value = "groId") String groId,
 			@RequestParam(value = "objId") String objId) throws NumberFormatException, SAXException, JAXBException{
-		System.out.println(jsonArray);
 		JSONArray jArray = (JSONArray) JSONSerializer.toJSON(jsonArray);
 		return DataManager.createData(jArray, Integer.parseInt(objId), Integer.parseInt(depId), Integer.parseInt(groId));
 	}
@@ -380,5 +379,20 @@ public class UserController {
 		model.addAttribute("ProjName", projName);
 		model.addAttribute("ProjId", rowId);
 		return "project";
+	}
+	
+	@RequestMapping("/**/newDetail")
+	public @ResponseBody
+	String newDetail(
+			@RequestParam(value = "jsonArray") String jsonArray,
+			@RequestParam(value = "depId") String depId,
+			@RequestParam(value = "groId") String groId,
+			@RequestParam(value = "objId") String objId,
+			@RequestParam(value = "projId") String projId,
+			@RequestParam(value = "status") String status) throws NumberFormatException, SAXException, JAXBException{
+		if("status".equals("") == false)
+			DataManager.updateValue(Integer.parseInt(depId), Integer.parseInt(groId), 0, Integer.parseInt(projId), FieldName.FIELD_STATUS, status);
+		JSONArray jArray = (JSONArray) JSONSerializer.toJSON(jsonArray);
+		return DataManager.createData(jArray, Integer.parseInt(objId), Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(projId));
 	}
 }

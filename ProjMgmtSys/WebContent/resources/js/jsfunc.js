@@ -370,22 +370,6 @@ function createProject(){
 	var groId = $('#groIdSpan').text();
 	var objId = OBJ_PROJ;
 	var data = [];
-//	data.push({
-//		"id" : 1,
-//		"val" : $('#projectName').val()
-//	});
-//	data.push({
-//		"id" : 2,
-//		"val" : $('#description').val()
-//	});
-//	data.push({
-//		"id" : 3,
-//		"val" : $('#startdate').val()
-//	});
-//	data.push({
-//		"id" : 4,
-//		"val" : STATUS_NOT_START
-//	});
 	var id = 1;
 	while($("#" + id).length > 0){
 		data.push({
@@ -448,6 +432,55 @@ function getGroProj(){
      		addAlert("alert-error", alertText, "#alertdiv");
 		}
 	});
+}
+
+function newDetail(){
+	var depId = $('#depIdSpan').text();
+	var groId = $('#groIdSpan').text();
+	var objId = OBJ_DETAIL;
+	var projId = $('#projIdSpan').text();
+	var userName = $('#userNameSpan').text();
+	var status = "";
+	var data = [];
+	
+	if($('#statusList').length > 0)
+		status = $('#statusList').val();
+	
+	data.push({
+		"id" : "5",
+		"val" : userName
+	});
+	var id = 6;
+	while($('#' + id).length > 0){
+		data.push({
+			"id" : id,
+			"val" : $("#" + id).val()
+		});
+		id++;
+	};
+	alert("jsonArray=" + JSON.stringify(data) + "&depId=" + depId + "&groId=" + groId + "&objId=" + objId + "&projId=" + projId + "&status=" + status);
+	$.ajax({
+		type : "Post",
+		url : "newDetail.html",
+		data : "jsonArray=" + JSON.stringify(data) + "&depId=" + depId + "&groId=" + groId + "&objId=" + objId + "&projId=" + projId + "&status=" + status,
+		success : function(response){
+			var alertText = "A new progress is successfully created! Progress ID: " + response;
+			addAlert("alert-success", alertText, "#alertdiv");
+			var newTr = $('#progTable tbody').append("<tr></tr>");
+			newTr.append("<td>" + response +"</td>");
+			newTr.append("<td>" + userName +"</td>");
+			newTr.append("<td>" + $('#6').val() +"</td>");
+			newTr.append("<td>" + $('#7').val() +"</td>");
+			newTr.append("<td>" + $('#8').val() +"</td>");
+			$("input").val("");
+		},
+		error : function(e){
+			var alertText = 'Error: ' + e;
+     		addAlert("alert-error", alertText, "#alertdiv");
+     		$("input").val("");
+		}
+	});
+	
 }
 
 //General Functions
@@ -624,7 +657,6 @@ function addStatus(){
 		success : function(response){
 			var status = parseInt(response);
 			if(userType == USER_GRO){
-				alert(STATUS.length);
 				select = $('<select></select>');
 				select.attr('id', 'statusList');
 				for(var i = 0; i < STATUS.length; i++){

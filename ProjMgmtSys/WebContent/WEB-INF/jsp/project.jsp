@@ -24,7 +24,7 @@
 	<div class="container">
 		<div class="row-fluid">
 			<h1>Project</h1>
-			<h3><%=session.getAttribute("userName")%>&nbsp;(id: <span id="userIdSpan"><%=session.getAttribute("userId")%></span>&nbsp;&nbsp;&nbsp;&nbsp;<span id="userTypeSpan"><%=session.getAttribute("userType")%></span>)</h3>		
+			<h3><span id="userNameSpan"><%=session.getAttribute("userName")%></span>&nbsp;(id: <span id="userIdSpan"><%=session.getAttribute("userId")%></span>&nbsp;&nbsp;&nbsp;&nbsp;<span id="userTypeSpan"><%=session.getAttribute("userType")%></span>)</h3>		
 			<h5>Dept: <%=session.getAttribute("depName")%>&nbsp;(id: <span id="depIdSpan"><%=session.getAttribute("depId")%></span>)
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				Group: <%=session.getAttribute("groName")%>&nbsp;(id: <span id="groIdSpan"><%=session.getAttribute("groId")%></span>)</h5>
@@ -46,18 +46,18 @@
 				</div>
 				<div class="row" style="margin-bottom:30px">
 					<div class="span4 offset1">
-						<input class="datepicker" placeholder="Choose Start Date" type="text">
+						<input id="6" class="datepicker" placeholder="Choose Start Date" type="text">
 					</div>
 					<div class="span4">
-						<input class="datepicker" placeholder="Choose End Date" type="text">
+						<input id="7" class="datepicker" placeholder="Choose End Date" type="text">
 					</div>
 				</div>
 				<div class="row" style="margin-bottom:30px">
 					<div class="span7 offset1">
-						<input type="text"  class="span12" placeholder="Progress" />
+						<input id="8" type="text"  class="span12" placeholder="Progress" />
 					</div>
 					<div class="span3">
-						<input type="submit" class="btn btn-primary btn-block" value="Submit"/>
+						<button class="btn btn-primary btn-block" onclick="newDetail();">Submit</button>
 					</div>
 				</div>
 				<div class="span10 offset1">
@@ -65,6 +65,7 @@
 						<caption>Progress Log</caption>
 						<thead>
 						    <tr>
+						      <th>Progress ID</th>	
 						      <th>Name</th>
 						      <th>Start</th>
 						      <th>End</th>
