@@ -193,7 +193,7 @@ public class UserController {
 	 String newPass(@RequestParam(value = "oldPass") String oldPass,
 		 			@RequestParam(value = "newPass") String newPass,
 		 			@RequestParam(value = "userId") String userId) throws Exception {  
-
+		System.out.println(userId+" "+oldPass+" "+newPass);
 		int result = UserManager.validatePassword(userId, oldPass);
 		if(result == StatusCode.LOGIN_SUCCESS){
 			UserManager.updatePassword(userId, newPass);
@@ -339,6 +339,7 @@ public class UserController {
 			@RequestParam(value = "depId") String depId,
 			@RequestParam(value = "groId") String groId,
 			@RequestParam(value = "objId") String objId){
+		System.out.println(depId+groId+objId);
 		JSONArray jsonA = FieldManager.getCustomizedField(Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(objId));
 		return jsonA.toString();
 	}
@@ -393,6 +394,7 @@ public class UserController {
 		JSONArray jArray = (JSONArray) JSONSerializer.toJSON(jsonArray);
 		return DataManager.createData(jArray, Integer.parseInt(objId), Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(projId));
 	}
+<<<<<<< HEAD
 	
 	@RequestMapping("/**/getDetails")
 	public @ResponseBody
@@ -403,5 +405,25 @@ public class UserController {
 			@RequestParam(value = "projId") String projId) throws NumberFormatException, SAXException, JAXBException{
 		JSONArray jsonA = DataManager.getProgList(Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(objId), Integer.parseInt(projId));
 		return jsonA.toString();
+=======
+	@RequestMapping("/getData")
+	public @ResponseBody
+	String getData(
+			@RequestParam(value = "depId") String depId,
+			@RequestParam(value = "groId") String groId,
+			@RequestParam(value = "objId") String objId,
+			@RequestParam(value = "projId") String projId,
+			@RequestParam(value = "fieldIds") String fieldIds){
+		JSONArray jArray = (JSONArray) JSONSerializer.toJSON(fieldIds);
+		int size = jArray.size();
+		ArrayList<String> list = new ArrayList<String>();
+		for(int i=0;i<size;i++){
+			String fieldId = jArray.getString(i);
+			Data data = DataManager.queryData(Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(objId), Integer.parseInt(projId), Integer.parseInt(fieldId));
+			list.add(data.getValue());
+		}
+		JSONArray dataJson = JSONArray.fromObject(list); 
+		return dataJson.toString();
+>>>>>>> tuyue/develop
 	}
 }

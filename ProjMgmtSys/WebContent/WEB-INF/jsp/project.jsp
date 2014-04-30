@@ -10,7 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/mainstyle.css" />
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-	<link rel="stylesheet" href="/resources/demos/style.css">
+	<!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
 	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 	<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/jsfunc.js"></script>
@@ -35,7 +35,7 @@
 			
 			<div class="span12 subdiv">
 				<div class="span10 offset1" style="margin-bottom:30px">
-					<div class="row">
+					<div class="row" id = "originaldiv">
 						<div class="span1">
 							<label class="label label-info">Status</label>
 						</div>
@@ -43,6 +43,9 @@
 						</div>
 					</div>
 				</div>
+				<script>
+					getCustomizedField("proj",$('#projIdSpan').text());
+				</script>
 				<div class="row" style="margin-bottom:30px">
 					<div class="span4 offset1">
 						<input id="6" class="datepicker" placeholder="Choose Start Date" type="text">

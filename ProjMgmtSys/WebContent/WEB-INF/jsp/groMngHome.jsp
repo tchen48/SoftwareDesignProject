@@ -31,7 +31,7 @@
 					</div>
 					<div class="span3">
 						<select id="typeList" class="form-control span12">
-						    <option value="0">Integer</option>
+						    <option value="0">Number</option>
 						    <option value="1">String</option>
 						    <option value="2">Date</option>
 						</select>
