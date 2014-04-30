@@ -128,7 +128,7 @@ function newEmp(){
     }
 	if(!EMP_REG.test(empName)){
     	var alertText = "Format of the name is incorrect! Please try again!";
-    	addAlert("alert-error", alertText, "#createDeptAlert");
+    	addAlert("alert-error", alertText, "#createEmpAlert");
     	return;
     }
 	 $.ajax({
@@ -165,7 +165,7 @@ function newPass(){
 	}
 	if(!PASS_REG.test(newPass)){
     	var alertText = "The password does not satisfy the minimum requriement! Please try again!";
-    	addAlert("alert-error", alertText, "#createDeptAlert");
+    	addAlert("alert-error", alertText, "#alertdiv");
     	return;
     }
 	$.ajax({
@@ -206,9 +206,9 @@ function newGroup() {
     	addAlert("alert-error", alertText, "#alertdiv");
     	return;
     }
-    if(!GRO_REG.test(newName)){
+    if(!GRO_REG.test(groName)){
     	var alertText = "The format of the group name is incorrect! Please try again!";
-    	addAlert("alert-error", alertText, "#createDeptAlert");
+    	addAlert("alert-error", alertText, "#alertdiv");
     	return;
     }
     $.ajax({  
@@ -248,7 +248,7 @@ function modifyGroup() {
     }
     if(!GRO_REG.test(newName)){
     	var alertText = "The format of the group name is incorrect! Please try again!";
-    	addAlert("alert-error", alertText, "#createDeptAlert");
+    	addAlert("alert-error", alertText,  "#alertdiv");
     	return;
     }
     $.ajax({  
@@ -356,6 +356,16 @@ function getGroEmp(){
 }
 
 function createProject(){
+    if(!PROJ_REG.test($("#1").val())){
+    	var alertText = "The format of the project name is incorrect! Please try again!";
+    	addAlert("alert-error", alertText, "#alertdiv");
+    	return;
+    }
+    if(!DATE_REG.test($("#3").val())){
+    	var alertText = "The format of the date is incorrect! Please try again!";
+    	addAlert("alert-error", alertText, "#alertdiv");
+    	return;
+    }
 	var depId = $('#depIdSpan').text();
 	var groId = $('#groIdSpan').text();
 	var objId = OBJ_PROJ;
@@ -491,7 +501,7 @@ function addProjTable(json, tableId, depId, groId){
 		tr.append("<td>" + json[i].status + "</td>");
 		tr.append("<td>" + json[i].description + "</td>");
 	}
-	$("#" + tableId + "");
+	//$("#" + tableId + "");
 }
 
 //Customization Function
@@ -506,7 +516,7 @@ function addField(level){
 	var fieldName = $('#fieldName').val();
     if(!FIELD_REG.test(fieldName)){
     	var alertText = "Format of the field name is incorrect! Please try again";
-    	addAlert("alert-error", alertText, "#createDeptAlert");
+    	addAlert("alert-error", alertText, "#alertdiv");
     	return;
     }
 	var fieldType = $("#typeList").val();
@@ -578,9 +588,10 @@ function addCustomizedField(json, location){
 		var inputSelector = "#" + newDiv.attr("id") + " input";
 		$(inputSelector).addClass("span6");
 		if(json[i].type == TYPE_DATE){
+			$(".datepicker").datepicker("destroy");
 			$(inputSelector).attr("type", "text");
 			$(inputSelector).addClass("datepicker");
-			$(inputSelector).datepicker();
+
 			name = "Manually input " + name + "(MM/DD/YYYY)";
 		}
 		else
@@ -589,6 +600,13 @@ function addCustomizedField(json, location){
 			placeholder: name,
 			id: id
 		});
+		/*
+		 * this line and .datepicker("destroy") is nessary, or dynamimcally 
+		 * generated type datepicker cannot beused 
+		 */
+		if(json[i].type == TYPE_DATE){
+			$(".datepicker").datepicker();
+		}
 		location = "#" + newDiv.attr("id");
 	}
 }
@@ -627,7 +645,9 @@ function addStatus(){
 var PROJ_FIELD = "proj";
 var DETAIL_FIELD = "detail";
 
-var NEW_PROJ_LOCATION = "#3";
+/* if you insert after #3, the level relation will be uncorrect) 
+ */
+var NEW_PROJ_LOCATION = "#originaldiv";
 
 var OBJ_PROJ = 0;
 var OBJ_DETAIL = 1;
@@ -657,4 +677,5 @@ var DEP_REG = /^[0-9a-zA-Z]+([-_ @#%][0-9a-zA-Z]+)*([+]{0,3})$/;
 var GRO_REG = /^[0-9a-zA-Z]+([-_ @#%][0-9a-zA-Z]+)*([+]{0,3})$/;
 var PROJ_REG = /^[0-9a-zA-Z]+([-_ @#%][0-9a-zA-Z]+)*([+]{0,3})$/;
 var FIELD_REG =/^[0-9a-zA-Z]+([ +_&\-][0-9a-zA-Z]+){0,4}$/;
+var DATE_REG = /^(1[0-2]|0[1-9])\/(0[1-9]|[1-2][0-9]|3[01])\/20[0-9][0-9]$/;
 

@@ -16,7 +16,7 @@
 	<div class="container">
 		<div class="row-fluid">
 			<h1>Department Manager Home</h1>
-			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <span id="userId"><%=session.getAttribute("userId")%></span>)</h3>		
+			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <span id="userIdSpan"><%=session.getAttribute("userId")%></span>)</h3>		
 			<h5>Dept: <%=session.getAttribute("depName")%>&nbsp;(id: <span id="depIdSpan"><%=session.getAttribute("depId")%></span>)</h5>
 			<div id="alertdiv" class="span12" style="margin-top:60px; height:50px">					
 			</div>

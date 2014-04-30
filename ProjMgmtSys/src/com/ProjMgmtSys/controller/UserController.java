@@ -193,7 +193,7 @@ public class UserController {
 	 String newPass(@RequestParam(value = "oldPass") String oldPass,
 		 			@RequestParam(value = "newPass") String newPass,
 		 			@RequestParam(value = "userId") String userId) throws Exception {  
-
+		System.out.println(userId+" "+oldPass+" "+newPass);
 		int result = UserManager.validatePassword(userId, oldPass);
 		if(result == StatusCode.LOGIN_SUCCESS){
 			UserManager.updatePassword(userId, newPass);
@@ -340,6 +340,7 @@ public class UserController {
 			@RequestParam(value = "depId") String depId,
 			@RequestParam(value = "groId") String groId,
 			@RequestParam(value = "objId") String objId){
+		System.out.println(depId+groId+objId);
 		JSONArray jsonA = FieldManager.getCustomizedField(Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(objId));
 		return jsonA.toString();
 	}
