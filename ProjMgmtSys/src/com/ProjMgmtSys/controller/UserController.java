@@ -394,7 +394,6 @@ public class UserController {
 		JSONArray jArray = (JSONArray) JSONSerializer.toJSON(jsonArray);
 		return DataManager.createData(jArray, Integer.parseInt(objId), Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(projId));
 	}
-<<<<<<< HEAD
 	
 	@RequestMapping("/**/getDetails")
 	public @ResponseBody
@@ -405,7 +404,8 @@ public class UserController {
 			@RequestParam(value = "projId") String projId) throws NumberFormatException, SAXException, JAXBException{
 		JSONArray jsonA = DataManager.getProgList(Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(objId), Integer.parseInt(projId));
 		return jsonA.toString();
-=======
+	}
+	
 	@RequestMapping("/getData")
 	public @ResponseBody
 	String getData(
@@ -424,6 +424,5 @@ public class UserController {
 		}
 		JSONArray dataJson = JSONArray.fromObject(list); 
 		return dataJson.toString();
->>>>>>> tuyue/develop
 	}
 }
