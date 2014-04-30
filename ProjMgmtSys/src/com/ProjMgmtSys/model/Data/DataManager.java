@@ -83,7 +83,7 @@ public class DataManager {
 			data.setGroId(groId);
 			data.setObjId(objId);
 			data.setValue("" + jObj.get("val"));
-			data.setRowId(projId);
+			data.setRowId(rowNO);
 			data.setDataId(objId + "_" + depId + "_" + groId + "_" + rowNO + "_" + jObj.getInt("id"));		
 			session.save(data);
 			session.getTransaction().commit();
@@ -113,7 +113,9 @@ public class DataManager {
 	}
 
 	public static Data queryData(int depId, int groId, int objId, int rowId, int fieldId){
-		createSession();
+//		createSession();
+		Session session = SessionFactoryUtil.getSessionFactory().openSession();
+        session.beginTransaction();
 		String hql = "from Data where depId=:depId and objId=:objId and groId=:groId and rowId=:rowId and fieldId=:fieldId";
 		Query query = session.createQuery(hql);
 		query.setInteger("depId", depId);
@@ -126,8 +128,9 @@ public class DataManager {
 		java.util.Iterator<Data> iter = list.iterator();
 		while (iter.hasNext()) {
 			data = iter.next();
-		}					
-		session.getTransaction().commit();
+		}			
+		if (!session.getTransaction().wasCommitted())
+			session.getTransaction().commit();
 		session.close();
 		return data;	
 	}
@@ -209,5 +212,101 @@ public class DataManager {
 		session.getTransaction().commit();
 		session.close();
 		return array;
+	}
+	
+	public static JSONArray getProgList(int depId, int groId, int objId, int projId){
+		Session session = SessionFactoryUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+		JSONArray array = new JSONArray();
+//		createSession();
+		String hql;
+		hql = "select rowId from Data where depId=:depId and groId=:groId and objId=:objId and fieldId=:fieldId and value=:value";
+		Query query = session.createQuery(hql);
+		query.setInteger("depId", depId);
+		query.setInteger("groId", groId);
+		query.setInteger("objId", objId);
+		query.setInteger("fieldId", 9);
+		query.setInteger("value", projId);
+		List <Integer>rowIdList = query.list();
+//		if (!session.getTransaction().wasCommitted())
+//			session.getTransaction().commit();
+//		session.close();
+		
+		Iterator<Integer> iter = rowIdList.iterator();
+//		List<Progress> progList = new ArrayList();
+		while(iter.hasNext()){
+			int rowId = iter.next();
+//			createSession();
+			hql = "from Data where rowId=:rowId and objId=:objId";
+			query = session.createQuery(hql);
+			query.setInteger("rowId", rowId);
+			query.setInteger("objId", 1);
+			List <Data>dataList = query.list();
+			Iterator<Data> dataIter = dataList.iterator();
+			Progress prog = new Progress();
+			prog.setProgId(rowId);
+			while(dataIter.hasNext()){
+				Data data = dataIter.next();
+				String val = data.getValue();
+				int fieldId = data.getFieldId();
+				if(fieldId == 5)
+					prog.setUserName(val);
+				else if(fieldId == 6)
+					prog.setStartDate(val);
+				else if(fieldId == 7)
+					prog.setEndDate(val);
+				else if(fieldId == 8)
+					prog.setProgress(val);
+				else if(fieldId == 9)
+					prog.setProjId(projId);
+			}
+			
+//			session.close();
+			array.add(prog);
+		}
+		if(!session.getTransaction().wasCommitted())
+			session.getTransaction().commit();
+		return array;
+		
+//		Iterator<Data> iter = list.iterator();
+//		Data data = null;
+//		List<Progress> progList = new ArrayList();
+//		while(iter.hasNext()){
+//			data = iter.next();
+//			int target = -1;
+//			for(int i = 0; i < progList.size(); i++){
+//				if(progList.get(i).getId() == data.getRowId()){
+//					target = i;
+//					break;
+//				}
+//			}
+//			Progress prog;
+//			if(target > -1){
+//				prog = progList.get(target);
+//			}
+//			else{
+//				prog = new Progress();
+//				prog.setId(data.getRowId());
+//				progList.add(prog);
+//			}
+//			int fieldId = data.getFieldId();
+//			String val = data.getValue();
+//			if(fieldId == 5)
+//				prog.setUserName(val);
+//			else if(fieldId == 6)
+//				prog.setStartDate(val);
+//			else if(fieldId == 7)
+//				prog.setEndDate(val);
+//			else if(fieldId == 8)
+//				prog.setProgress(val);
+//		}
+//
+//		Iterator<Progress> iterProg = progList.iterator();
+//		while (iterProg.hasNext()) {
+//			array.add(iterProg.next());
+//		}					
+//		session.getTransaction().commit();
+//		session.close();
+//		return array;
 	}
 }

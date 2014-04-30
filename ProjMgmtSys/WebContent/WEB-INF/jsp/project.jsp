@@ -37,11 +37,10 @@
 				<div class="span10 offset1" style="margin-bottom:30px">
 					<div class="row">
 						<div class="span1">
-							<label class="label label-info">status</label>
+							<label class="label label-info">Status</label>
 						</div>
 						<div class="span4" id="statusListDiv">
 						</div>
-						<script>addStatus()</script>
 					</div>
 				</div>
 				<div class="row" style="margin-bottom:30px">
@@ -79,5 +78,10 @@
 			</div>
 		</div>
 	</div>
+	<!-- <script>getCustomizedData()</script>-->
+	<script>
+		addStatus();
+		getDetails();
+	</script>
 </body>
 </html>

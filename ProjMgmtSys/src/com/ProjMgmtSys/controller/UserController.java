@@ -315,7 +315,6 @@ public class UserController {
 			@RequestParam(value = "groId") int groId,
 			@RequestParam(value = "rowId") int rowId,
 			Model model){	
-		System.out.println(depId+groId+rowId);
 		String projName = DataManager.queryData(depId, groId, 0, rowId, FieldName.FIELD_PROJNAME).getValue();
 		model.addAttribute("ProjName", projName);
 		model.addAttribute("ProjId", rowId);
@@ -393,5 +392,16 @@ public class UserController {
 			DataManager.updateValue(Integer.parseInt(depId), Integer.parseInt(groId), 0, Integer.parseInt(projId), FieldName.FIELD_STATUS, status);
 		JSONArray jArray = (JSONArray) JSONSerializer.toJSON(jsonArray);
 		return DataManager.createData(jArray, Integer.parseInt(objId), Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(projId));
+	}
+	
+	@RequestMapping("/**/getDetails")
+	public @ResponseBody
+	String getDetails(
+			@RequestParam(value = "depId") String depId,
+			@RequestParam(value = "groId") String groId,
+			@RequestParam(value = "objId") String objId,
+			@RequestParam(value = "projId") String projId) throws NumberFormatException, SAXException, JAXBException{
+		JSONArray jsonA = DataManager.getProgList(Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(objId), Integer.parseInt(projId));
+		return jsonA.toString();
 	}
 }

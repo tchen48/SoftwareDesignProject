@@ -448,16 +448,21 @@ function newDetail(){
 		});
 		id++;
 	};
+	data.push({
+		"id" : "9",
+		"val" : projId
+	});
 	alert("jsonArray=" + JSON.stringify(data) + "&depId=" + depId + "&groId=" + groId + "&objId=" + objId + "&projId=" + projId + "&status=" + status);
 	$.ajax({
 		type : "Post",
 		url : "newDetail.html",
 		data : "jsonArray=" + JSON.stringify(data) + "&depId=" + depId + "&groId=" + groId + "&objId=" + objId + "&projId=" + projId + "&status=" + status,
 		success : function(response){
-			var alertText = "A new progress is successfully created! Progress ID: " + response;
+			var alertText = "A new progress is successfully created!";
 			addAlert("alert-success", alertText, "#alertdiv");
-			var newTr = $('#progTable tbody').append("<tr></tr>");
-			newTr.append("<td>" + response +"</td>");
+			var newTr = $("<tr></tr>").prependTo($('#progTable tbody'));
+			
+			newTr.append("<td>" + ($("#progTable tbody tr").length) +"</td>");
 			newTr.append("<td>" + userName +"</td>");
 			newTr.append("<td>" + $('#6').val() +"</td>");
 			newTr.append("<td>" + $('#7').val() +"</td>");
@@ -470,7 +475,46 @@ function newDetail(){
      		$("input").val("");
 		}
 	});
+}
+
+function getDetails(){
+	var depId = $('#depIdSpan').text();
+	var groId = $('#groIdSpan').text();
+	var objId = OBJ_DETAIL;
+	var projId = $('#projIdSpan').text();
 	
+	$.ajax({
+		type : "Get",
+		url : "getDetails.html",
+		data : "depId=" + depId + "&groId=" + groId + "&objId=" + objId + "&projId=" + projId,
+		success : function(response){
+			var json = $.parseJSON(response);
+			json.sort(predicatBy('progId'));
+			var table = $('#progTable tbody');
+			alert(JSON.stringify(json));
+			for(var i = 0; i < json.length; i++){
+				var tr = $("<tr></tr>").appendTo(table);
+				tr.append("<td>" + (json.length - i) + "</td>");
+				tr.append("<td>" + json[i].userName + "</td>");
+				tr.append("<td>" + json[i].startDate + "</td>");
+				tr.append("<td>" + json[i].endDate + "</td>");
+				tr.append("<td>" + json[i].progress + "</td>");
+				
+				/*
+				 *  this is another way of sending the project information(just a GET method). 
+				 *  this way won't change the relative path.
+				 *  it will map to "/project" instead of "/project/{depId}/{groId}/{rowId}"
+				 *  
+				 * */
+				//nameLink.attr("href", "project.html?depId=" + depId + "&groId=" + groId + "&rowId=" + json[i].id);
+			}
+		},
+		error : function(e){
+			var alertText = 'Error: ' + e;
+     		addAlert("alert-error", alertText, "#alertdiv");
+     		$("input").val("");
+		}
+	});
 }
 
 //General Functions
@@ -525,6 +569,18 @@ function addProjTable(json, tableId, depId, groId){
 		tr.append("<td>" + json[i].description + "</td>");
 	}
 	$("#" + tableId + "");
+}
+
+//Sort the JSON array
+function predicatBy(prop){
+   return function(a,b){
+      if( a[prop] > b[prop]){
+          return -1;
+      }else if( a[prop] < b[prop] ){
+          return 1;
+      }
+      return 0;
+   }
 }
 
 //Customization Function
@@ -646,6 +702,10 @@ function addStatus(){
 				}
 				$('#statusListDiv').append(select);
 				$('#statusList').val(status).attr('selected', true);
+			}
+			else{
+				$statusLabel = $('#statusListDiv').append($('<label></label>'));
+				$statusLabel.text(STATUS[status]);
 			}
 		},
 		error : function(e){
