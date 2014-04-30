@@ -14,6 +14,7 @@ import com.ProjMgmtSys.model.Dept.Dept;
 import com.ProjMgmtSys.model.Dept.DeptManager;
 import com.ProjMgmtSys.model.Gro.Gro;
 import com.ProjMgmtSys.model.Gro.GroManager;
+import com.ProjMgmtSys.model.Object.SessionFactoryUtil;
 
 
 public class UserManager {
@@ -32,7 +33,8 @@ public class UserManager {
 		user.setGroId(groId);
 		user.setDepId(depId);
 
-		createSession();
+		Session session = SessionFactoryUtil.getSessionFactory().openSession();
+        session.beginTransaction();
 		
 		Dept dept = DeptManager.queryDeptById(depId);
 		System.out.println(dept.getDepName());

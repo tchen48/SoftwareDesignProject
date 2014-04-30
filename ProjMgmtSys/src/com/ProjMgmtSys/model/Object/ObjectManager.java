@@ -52,7 +52,8 @@ public class ObjectManager {
 	}
 	
 	public static int queryRowNO(int objId){
-		createSession();
+		Session session = SessionFactoryUtil.getSessionFactory().openSession();
+        session.beginTransaction();
 		String hql = "from Object where objId=:objId";
 		Query query = session.createQuery(hql); 
 		query.setInteger("objId", objId);

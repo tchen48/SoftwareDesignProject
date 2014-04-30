@@ -50,7 +50,9 @@ public class DataManager {
 		int rowNO = ObjectManager.queryRowNO(objId);
 		for(Object json : jArray){
 			JSONObject jObj = (JSONObject)json;
-			createSession();
+			Session session = SessionFactoryUtil.getSessionFactory().openSession();
+	        session.beginTransaction();
+//			createSession();
 			Data data = new Data();
 			data.setDepId(depId);
 			data.setFieldId(jObj.getInt("id"));
