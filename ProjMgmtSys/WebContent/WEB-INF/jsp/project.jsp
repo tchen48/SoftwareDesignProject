@@ -41,6 +41,10 @@
 						</div>
 						<div class="span4" id="statusListDiv">
 						</div>
+						
+						<div class="span3 offset4" >
+							<a href="groMngHome.html" class="btn btn-block">Go Back</a>
+						</div>
 					</div>
 				</div>
 				<script>

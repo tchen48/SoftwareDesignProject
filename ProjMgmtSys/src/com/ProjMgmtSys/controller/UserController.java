@@ -417,6 +417,7 @@ public class UserController {
 		ArrayList<String> list = new ArrayList<String>();
 		for(int i=0;i<size;i++){
 			String fieldId = jArray.getString(i);
+			System.out.println(fieldId);
 			Data data = DataManager.queryData(Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(objId), Integer.parseInt(projId), Integer.parseInt(fieldId));
 			list.add(data.getValue());
 		}

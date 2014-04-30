@@ -442,7 +442,31 @@ function newDetail(){
 	var userName = $('#userNameSpan').text();
 	var status = "";
 	var data = [];
-	
+	if($("#6").val()==""||$("#7").val()==""){
+    	var alertText = "The date cannot be blank!";
+    	addAlert("alert-error", alertText, "#alertdiv");
+    	return;
+    }
+    if(!DATE_REG.test($("#6").val())){
+    	var alertText = "The format of the start date is incorrect! Please try again!";
+    	addAlert("alert-error", alertText, "#alertdiv");
+    	return;
+    }
+    if(!DATE_REG.test($("#7").val())){
+    	var alertText = "The format of the end date is incorrect! Please try again!";
+    	addAlert("alert-error", alertText, "#alertdiv");
+    	return;
+    }
+    if($("#8").val()==""){
+    	var alertText = "The progress cannot be blank!";
+    	addAlert("alert-error", alertText, "#alertdiv");
+    	return;
+    }
+    if(!PROJ_REG.test($("#8").val())){
+    	var alertText = "The format of the progress is incorrect! Please try again!";
+    	addAlert("alert-error", alertText, "#alertdiv");
+    	return;
+    }
 	if($('#statusList').length > 0)
 		status = $('#statusList').val();
 	
@@ -462,7 +486,7 @@ function newDetail(){
 		"id" : "9",
 		"val" : projId
 	});
-	alert("jsonArray=" + JSON.stringify(data) + "&depId=" + depId + "&groId=" + groId + "&objId=" + objId + "&projId=" + projId + "&status=" + status);
+	//alert("jsonArray=" + JSON.stringify(data) + "&depId=" + depId + "&groId=" + groId + "&objId=" + objId + "&projId=" + projId + "&status=" + status);
 	$.ajax({
 		type : "Post",
 		url : "newDetail.html",
@@ -501,7 +525,7 @@ function getDetails(){
 			var json = $.parseJSON(response);
 			json.sort(predicatBy('progId'));
 			var table = $('#progTable tbody');
-			alert(JSON.stringify(json));
+			//alert(JSON.stringify(json));
 			for(var i = 0; i < json.length; i++){
 				var tr = $("<tr></tr>").appendTo(table);
 				tr.append("<td>" + (json.length - i) + "</td>");
@@ -685,7 +709,6 @@ function getCustomizedField(type,extra){
 }
 function addCustomizedFieldAsLable(json, location,data){
 	var fieldData = $.parseJSON(data);
-	alert(fieldData);
 	for(var i = 0; i < json.length; i++){
 		var name = json[i].name;
 		var id = json[i].id;
