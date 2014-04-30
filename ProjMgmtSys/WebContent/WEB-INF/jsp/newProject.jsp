@@ -10,7 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/mainstyle.css" />
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-	<link rel="stylesheet" href="/resources/demos/style.css">
+	<!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
 	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 	<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/jsfunc.js"></script>
@@ -34,18 +34,20 @@
 			
 			<div class="subdiv span12">
 				<div class="content span8 offset2">
+				<div id = field>
 				<div>
 					<input type="text"  class="span12" placeholder="Enter the name of the new project" required="true" id="1" />
 				</div>
-				<div>
+				<div id = originaldiv>
 					<input class="span6 datepicker" placeholder="Choose Start Date" type="text" id="3" />
 				</div>
 				<script>
-					getCustomizedField("proj");
+					getCustomizedField("proj","input");
 				</script>
 
 				<div>
 					<textarea class="input-block-level" placeholder="Enter project description" rows="5" id="2"></textarea>
+				</div>
 				</div>
 				<div class="span12" style="margin-bottom: 30px;">
 					<div class="span3 offset4">

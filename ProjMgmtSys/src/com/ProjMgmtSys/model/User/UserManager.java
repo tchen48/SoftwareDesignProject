@@ -241,7 +241,7 @@ public class UserManager {
 		createSession();
 		String hql;
 		if(isGroMng)
-			hql = "update User as u set u.groId=:groId u.userType=:userType where u.userId=:userId";
+			hql = "update User as u set u.groId=:groId, u.userType=:userType where u.userId=:userId";
 		else
 			hql = "update User as u set u.groId=:groId where u.userId=:userId";
 		Query query = session.createQuery(hql);
