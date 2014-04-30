@@ -39,7 +39,11 @@
 						<div class="span1">
 							<label class="label label-info">Status</label>
 						</div>
-						<div class="span4" id="statusListDiv">
+						<div class="span4 offset1" id="statusListDiv">
+						</div>
+						
+						<div class="span3 offset4" >
+							<a href="groMngHome.html" class="btn btn-block">Go Back</a>
 						</div>
 					</div>
 				</div>

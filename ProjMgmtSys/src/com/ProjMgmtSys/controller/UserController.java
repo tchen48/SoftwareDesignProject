@@ -394,6 +394,7 @@ public class UserController {
 		JSONArray jArray = (JSONArray) JSONSerializer.toJSON(jsonArray);
 		return DataManager.createData(jArray, Integer.parseInt(objId), Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(projId));
 	}
+
 	@RequestMapping("/**/getDetails")
 	public @ResponseBody
 	String getDetails(
@@ -404,6 +405,7 @@ public class UserController {
 		JSONArray jsonA = DataManager.getProgList(Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(objId), Integer.parseInt(projId));
 		return jsonA.toString();
 	}
+
 	@RequestMapping("/getData")
 	public @ResponseBody
 	String getData(
@@ -417,6 +419,7 @@ public class UserController {
 		ArrayList<String> list = new ArrayList<String>();
 		for(int i=0;i<size;i++){
 			String fieldId = jArray.getString(i);
+			System.out.println(fieldId);
 			Data data = DataManager.queryData(Integer.parseInt(depId), Integer.parseInt(groId), Integer.parseInt(objId), Integer.parseInt(projId), Integer.parseInt(fieldId));
 			list.add(data.getValue());
 		}
