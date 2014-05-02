@@ -415,6 +415,7 @@ function createProject(){
 }
 
 function getGroProj(){
+	
 	var depId = $('#depIdSpan').text();
 	var groId = $('#groIdSpan').text();
 	var objId = OBJ_PROJ;
@@ -463,11 +464,11 @@ function newDetail(){
     	addAlert("alert-error", alertText, "#alertdiv");
     	return;
     }
-    if(!PROJ_REG.test($("#8").val())){
-    	var alertText = "The format of the progress is incorrect! Please try again!";
-    	addAlert("alert-error", alertText, "#alertdiv");
-    	return;
-    }
+//    if(!PROJ_REG.test($("#8").val())){
+//    	var alertText = "The format of the progress is incorrect! Please try again!";
+//    	addAlert("alert-error", alertText, "#alertdiv");
+//    	return;
+//    }
 	if($('#statusList').length > 0)
 		status = $('#statusList').val();
 	
@@ -617,6 +618,16 @@ function predicatBy(prop){
       return 0;
    }
 }
+
+//function editGoBack(){
+//	var userType = $('#userTypeSpan').text();
+//	if(userType == USER_GRO){
+//		$('#goBackBtn').attr('href', "groMngHome.html");
+//	}
+//	else{
+//		$('#goBackBtn').attr('href', "empHome.html");
+//	}
+//}
 
 //Customization Function
 function addField(level){

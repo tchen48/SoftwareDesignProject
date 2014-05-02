@@ -349,6 +349,11 @@ public class UserController {
         return "groMngHome";
     }
 	
+	@RequestMapping("/empHome")
+    public String empHome(@ModelAttribute("user") User user, Model model){	
+        return "empHome";
+    }
+	
 	@RequestMapping("/createProject")
 	public @ResponseBody
 	String createProject(
@@ -425,5 +430,11 @@ public class UserController {
 		}
 		JSONArray dataJson = JSONArray.fromObject(list); 
 		return dataJson.toString();
+	}
+	
+	@RequestMapping("/logout")
+	public String logout(@ModelAttribute("user") User user, HttpSession session){
+		session.invalidate();
+		return "login";
 	}
 }

@@ -16,7 +16,7 @@
 	<div class="container">
 		<div class="row-fluid">
 			<h1>Admin Home</h1>
-			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <span id="userIdSpan"><%=session.getAttribute("userId")%></span>)</h3>
+			<h3>Hello <%=session.getAttribute("userName")%>&nbsp;(id: <span id="userIdSpan"><%=session.getAttribute("userId")%></span>)&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn" href="logout.html">Log Out</a></h3>
 
 			<div id="createDeptAlert" class="span12" style="height:30px; margin-top:20px; margin-bottom:20px; opacity: .90;"></div>
 			<br/>
