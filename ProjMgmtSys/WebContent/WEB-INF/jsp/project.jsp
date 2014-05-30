@@ -42,8 +42,8 @@
 						<div class="span4 offset1" id="statusListDiv">
 						</div>
 						
-						<div class="span3 offset4" >
-							<a href="groMngHome.html" class="btn btn-block">Go Back</a>
+						<div class="span3 offset3" >
+							<a id=editHref href="" class="btn btn-block">Go Back</a>
 						</div>
 					</div>
 				</div>
@@ -87,6 +87,7 @@
 	</div>
 	<!-- <script>getCustomizedData()</script>-->
 	<script>
+		changeHref();
 		addStatus();
 		getDetails();
 	</script>

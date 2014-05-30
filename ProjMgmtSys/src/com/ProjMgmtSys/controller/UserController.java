@@ -348,6 +348,10 @@ public class UserController {
     public String groMngHome(@ModelAttribute("user") User user, Model model){	
         return "groMngHome";
     }
+	@RequestMapping("/empHome")
+    public String empHome(@ModelAttribute("user") User user, Model model){	
+        return "empHome";
+    }
 	
 	@RequestMapping("/createProject")
 	public @ResponseBody

@@ -811,6 +811,14 @@ function addStatus(){
 	});
 }
 
+function changeHref(){
+	if($('#userTypeSpan').text==USER_GRO){
+		$('#editHref').attr("href","groMngHome.html");
+	}
+	else{
+		$('#editHref').attr("href","empHome.html");
+	}
+}
 //Global Variables used for customized field
 var PROJ_FIELD = "proj";
 var DETAIL_FIELD = "detail";
